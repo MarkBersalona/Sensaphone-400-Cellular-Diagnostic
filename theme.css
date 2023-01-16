@@ -1,0 +1,98 @@
+/*
+    Created on : 2023.01.16
+    Author     : Mark Bersalona
+
+    This is the CSS theme for the Sensaphone 400 Cellular Diagnostic
+*/
+
+/*Main window*/
+window
+{
+    background-color: black;
+}
+
+/*Diagnostics pop-up dialog window*/
+dialog
+{
+    background-color: goldenrod;
+}
+
+
+/*Generic label*/
+label
+{
+    color: #33CCCC;
+    /* For original Stratus Display */
+    /*font: bold 18px DejaVu Sans, sans-serif;*/
+    /* For Stratus Display Mk.2 */
+    /*font: bold 25px DejaVu Sans, sans-serif;*/
+		/* For 400 Cellular Diagnostic */
+		font: 11px DejaVu Sans, sans-serif;
+}
+
+/*Main display, zone values*/
+label#lblZoneValue
+{
+    color: #00FF00;
+}
+
+/*Main display, zone status OK/Alarm*/
+label#ZoneStatusOK
+{
+    color: #00FF00;
+}
+label#ZoneStatusAlarm
+{
+    color: red;
+}
+
+/*Main display, zone numbers*/
+label#ZoneNumber
+{
+    color: yellow;
+}
+
+/*Main display, connection OK/warning/error*/
+label#ConnectionOK
+{
+    color: #00FF00;
+}
+label#ConnectionWarning
+{
+    color: yellow;
+}
+label#ConnectionError
+{
+    color: red;
+}
+
+/*Main display, zone names*/
+
+/*Diagnostics display, titles*/
+label#DiagnosticsTitle
+{
+    color: gray;
+}
+
+/*Diagnostics display, values*/
+label#DiagnosticValue
+{
+    /* For original Stratus Display */
+    /*color: black;*/
+    /* For Stratus Display Mk.2 */
+    color: white;
+}
+
+/*button colors*/
+button
+{
+    background-color: gray;
+    color: black;
+}
+
+/*vertical separator*/
+separator
+{
+    color: gray;
+    background-color: gray;
+}
