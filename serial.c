@@ -21,7 +21,7 @@
 #include <string.h>
 #include "gconfig.h"
 #include "main.h"
-#include "json.h"
+//#include "json.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -156,63 +156,63 @@ serial_read(GIOChannel *gio, GIOCondition condition, gpointer data) // GdkInputC
             // At this point msg[] may contain a Display JSON string.
             // Try to detect these; if found, strip the preamble and
             // save the JSON to the appropriate JSON buffer.
-            char * lpCheckForJSON;
-            lpCheckForJSON = strstr(msg, "DISPLAY ZONE VALUES >>> ");
-            if (lpCheckForJSON != NULL)
-            {
-                //g_print("DISPLAY ZONE VALUES detected\r\n");
-                memset (strJSONZoneValues, 0, sizeof(strJSONZoneValues));
-                strncpy(strJSONZoneValues, &msg[24], strlen(msg));
-                ucJSONParseCountdown = DELAY_JSON_PARSING_SEC;
-            }
-            lpCheckForJSON = strstr(msg, "DISPLAY ALARM VALUES >>> ");
-            if (lpCheckForJSON != NULL)
-            {
-                //g_print("DISPLAY ALARM VALUES detected\r\n");
-                memset (strJSONAlarmValues, 0, sizeof(strJSONAlarmValues));
-                strncpy(strJSONAlarmValues, &msg[25], strlen(msg));
-                //g_print("%s\r\n",strJSONAlarmValues);
-                ucJSONParseCountdown = DELAY_JSON_PARSING_SEC;
-            }
-            lpCheckForJSON = strstr(msg, "DISPLAY ZONE NAMES >>> ");
-            if (lpCheckForJSON != NULL)
-            {
-                //g_print("DISPLAY ZONE NAMES detected\r\n");
-                memset (strJSONZoneNames, 0, sizeof(strJSONZoneNames));
-                strncpy(strJSONZoneNames, &msg[23], strlen(msg));
-                //g_print("%s\r\n",strJSONZoneNames);
-                ucJSONParseCountdown = DELAY_JSON_PARSING_SEC;
-            }
-            lpCheckForJSON = strstr(msg, "DISPLAY ZONE TYPES >>> ");
-            if (lpCheckForJSON != NULL)
-            {
-                //g_print("DISPLAY ZONE TYPES detected\r\n");
-                memset (strJSONZoneTypes, 0, sizeof(strJSONZoneTypes));
-                strncpy(strJSONZoneTypes, &msg[23], strlen(msg));
-                //g_print("%s\r\n",strJSONZoneTypes);
-                ucJSONParseCountdown = DELAY_JSON_PARSING_SEC;
-            }
-            lpCheckForJSON = strstr(msg, "DISPLAY DIAGNOSTICS >>> ");
-            if (lpCheckForJSON != NULL)
-            {
-                //g_print("DISPLAY DIAGNOSTICS detected\r\n");
-                memset (strJSONDiagnostics, 0, sizeof(strJSONDiagnostics));
-                strncpy(strJSONDiagnostics, &msg[24], strlen(msg));
-                //g_print("%s\r\n",strJSONDiagnostics);
-                ucJSONParseCountdown = DELAY_JSON_PARSING_SEC;
-            }
+            // char * lpCheckForJSON;
+            // lpCheckForJSON = strstr(msg, "DISPLAY ZONE VALUES >>> ");
+            // if (lpCheckForJSON != NULL)
+            // {
+            //     //g_print("DISPLAY ZONE VALUES detected\r\n");
+            //     memset (strJSONZoneValues, 0, sizeof(strJSONZoneValues));
+            //     strncpy(strJSONZoneValues, &msg[24], strlen(msg));
+            //     ucJSONParseCountdown = DELAY_JSON_PARSING_SEC;
+            // }
+            // lpCheckForJSON = strstr(msg, "DISPLAY ALARM VALUES >>> ");
+            // if (lpCheckForJSON != NULL)
+            // {
+            //     //g_print("DISPLAY ALARM VALUES detected\r\n");
+            //     memset (strJSONAlarmValues, 0, sizeof(strJSONAlarmValues));
+            //     strncpy(strJSONAlarmValues, &msg[25], strlen(msg));
+            //     //g_print("%s\r\n",strJSONAlarmValues);
+            //     ucJSONParseCountdown = DELAY_JSON_PARSING_SEC;
+            // }
+            // lpCheckForJSON = strstr(msg, "DISPLAY ZONE NAMES >>> ");
+            // if (lpCheckForJSON != NULL)
+            // {
+            //     //g_print("DISPLAY ZONE NAMES detected\r\n");
+            //     memset (strJSONZoneNames, 0, sizeof(strJSONZoneNames));
+            //     strncpy(strJSONZoneNames, &msg[23], strlen(msg));
+            //     //g_print("%s\r\n",strJSONZoneNames);
+            //     ucJSONParseCountdown = DELAY_JSON_PARSING_SEC;
+            // }
+            // lpCheckForJSON = strstr(msg, "DISPLAY ZONE TYPES >>> ");
+            // if (lpCheckForJSON != NULL)
+            // {
+            //     //g_print("DISPLAY ZONE TYPES detected\r\n");
+            //     memset (strJSONZoneTypes, 0, sizeof(strJSONZoneTypes));
+            //     strncpy(strJSONZoneTypes, &msg[23], strlen(msg));
+            //     //g_print("%s\r\n",strJSONZoneTypes);
+            //     ucJSONParseCountdown = DELAY_JSON_PARSING_SEC;
+            // }
+            // lpCheckForJSON = strstr(msg, "DISPLAY DIAGNOSTICS >>> ");
+            // if (lpCheckForJSON != NULL)
+            // {
+            //     //g_print("DISPLAY DIAGNOSTICS detected\r\n");
+            //     memset (strJSONDiagnostics, 0, sizeof(strJSONDiagnostics));
+            //     strncpy(strJSONDiagnostics, &msg[24], strlen(msg));
+            //     //g_print("%s\r\n",strJSONDiagnostics);
+            //     ucJSONParseCountdown = DELAY_JSON_PARSING_SEC;
+            // }
             
-            // Also check for the online connection error code
-            // Although it isn't JSON, the prefix is similar
-            lpCheckForJSON = strstr(msg, "DISPLAY ERROR CODE >>> ");
-            if (lpCheckForJSON != NULL)
-            {
-                //g_print("DISPLAY ERROR CODE detected\r\n");
-                memset (lcSerialTempString, 0, sizeof(lcSerialTempString));
-                strncpy(lcSerialTempString, &msg[23], strlen(msg));
-                ucConnectionErrorCode = atoi(lcSerialTempString);
-                //g_print("ucConnectionErrorCode = %d\r\n",ucConnectionErrorCode);
-            }
+            // // Also check for the online connection error code
+            // // Although it isn't JSON, the prefix is similar
+            // lpCheckForJSON = strstr(msg, "DISPLAY ERROR CODE >>> ");
+            // if (lpCheckForJSON != NULL)
+            // {
+            //     //g_print("DISPLAY ERROR CODE detected\r\n");
+            //     memset (lcSerialTempString, 0, sizeof(lcSerialTempString));
+            //     strncpy(lcSerialTempString, &msg[23], strlen(msg));
+            //     ucConnectionErrorCode = atoi(lcSerialTempString);
+            //     //g_print("ucConnectionErrorCode = %d\r\n",ucConnectionErrorCode);
+            // }
             //////////////////////////////////////////////////////////
             
             count = 0;

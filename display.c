@@ -169,7 +169,7 @@ display_update_zones(void)
     char lstrBuf[40];
     int zone;
     
-    // First, clear the existing zone info
+/*     // First, clear the existing zone info
     #if MARK_VERSION == 1
     for (int i = 0; i < 8; ++i)
     #else
@@ -381,6 +381,7 @@ display_update_zones(void)
         }
         
     } // for
+ */
 }
 // end display_update_zones
 
@@ -415,7 +416,7 @@ display_update_display_connection(void)
 void
 display_update_data_age(void)
 {
-    if (ulElapsedTimeSinceDataUpdate_sec < DATA_TIMEOUT_MIN_MINUTES)
+/*     if (ulElapsedTimeSinceDataUpdate_sec < DATA_TIMEOUT_MIN_MINUTES)
     {
         // Data has been updated recently, so connection is OK
     }
@@ -469,6 +470,7 @@ display_update_data_age(void)
                 (float)ulElapsedTimeSinceDataUpdate_sec/(60*60*24*365));
         //gtk_label_set_text(GTK_LABEL(lblDataConnectionStatus), lcTempString);
     }
+ */
 }
 // end display_update_data_age
 

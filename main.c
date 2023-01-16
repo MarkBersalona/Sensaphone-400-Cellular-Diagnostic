@@ -69,7 +69,7 @@ main_periodic(gpointer data)
     static guint32 lulAutoscrollElapsed_sec = 0;
     
     ++lulElapsed_sec;
-    ++ulElapsedTimeSinceDataUpdate_sec;
+    //++ulElapsedTimeSinceDataUpdate_sec;
     
     //////////////////////////////////////////////////////////
     //
@@ -133,13 +133,13 @@ main_periodic(gpointer data)
         if (isUSBConnectionOK)
         {
             // Display RMSP connection (include Standby mode/state if active)
-            display_update_RMSP_connection();
+            //display_update_RMSP_connection();
         }
         // ELSE (USB is disconnected, connection error code is really unknown)
         else
         {
             // Clear the RMSP connection display
-            display_clear_RMSP_connection();
+            //display_clear_RMSP_connection();
         }
         // ENDIF (is USB connected)
         
@@ -232,15 +232,12 @@ int main(int argc, char** argv)
     //
     display_main_initialize();
    
-/*     //
+    //
     // Disable window decoration (title bar, minimize/maximize/close, etc.)
     //
-    gtk_window_set_decorated(GTK_WINDOW(window), FALSE);
-    #if MARK_VERSION == 1
-    gtk_window_set_decorated(GTK_WINDOW(dialog), FALSE);
-    #endif
- */
- 
+    gtk_window_set_decorated(GTK_WINDOW(window), TRUE);
+
+
     //
     // Initialize the Diagnostics dialog
     //
