@@ -396,14 +396,10 @@ display_update_display_connection(void)
     if (isUSBConnectionOK)
     {
         // Display connection OK
-        gtk_widget_set_name((lblRMDConnectionStatus), "ConnectionOK");
-        gtk_label_set_text(GTK_LABEL(lblRMDConnectionStatus), "Display Connected");
     }
     else
     {
         // Display disconnected
-        gtk_widget_set_name((lblRMDConnectionStatus), "ConnectionError");
-        gtk_label_set_text(GTK_LABEL(lblRMDConnectionStatus), "Display Disconnected");
     }
 }
 // end display_update_display_connection
@@ -421,83 +417,60 @@ display_update_data_age(void)
 {
     if (ulElapsedTimeSinceDataUpdate_sec < DATA_TIMEOUT_MIN_MINUTES)
     {
-        gtk_widget_set_name((lblDataConnectionStatus), "ConnectionOK");
-        gtk_label_set_text(GTK_LABEL(lblDataConnectionStatus), "Data OK");
+        // Data has been updated recently, so connection is OK
     }
     else if (ulElapsedTimeSinceDataUpdate_sec < DATA_TIMEOUT_MIN_DAYS)
     {
-        gtk_widget_set_name((lblRMSPConnectionStatus), "ConnectionError");
-        gtk_widget_set_name((lblDataConnectionStatus), "ConnectionWarning");
+        // Data was at least updated within the minimum number of days,
+        // so issue a connection warning
     }
     else
-        gtk_widget_set_name((lblDataConnectionStatus), "ConnectionError");
+    {
+        // Data has NOT been updated within the minimum number of days,
+        // so issue a connection error
+    }
 
     if (ulElapsedTimeSinceDataUpdate_sec >= DATA_TIMEOUT_MIN_MINUTES &&
         ulElapsedTimeSinceDataUpdate_sec <  DATA_TIMEOUT_MAX_MINUTES    )
     {
+        // Data is less than an hour old, report data age in minutes
         sprintf(lcTempString, "Data %d minutes old", 
                 ulElapsedTimeSinceDataUpdate_sec/60);
-        gtk_label_set_text(GTK_LABEL(lblDataConnectionStatus), lcTempString);
+        //gtk_label_set_text(GTK_LABEL(lblDataConnectionStatus), lcTempString);
     }
     else if (ulElapsedTimeSinceDataUpdate_sec >= DATA_TIMEOUT_MIN_HOURS &&
              ulElapsedTimeSinceDataUpdate_sec <  DATA_TIMEOUT_MAX_HOURS    )
     {
+        // Data is less than a day old, report data age in hours
         sprintf(lcTempString, "Data %d hours old", 
                 ulElapsedTimeSinceDataUpdate_sec/(60*60));
-        gtk_label_set_text(GTK_LABEL(lblDataConnectionStatus), lcTempString);
+        //gtk_label_set_text(GTK_LABEL(lblDataConnectionStatus), lcTempString);
     }
     else if (ulElapsedTimeSinceDataUpdate_sec >= DATA_TIMEOUT_MIN_DAYS &&
              ulElapsedTimeSinceDataUpdate_sec <  DATA_TIMEOUT_MAX_DAYS    )
     {
+        // Data is less than a month old, report data age in days
         sprintf(lcTempString, "Data %d days old", 
                 ulElapsedTimeSinceDataUpdate_sec/(60*60*24));
-        gtk_label_set_text(GTK_LABEL(lblDataConnectionStatus), lcTempString);
+        //gtk_label_set_text(GTK_LABEL(lblDataConnectionStatus), lcTempString);
     }
     else if (ulElapsedTimeSinceDataUpdate_sec >= DATA_TIMEOUT_MIN_MONTHS &&
              ulElapsedTimeSinceDataUpdate_sec <  DATA_TIMEOUT_MAX_MONTHS    )
     {
+        // Data is less than a year old, report data age in months
         sprintf(lcTempString, "Data %.01f months old", 
                 (float)ulElapsedTimeSinceDataUpdate_sec/(60*60*24*30));
-        gtk_label_set_text(GTK_LABEL(lblDataConnectionStatus), lcTempString);
+        //gtk_label_set_text(GTK_LABEL(lblDataConnectionStatus), lcTempString);
     }
     else if (ulElapsedTimeSinceDataUpdate_sec >= DATA_TIMEOUT_MIN_YEARS)
     {
+        // Report data age in years
         sprintf(lcTempString, "Data %.01f years old", 
                 (float)ulElapsedTimeSinceDataUpdate_sec/(60*60*24*365));
-        gtk_label_set_text(GTK_LABEL(lblDataConnectionStatus), lcTempString);
+        //gtk_label_set_text(GTK_LABEL(lblDataConnectionStatus), lcTempString);
     }
 }
 // end display_update_data_age
-
-////////////////////////////////////////////////////////////////////////////
-// Name:         display_set_autoscroll_icon
-// Description:  Change Main display autoscroll icon to STOP or Go
-// Parameters:   gboolean afIsAutoscrollEnabled
-//                 TRUE  - autoscroll enabled, set STOP icon
-//                 FALSE - autoscroll disabled, set GO  icon
-// Return:       None
-////////////////////////////////////////////////////////////////////////////
-#if MARK_VERSION == 1
-void
-display_set_autoscroll_icon(gboolean afIsAutoscrollEnabled)
-{
-    // IF autoscroll is enabled
-    if (afIsAutoscrollEnabled)
-    {
-        // Set autoscroll icon to STOP
-        gtk_image_set_from_file(GTK_IMAGE(imgStopSign), "Stop24.png");
-    }
-    // ELSE
-    else
-    {
-        // Set autoscroll icon to GO
-        gtk_image_set_from_file(GTK_IMAGE(imgStopSign), "Refresh24.png");
-    }
-    // ENDIF
-}
-#endif
-// end display_set_autoscroll_icon
-
 
 ////////////////////////////////////////////////////////////////////////////
 // Name:         display_diagnostics_enter
@@ -509,7 +482,7 @@ void
 display_diagnostics_enter(GtkWindow *parent)
 {
     //g_print("%s() Showing the Diagnostics dialog\r\n", __FUNCTION__);
-    gtk_widget_show_all(dialog);
+    //gtk_widget_show_all(dialog);
 }
 // end display_diagnostics_enter
 
@@ -523,6 +496,6 @@ void
 display_diagnostics_exit(void)
 {
     //g_print("%s() Hiding the Diagnostics dialog\r\n", __FUNCTION__);
-    gtk_widget_hide(GTK_WIDGET(dialog));
+    //gtk_widget_hide(GTK_WIDGET(dialog));
 }
 // end display_diagnostics_exit

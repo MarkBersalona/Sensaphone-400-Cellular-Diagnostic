@@ -34,7 +34,6 @@ void display_main_initialize(void);
 void display_update_zones(void);
 void display_update_display_connection(void);
 void display_update_data_age(void);
-void display_set_autoscroll_icon(gboolean afIsAutoscrollEnabled);
 void display_diagnostics_enter(GtkWindow *parent);
 void display_diagnostics_exit(void);
 
