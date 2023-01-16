@@ -26,8 +26,8 @@ label
     /*font: bold 18px DejaVu Sans, sans-serif;*/
     /* For Stratus Display Mk.2 */
     /*font: bold 25px DejaVu Sans, sans-serif;*/
-		/* For 400 Cellular Diagnostic */
-		font: 11px DejaVu Sans, sans-serif;
+	/* For 400 Cellular Diagnostic */
+	font: bold 14px DejaVu Sans, sans-serif;
 }
 
 /*Main display, zone values*/

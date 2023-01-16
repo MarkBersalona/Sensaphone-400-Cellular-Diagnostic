@@ -128,7 +128,7 @@ display_main_initialize(void)
     gtk_widget_set_name((lblLogfileTitle),        "DiagnosticsTitle");
 
 		
-		// Values
+	// Values
     gtk_widget_set_name((lblMAC),            "DiagnosticValue");
     gtk_widget_set_name((lblBoardRev),       "DiagnosticValue");
     gtk_widget_set_name((lblHumiditySensor), "DiagnosticValue");
@@ -141,16 +141,16 @@ display_main_initialize(void)
 		
     //
     // Initialize values
-		//
-    gtk_label_set_text(GTK_LABEL(lblMAC), "");
-    gtk_label_set_text(GTK_LABEL(lblBoardRev), "");
-    gtk_label_set_text(GTK_LABEL(lblHumiditySensor), "");
-    gtk_label_set_text(GTK_LABEL(lbl400FW), "");
-    gtk_label_set_text(GTK_LABEL(lblTransceiver), "");
-    gtk_label_set_text(GTK_LABEL(lblTransceiverFW), "");
-    gtk_label_set_text(GTK_LABEL(lblICCID), "");
-    gtk_label_set_text(GTK_LABEL(lblIMEI), "");
-    gtk_label_set_text(GTK_LABEL(lblLogfile), "");
+	//
+    gtk_label_set_text(GTK_LABEL(lblMAC), "00-07-F9-xx-xx");
+    gtk_label_set_text(GTK_LABEL(lblBoardRev), "D");
+    gtk_label_set_text(GTK_LABEL(lblHumiditySensor), "Sensirion SHTC3");
+    gtk_label_set_text(GTK_LABEL(lbl400FW), "v0.7.5");
+    gtk_label_set_text(GTK_LABEL(lblTransceiver), "SARA-R510M8S-01B-00");
+    gtk_label_set_text(GTK_LABEL(lblTransceiverFW), "03.15");
+    gtk_label_set_text(GTK_LABEL(lblICCID), "89148000005471114678");
+    gtk_label_set_text(GTK_LABEL(lblIMEI), "355598110014663");
+    gtk_label_set_text(GTK_LABEL(lblLogfile), "20230116 1634 400 Cellular.txt");
     //sprintf(lcTempString, "v%s.%s.%s", VERSION_A, VERSION_B, VERSION_C);
     //gtk_label_set_text(GTK_LABEL(lblDisplay), lcTempString);
 }
