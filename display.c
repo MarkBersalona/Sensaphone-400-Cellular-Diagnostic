@@ -20,6 +20,7 @@
 #include "gconfig.h"
 #include "main.h"
 #include "serial.h"
+#include "display.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -46,6 +47,13 @@ GtkWidget *lblStatusTitle, *textviewStatus;
 GtkWidget *lblReceiveTitle, *lblLogfileTitle, *swLogfileEnable, *lblLogfile;
 GtkWidget *textviewReceive;
 
+// Status view
+GtkScrolledWindow *scrolledwindowStatus;
+GtkAdjustment *adjStatus;
+GtkTextBuffer *textbufStatus;
+// GtkTextIter *textiterStatusStart;
+// GtkTextIter *textiterStatusEnd;
+// GtkTextMark *textmarkStatus;
 
 char lcTempString[40];
 
@@ -105,7 +113,13 @@ display_main_initialize(void)
     lblLogfile      = GTK_WIDGET(gtk_builder_get_object(builder, "lblLogfile"));
     textviewReceive = GTK_WIDGET(gtk_builder_get_object(builder, "textviewReceive"));
 		
-    
+    // Status text buffer
+    scrolledwindowStatus = GTK_SCROLLED_WINDOW(gtk_builder_get_object(builder, "scrolledwindow1"));
+    textbufStatus  = gtk_text_view_get_buffer(GTK_TEXT_VIEW(textviewStatus));
+    // gtk_text_buffer_get_start_iter(textbufStatus, textiterStatusStart);
+    // gtk_text_buffer_get_end_iter  (textbufStatus, textiterStatusEnd);
+    // gtk_text_buffer_add_mark(textbufStatus, textmarkStatus, textiterStatusEnd);
+    gtk_text_view_set_monospace(GTK_TEXT_VIEW(textviewStatus), TRUE);
     
     // 
     // Initialize stylings
@@ -153,8 +167,46 @@ display_main_initialize(void)
     gtk_label_set_text(GTK_LABEL(lblLogfile), "20230116 1634 400 Cellular.txt");
     //sprintf(lcTempString, "v%s.%s.%s", VERSION_A, VERSION_B, VERSION_C);
     //gtk_label_set_text(GTK_LABEL(lblDisplay), lcTempString);
+
+    // gtk_text_buffer_set_text(textbufStatus, "Hello, this is some text\r\n", -1);
+    // gtk_text_iter_forward_to_end(textiterStatusEnd);
+    // gtk_text_buffer_insert_at_cursor(textbufStatus, "Hope this is a 2nd line\r\n", -1);
+    // gtk_text_buffer_insert_at_cursor(textbufStatus, "Hope this is a 3rd line\r\n", -1);
+    // gtk_text_buffer_insert_at_cursor(textbufStatus, "Hope this is a 4th line\r\n", -1);
+    // gtk_text_buffer_insert_at_cursor(textbufStatus, "Hope this is a 5th line\r\n", -1);
+    // gtk_text_buffer_insert_at_cursor(textbufStatus, "Hope this is a 6th line\r\n", -1);
+    // gtk_text_buffer_insert_at_cursor(textbufStatus, "Hope this is a 7th line\r\n", -1);
+    // gtk_text_buffer_insert_at_cursor(textbufStatus, "Hope this is a 8th line\r\n", -1);
+    // gtk_text_buffer_insert_at_cursor(textbufStatus, "Hope this is a 2nd line\r\n", -1);
+    // gtk_text_buffer_insert_at_cursor(textbufStatus, "Hope this is a 3rd line\r\n", -1);
+    // gtk_text_buffer_insert_at_cursor(textbufStatus, "Hope this is a 4th line\r\n", -1);
+    // gtk_text_buffer_insert_at_cursor(textbufStatus, "Hope this is a 5th line\r\n", -1);
+    // gtk_text_buffer_insert_at_cursor(textbufStatus, "Hope this is a 6th line\r\n", -1);
+    // gtk_text_buffer_insert_at_cursor(textbufStatus, "Hope this is a 7th line\r\n", -1);
+    // gtk_text_buffer_insert_at_cursor(textbufStatus, "Hope this is a 8th line\r\n", -1);
+    display_status_write("Hello, this is some text\r\n");
 }
 // end display_main_initialize
+
+
+////////////////////////////////////////////////////////////////////////////
+// Name:         display_status_write
+// Description:  Write a new string buffer to Status
+// Parameters:   paucWriteBuf - pointer to buffer containing chars to
+//                              write to Status; assumes NULL-terminated
+// Return:       None
+////////////////////////////////////////////////////////////////////////////
+void
+display_status_write(char * paucWriteBuf)
+{
+    // Write contents of paucWriteBuf string buffer to Status text buffer
+    gtk_text_buffer_insert_at_cursor   (textbufStatus, paucWriteBuf, -1);
+
+    // Move to bottom of Status window
+    adjStatus = gtk_scrolled_window_get_vadjustment(scrolledwindowStatus);
+    gtk_adjustment_set_value( adjStatus, gtk_adjustment_get_upper(adjStatus) );
+}
+// end display_status_write
 
 
 ////////////////////////////////////////////////////////////////////////////

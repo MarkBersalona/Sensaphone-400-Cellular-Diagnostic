@@ -52,7 +52,7 @@
 // GTK builder
 GtkBuilder *builder;
 
-
+char lcTempMainString[100];
 
 
 
@@ -94,12 +94,12 @@ main_periodic(gpointer data)
         //g_print("  fd = %d\r\n", fd);
         if (fd<0)
         {
-            g_print("***ERROR*** problem opening ttyUSB0\r\n");
+            display_status_write("***ERROR*** problem opening ttyUSB0\r\n");
             isUSBConnectionOK = FALSE;
         }
         else
         {
-            g_print("ttyUSB0 opened successfully!\r\n");
+            display_status_write("ttyUSB0 opened successfully!\r\n");
             isUSBConnectionOK = TRUE;
             gIOPointer = g_io_channel_unix_new(fd);  // creates the correct reference for callback
             // Set encoding
@@ -171,12 +171,12 @@ int main(int argc, char** argv)
 
     gtk_init(&argc, &argv);
     
-    g_print("\r\n");
-    g_print("=================================<=>=================================\r\n");
-    g_print("                 Sensaphone 400 Cellular Diagnostic                  \r\n");
-    g_print("                               v%s.%s.%s \r\n", VERSION_A,VERSION_B,VERSION_C);
-    g_print("                             2023.01.16                              \r\n");
-    g_print("=================================<=>=================================\r\n");
+    // g_print("\r\n");
+    // g_print("=================================<=>=================================\r\n");
+    // g_print("                 Sensaphone 400 Cellular Diagnostic                  \r\n");
+    // g_print("                               v%s.%s.%s \r\n", VERSION_A,VERSION_B,VERSION_C);
+    // g_print("                             2023.01.17                              \r\n");
+    // g_print("=================================<=>=================================\r\n");
 
     
     //
@@ -247,6 +247,13 @@ int main(int argc, char** argv)
     // Start the timeout periodic function
     //
     g_timeout_add(MAIN_PERIODIC_INTERVAL_MSEC, main_periodic, NULL);
+
+    display_status_write("=================================<=>=================================\r\n");
+    display_status_write("                 Sensaphone 400 Cellular Diagnostic                  \r\n");
+    sprintf(lcTempMainString, "                               v%s.%s.%s \r\n", VERSION_A,VERSION_B,VERSION_C);
+    display_status_write(lcTempMainString);
+    display_status_write("                             2023.01.17                              \r\n");
+    display_status_write("=================================<=>=================================\r\n");
 
     //
     // Kick off GTK main loop

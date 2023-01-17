@@ -31,6 +31,7 @@ extern GtkWindow *window;
 ///////////////////////////////////////////////////////////////////////////////
 
 void display_main_initialize(void);
+void display_status_write(char * paucWriteBuf);
 void display_update_zones(void);
 void display_update_display_connection(void);
 void display_update_data_age(void);
