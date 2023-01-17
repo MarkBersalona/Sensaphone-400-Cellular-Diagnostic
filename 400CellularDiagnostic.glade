@@ -5,7 +5,6 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Sensaphone 400 Cellular Diagnostic</property>
-    <property name="window_position">none</property>
     <child>
       <object class="GtkBox" id="box1">
         <property name="visible">True</property>
@@ -293,6 +292,8 @@
                 <property name="halign">end</property>
                 <property name="margin_left">20</property>
                 <property name="margin_right">10</property>
+                <property name="margin_top">10</property>
+                <property name="margin_bottom">10</property>
                 <property name="label" translatable="yes">New MAC/SN</property>
               </object>
               <packing>
@@ -309,6 +310,7 @@
                 <property name="halign">end</property>
                 <property name="margin_left">20</property>
                 <property name="margin_right">10</property>
+                <property name="margin_top">10</property>
                 <property name="label" translatable="yes">New Board rev.</property>
               </object>
               <packing>
@@ -325,6 +327,8 @@
                 <property name="halign">end</property>
                 <property name="margin_left">20</property>
                 <property name="margin_right">10</property>
+                <property name="margin_top">10</property>
+                <property name="margin_bottom">10</property>
                 <property name="label" translatable="yes">AT command</property>
               </object>
               <packing>
@@ -413,6 +417,9 @@
                 <property name="width_request">500</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="valign">center</property>
+                <property name="margin_top">10</property>
+                <property name="margin_bottom">10</property>
                 <property name="hexpand">True</property>
                 <property name="invisible_char">●</property>
                 <property name="text" translatable="yes">00-07-F9-00-45-B8</property>
@@ -428,6 +435,9 @@
               <object class="GtkEntry" id="txtentNewBoardRev">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="valign">center</property>
+                <property name="margin_top">10</property>
+                <property name="margin_bottom">10</property>
                 <property name="hexpand">True</property>
                 <property name="invisible_char">●</property>
                 <property name="text" translatable="yes">E</property>
@@ -444,6 +454,9 @@
                 <property name="width_request">500</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="valign">center</property>
+                <property name="margin_top">10</property>
+                <property name="margin_bottom">10</property>
                 <property name="hexpand">True</property>
                 <property name="invisible_char">●</property>
                 <property name="text" translatable="yes">ATI0</property>
@@ -520,6 +533,7 @@
                 <property name="receives_default">True</property>
                 <property name="halign">center</property>
                 <property name="margin_left">20</property>
+                <property name="margin_right">20</property>
                 <property name="margin_top">10</property>
                 <property name="margin_bottom">10</property>
               </object>
@@ -629,6 +643,8 @@
                   <object class="GtkSwitch" id="swLogfileEnable">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="margin_left">10</property>
+                    <property name="margin_right">10</property>
                     <property name="active">True</property>
                   </object>
                   <packing>
@@ -642,6 +658,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
+                    <property name="margin_left">10</property>
                     <property name="margin_right">20</property>
                     <property name="label" translatable="yes">20230113 1043 400 Cellular.txt</property>
                   </object>
