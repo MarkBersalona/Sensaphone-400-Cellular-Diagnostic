@@ -463,28 +463,6 @@ display_update_zones(void)
 // end display_update_zones
 
 ////////////////////////////////////////////////////////////////////////////
-// Name:         display_update_display_connection
-// Description:  Update the main display "Display Connection" status
-// Parameters:   None
-// Return:       None
-////////////////////////////////////////////////////////////////////////////
-void
-display_update_display_connection(void)
-{
-    if (isUSBConnectionOK)
-    {
-        // Display connection OK
-    }
-    else
-    {
-        // Display disconnected
-    }
-}
-// end display_update_display_connection
-
-
-
-////////////////////////////////////////////////////////////////////////////
 // Name:         display_update_data_age
 // Description:  Update data age if data hasn't updated "in a while"
 // Parameters:   None
@@ -493,11 +471,11 @@ display_update_display_connection(void)
 void
 display_update_data_age(void)
 {
-/*     if (ulElapsedTimeSinceDataUpdate_sec < DATA_TIMEOUT_MIN_MINUTES)
+    if (gulElapsedTimeSinceDataUpdate_sec < DATA_TIMEOUT_MIN_MINUTES)
     {
         // Data has been updated recently, so connection is OK
     }
-    else if (ulElapsedTimeSinceDataUpdate_sec < DATA_TIMEOUT_MIN_DAYS)
+    else if (gulElapsedTimeSinceDataUpdate_sec < DATA_TIMEOUT_MIN_DAYS)
     {
         // Data was at least updated within the minimum number of days,
         // so issue a connection warning
@@ -508,46 +486,45 @@ display_update_data_age(void)
         // so issue a connection error
     }
 
-    if (ulElapsedTimeSinceDataUpdate_sec >= DATA_TIMEOUT_MIN_MINUTES &&
-        ulElapsedTimeSinceDataUpdate_sec <  DATA_TIMEOUT_MAX_MINUTES    )
+    if (gulElapsedTimeSinceDataUpdate_sec >= DATA_TIMEOUT_MIN_MINUTES &&
+        gulElapsedTimeSinceDataUpdate_sec <  DATA_TIMEOUT_MAX_MINUTES    )
     {
         // Data is less than an hour old, report data age in minutes
-        sprintf(lcTempString, "Data %d minutes old", 
-                ulElapsedTimeSinceDataUpdate_sec/60);
-        //gtk_label_set_text(GTK_LABEL(lblDataConnectionStatus), lcTempString);
+        sprintf(lcTempString, "Data %d minutes old\r\n", 
+                gulElapsedTimeSinceDataUpdate_sec/60);
+        display_status_write(lcTempString);
     }
-    else if (ulElapsedTimeSinceDataUpdate_sec >= DATA_TIMEOUT_MIN_HOURS &&
-             ulElapsedTimeSinceDataUpdate_sec <  DATA_TIMEOUT_MAX_HOURS    )
+    else if (gulElapsedTimeSinceDataUpdate_sec >= DATA_TIMEOUT_MIN_HOURS &&
+             gulElapsedTimeSinceDataUpdate_sec <  DATA_TIMEOUT_MAX_HOURS    )
     {
         // Data is less than a day old, report data age in hours
-        sprintf(lcTempString, "Data %d hours old", 
-                ulElapsedTimeSinceDataUpdate_sec/(60*60));
-        //gtk_label_set_text(GTK_LABEL(lblDataConnectionStatus), lcTempString);
+        sprintf(lcTempString, "Data %d hours old\r\n", 
+                gulElapsedTimeSinceDataUpdate_sec/(60*60));
+        display_status_write(lcTempString);
     }
-    else if (ulElapsedTimeSinceDataUpdate_sec >= DATA_TIMEOUT_MIN_DAYS &&
-             ulElapsedTimeSinceDataUpdate_sec <  DATA_TIMEOUT_MAX_DAYS    )
+    else if (gulElapsedTimeSinceDataUpdate_sec >= DATA_TIMEOUT_MIN_DAYS &&
+             gulElapsedTimeSinceDataUpdate_sec <  DATA_TIMEOUT_MAX_DAYS    )
     {
         // Data is less than a month old, report data age in days
-        sprintf(lcTempString, "Data %d days old", 
-                ulElapsedTimeSinceDataUpdate_sec/(60*60*24));
-        //gtk_label_set_text(GTK_LABEL(lblDataConnectionStatus), lcTempString);
+        sprintf(lcTempString, "Data %d days old\r\n", 
+                gulElapsedTimeSinceDataUpdate_sec/(60*60*24));
+        display_status_write(lcTempString);
     }
-    else if (ulElapsedTimeSinceDataUpdate_sec >= DATA_TIMEOUT_MIN_MONTHS &&
-             ulElapsedTimeSinceDataUpdate_sec <  DATA_TIMEOUT_MAX_MONTHS    )
+    else if (gulElapsedTimeSinceDataUpdate_sec >= DATA_TIMEOUT_MIN_MONTHS &&
+             gulElapsedTimeSinceDataUpdate_sec <  DATA_TIMEOUT_MAX_MONTHS    )
     {
         // Data is less than a year old, report data age in months
-        sprintf(lcTempString, "Data %.01f months old", 
-                (float)ulElapsedTimeSinceDataUpdate_sec/(60*60*24*30));
-        //gtk_label_set_text(GTK_LABEL(lblDataConnectionStatus), lcTempString);
+        sprintf(lcTempString, "Data %.01f months old\r\n", 
+                (float)gulElapsedTimeSinceDataUpdate_sec/(60*60*24*30));
+        display_status_write(lcTempString);
     }
-    else if (ulElapsedTimeSinceDataUpdate_sec >= DATA_TIMEOUT_MIN_YEARS)
+    else if (gulElapsedTimeSinceDataUpdate_sec >= DATA_TIMEOUT_MIN_YEARS)
     {
         // Report data age in years
-        sprintf(lcTempString, "Data %.01f years old", 
-                (float)ulElapsedTimeSinceDataUpdate_sec/(60*60*24*365));
-        //gtk_label_set_text(GTK_LABEL(lblDataConnectionStatus), lcTempString);
+        sprintf(lcTempString, "Data %.01f years old\r\n", 
+                (float)gulElapsedTimeSinceDataUpdate_sec/(60*60*24*365));
+        display_status_write(lcTempString);
     }
- */
 }
 // end display_update_data_age
 

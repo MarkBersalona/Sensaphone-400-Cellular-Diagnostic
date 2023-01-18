@@ -59,6 +59,12 @@ char gucReceiveFIFO[RECEIVE_FIFO_MSG_COUNT][RECEIVE_FIFO_MSG_LENGTH_MAX];
 guint16 guiReceiveFIFOWriteIndex;
 guint16 guiReceiveFIFOReadIndex;
 
+// UNIX timestamp
+guint32 gulUNIXTimestamp;
+// Elapsed time since last data update
+guint32 gulElapsedTimeSinceDataUpdate_sec;
+// Glib date/time
+GDateTime *gDateTime;
 
 
 ////////////////////////////////////////////////////////////////////////////
@@ -116,11 +122,48 @@ static gboolean
 main_periodic(gpointer data)
 {
     static guint32 lulElapsed_sec = 0;
-    static guint32 lulAutoscrollElapsed_sec = 0;
     char* plcReceivedMsgAvailable;
+    static int fd;
     
-    ++lulElapsed_sec;
-    //++ulElapsedTimeSinceDataUpdate_sec;
+    //////////////////////////////////////////////////////////
+    //
+    // Update timestamps
+    //
+    //////////////////////////////////////////////////////////
+    if (gulUNIXTimestamp != g_get_real_time()/1000000)
+    {
+        // Updates every second
+        gulUNIXTimestamp = g_get_real_time()/1000000;
+        //gDateTime = g_date_time_new_now_utc();
+        gDateTime = g_date_time_new_now_local();
+        ++lulElapsed_sec;
+        ++gulElapsedTimeSinceDataUpdate_sec;
+
+        // Display data age if it's been a while since update (update every n seconds)
+        if (lulElapsed_sec%300 == 0)
+        {
+            display_update_data_age();
+        }
+
+        if (lulElapsed_sec%60 == 0)
+        {
+            // Updates every minute
+            sprintf(lcTempMainString, "%s: UNIX timestamp %d\t", __FUNCTION__, gulUNIXTimestamp);
+            display_status_write(lcTempMainString);
+            sprintf(lcTempMainString, "Local time %s\r\n", g_date_time_format(gDateTime, "%Y-%m-%d %H:%M"));
+            display_status_write(lcTempMainString);
+        }
+
+        if (lulElapsed_sec%(60*60) == 0)
+        {
+            // Updates every hour
+        }
+
+        if (lulElapsed_sec%(60*60*24) == 0)
+        {
+            // Updates every 24-hour day
+        }
+    }
     
     //////////////////////////////////////////////////////////
     //
@@ -135,7 +178,6 @@ main_periodic(gpointer data)
     {
         // Code when USB connection failed
         // Try to open the serial-to-USB port
-        int fd;
         /* IO channel variable for file */
         GIOChannel *gIOPointer;
 
@@ -148,7 +190,7 @@ main_periodic(gpointer data)
             if (isFirstSerialFail)
             {
                 isFirstSerialFail = FALSE;
-                display_status_write("***ERROR*** problem opening ttyUSB0\r\n");
+                display_status_write("***ERROR*** problem opening ttyUSB0 - connect serial-to-USB cable to USB port\r\n");
             }
             isUSBConnectionOK = FALSE;
         }
@@ -174,42 +216,11 @@ main_periodic(gpointer data)
         }
     }
     
-    //////////////////////////////////////////////////////////
-    //
-    // Display connection status
-    //
-    //////////////////////////////////////////////////////////
-    // Display connection
-    display_update_display_connection();
-    
-    // Display RMSP connection and Standby mode if active (update every 10 seconds)
-    if (lulElapsed_sec%10 == 0)
-    {
-        // IF USB is connected (connection error code is updated)
-        if (isUSBConnectionOK)
-        {
-            // Display RMSP connection (include Standby mode/state if active)
-            //display_update_RMSP_connection();
-        }
-        // ELSE (USB is disconnected, connection error code is really unknown)
-        else
-        {
-            // Clear the RMSP connection display
-            //display_clear_RMSP_connection();
-        }
-        // ENDIF (is USB connected)
-        
-    } // end Display Standby mode every 10 seconds
-    
-    // Display data age if it's been a while since update (update every 5 seconds)
-    if (lulElapsed_sec%5 == 0)
-    {
-        display_update_data_age();
-    }
     
     //////////////////////////////////////////////////////////
     //
-    // Display received messages
+    // Display and parse received messages
+    // If a log file is active, save received messages
     //
     //////////////////////////////////////////////////////////
     do
@@ -217,8 +228,13 @@ main_periodic(gpointer data)
         plcReceivedMsgAvailable = main_receive_msg_read();
         if (plcReceivedMsgAvailable)
         {
+            // Display received message
             display_receive_write(plcReceivedMsgAvailable);
             display_receive_write("\r\n");
+
+            // Parse received message
+
+            // If log file is active, save received message
         }
     } while (plcReceivedMsgAvailable);
     
@@ -248,6 +264,12 @@ int main(int argc, char** argv)
     // g_print("                             2023.01.17                              \r\n");
     // g_print("=================================<=>=================================\r\n");
 
+    //
+    // Initalize any globals needed
+    //
+    gulElapsedTimeSinceDataUpdate_sec = 0;
+    //gDateTime = g_date_time_new_now_utc();
+    gDateTime = g_date_time_new_now_local();
     
     //
     // Enable CSS styling (colors, fonts, text sizes)
@@ -303,15 +325,10 @@ int main(int argc, char** argv)
     display_main_initialize();
    
     //
-    // Disable window decoration (title bar, minimize/maximize/close, etc.)
+    // Enable window decoration (title bar, minimize/maximize/close, etc.)
     //
     gtk_window_set_decorated(GTK_WINDOW(window), TRUE);
 
-
-    //
-    // Initialize the Diagnostics dialog
-    //
-    //display_diagnostics_initialize();
     
     //
     // Start the timeout periodic function

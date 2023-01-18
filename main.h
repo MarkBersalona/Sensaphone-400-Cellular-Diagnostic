@@ -55,6 +55,9 @@ void main_receive_msg_write(char *paucReceiveMsg);
 // GTK builder
 extern GtkBuilder *builder;
 
+// Elapsed time since last data update
+extern guint32 gulElapsedTimeSinceDataUpdate_sec;
+
 
 #ifdef __cplusplus
 }
