@@ -23,6 +23,7 @@ extern "C" {
 // serial-to-USB
 //
 extern gboolean isUSBConnectionOK;
+extern gboolean isFirstSerialFail;
 
 ///////////////////////////////////////////////////////////////////////////////
 //

@@ -94,13 +94,18 @@ main_periodic(gpointer data)
         //g_print("  fd = %d\r\n", fd);
         if (fd<0)
         {
-            display_status_write("***ERROR*** problem opening ttyUSB0\r\n");
+            if (isFirstSerialFail)
+            {
+                isFirstSerialFail = FALSE;
+                display_status_write("***ERROR*** problem opening ttyUSB0\r\n");
+            }
             isUSBConnectionOK = FALSE;
         }
         else
         {
             display_status_write("ttyUSB0 opened successfully!\r\n");
             isUSBConnectionOK = TRUE;
+            isFirstSerialFail = TRUE;
             gIOPointer = g_io_channel_unix_new(fd);  // creates the correct reference for callback
             // Set encoding
             g_io_channel_set_encoding(gIOPointer, NULL, NULL);
@@ -252,7 +257,7 @@ int main(int argc, char** argv)
     display_status_write("                 Sensaphone 400 Cellular Diagnostic                  \r\n");
     sprintf(lcTempMainString, "                               v%s.%s.%s \r\n", VERSION_A,VERSION_B,VERSION_C);
     display_status_write(lcTempMainString);
-    display_status_write("                             2023.01.17                              \r\n");
+    display_status_write("                             2023.01.18                              \r\n");
     display_status_write("=================================<=>=================================\r\n");
 
     //

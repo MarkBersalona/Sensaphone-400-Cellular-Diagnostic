@@ -33,6 +33,7 @@
 // serial-to-USB
 //
 gboolean isUSBConnectionOK = FALSE;
+gboolean isFirstSerialFail = TRUE;
 
 char lcSerialTempString[40];
 
