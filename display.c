@@ -47,6 +47,14 @@ GtkWidget *lblStatusTitle, *textviewStatus;
 GtkWidget *lblReceiveTitle, *lblLogfileTitle, *swLogfileEnable, *lblLogfile;
 GtkWidget *textviewReceive;
 
+// Receive view
+GtkScrolledWindow *scrolledwindowReceive;
+GtkAdjustment *adjReceive;
+GtkTextBuffer *textbufReceive;
+// GtkTextIter *textiterReceiveStart;
+// GtkTextIter *textiterReceiveEnd;
+// GtkTextMark *textmarkReceive;
+
 // Status view
 GtkScrolledWindow *scrolledwindowStatus;
 GtkAdjustment *adjStatus;
@@ -113,6 +121,14 @@ display_main_initialize(void)
     lblLogfile      = GTK_WIDGET(gtk_builder_get_object(builder, "lblLogfile"));
     textviewReceive = GTK_WIDGET(gtk_builder_get_object(builder, "textviewReceive"));
 		
+    // Receive text buffer
+    scrolledwindowReceive = GTK_SCROLLED_WINDOW(gtk_builder_get_object(builder, "scrolledwindow2"));
+    textbufReceive        = gtk_text_view_get_buffer(GTK_TEXT_VIEW(textviewReceive));
+    // gtk_text_buffer_get_start_iter(textbufStatus, textiterStatusStart);
+    // gtk_text_buffer_get_end_iter  (textbufStatus, textiterStatusEnd);
+    // gtk_text_buffer_add_mark(textbufStatus, textmarkStatus, textiterStatusEnd);
+    gtk_text_view_set_monospace(GTK_TEXT_VIEW(textviewReceive), TRUE);
+    
     // Status text buffer
     scrolledwindowStatus = GTK_SCROLLED_WINDOW(gtk_builder_get_object(builder, "scrolledwindow1"));
     textbufStatus  = gtk_text_view_get_buffer(GTK_TEXT_VIEW(textviewStatus));
@@ -176,6 +192,26 @@ display_main_initialize(void)
 
 }
 // end display_main_initialize
+
+
+////////////////////////////////////////////////////////////////////////////
+// Name:         display_receive_write
+// Description:  Write a new string buffer to Receive
+// Parameters:   paucWriteBuf - pointer to buffer containing chars to
+//                              write to Receive; assumes NULL-terminated
+// Return:       None
+////////////////////////////////////////////////////////////////////////////
+void
+display_receive_write(char * paucWriteBuf)
+{
+    // Write contents of paucWriteBuf string buffer to Receive text buffer
+    gtk_text_buffer_insert_at_cursor   (textbufReceive, paucWriteBuf, -1);
+
+    // Move to bottom of Receive window
+    adjStatus = gtk_scrolled_window_get_vadjustment(scrolledwindowReceive);
+    gtk_adjustment_set_value( adjStatus, gtk_adjustment_get_upper(adjStatus) );
+}
+// end display_status_write
 
 
 ////////////////////////////////////////////////////////////////////////////

@@ -25,7 +25,11 @@ extern "C" {
 #define VERSION_C     "3"
     
 // Period of the periodic callback
-#define MAIN_PERIODIC_INTERVAL_MSEC (1000)
+#define MAIN_PERIODIC_INTERVAL_MSEC (250)
+
+// Receive message FIFO
+#define RECEIVE_FIFO_MSG_COUNT (200)
+#define RECEIVE_FIFO_MSG_LENGTH_MAX (10000)
     
 
 #ifdef __cplusplus

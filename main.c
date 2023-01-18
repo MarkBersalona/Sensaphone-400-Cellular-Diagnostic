@@ -54,6 +54,56 @@ GtkBuilder *builder;
 
 char lcTempMainString[100];
 
+// Receive message FIFO
+char gucReceiveFIFO[RECEIVE_FIFO_MSG_COUNT][RECEIVE_FIFO_MSG_LENGTH_MAX];
+guint16 guiReceiveFIFOWriteIndex;
+guint16 guiReceiveFIFOReadIndex;
+
+
+
+////////////////////////////////////////////////////////////////////////////
+// Name:         main_receive_msg_read
+// Description:  Read the next received string from the FIFO
+// Parameters:   None
+// Return:       Pointer to next received string, or NULL if no more strings
+//               available from the FIFO
+////////////////////////////////////////////////////////////////////////////
+char * 
+main_receive_msg_read(void)
+{
+    char *plcReturnPointer;
+
+    if (guiReceiveFIFOReadIndex == guiReceiveFIFOWriteIndex)
+    {
+        // Read and write FIFO pointers are the same, no more receive strings available
+        plcReturnPointer = NULL;
+    }
+    else
+    {
+        // Return the next available received string off the FIFO,
+        // then point to the next received string
+        plcReturnPointer = &gucReceiveFIFO[guiReceiveFIFOReadIndex][0];
+        if (++guiReceiveFIFOReadIndex >= RECEIVE_FIFO_MSG_COUNT) guiReceiveFIFOReadIndex = 0;
+    }
+    return plcReturnPointer;
+}
+// end main_receive_msg_read
+
+
+////////////////////////////////////////////////////////////////////////////
+// Name:         main_receive_msg_write
+// Description:  Write a received string to the FIFO
+// Parameters:   paucReceiveMsg - pointer to received NULL-terminated string
+// Return:       None
+////////////////////////////////////////////////////////////////////////////
+void 
+main_receive_msg_write(char *paucReceiveMsg)
+{
+    memcpy(&gucReceiveFIFO[guiReceiveFIFOWriteIndex][0], paucReceiveMsg, strlen(paucReceiveMsg));
+    if (++guiReceiveFIFOWriteIndex >= RECEIVE_FIFO_MSG_COUNT) guiReceiveFIFOWriteIndex = 0;
+}
+// end main_receive_msg_write
+
 
 
 ////////////////////////////////////////////////////////////////////////////
@@ -67,6 +117,7 @@ main_periodic(gpointer data)
 {
     static guint32 lulElapsed_sec = 0;
     static guint32 lulAutoscrollElapsed_sec = 0;
+    char* plcReceivedMsgAvailable;
     
     ++lulElapsed_sec;
     //++ulElapsedTimeSinceDataUpdate_sec;
@@ -156,6 +207,20 @@ main_periodic(gpointer data)
         display_update_data_age();
     }
     
+    //////////////////////////////////////////////////////////
+    //
+    // Display received messages
+    //
+    //////////////////////////////////////////////////////////
+    do
+    {
+        plcReceivedMsgAvailable = main_receive_msg_read();
+        if (plcReceivedMsgAvailable)
+        {
+            display_receive_write(plcReceivedMsgAvailable);
+            display_receive_write("\r\n");
+        }
+    } while (plcReceivedMsgAvailable);
     
     
     return TRUE;

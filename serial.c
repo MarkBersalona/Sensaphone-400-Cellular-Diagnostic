@@ -21,7 +21,7 @@
 #include <string.h>
 #include "gconfig.h"
 #include "main.h"
-//#include "json.h"
+#include "display.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -34,6 +34,7 @@
 //
 gboolean isUSBConnectionOK = FALSE;
 gboolean isFirstSerialFail = TRUE;
+int fd; /* file descriptor of the port */
 
 char lcSerialTempString[40];
 
@@ -48,7 +49,6 @@ char lcSerialTempString[40];
 int 
 serial_open(char *name, int baud)
 {
-    int fd; /* file descriptor of the port */
 
     int b_baud;
     struct termios t; /* struct for port settings */
@@ -107,7 +107,7 @@ serial_open(char *name, int baud)
 gboolean 
 serial_read(GIOChannel *gio, GIOCondition condition, gpointer data) // GdkInputCondition condition )
 {
-    gsize n = 1;
+    static gsize n = 1;
     static char msg[10000] = ""; // application dependent - convert back to static when processing works
     static int  count = 0;
     gchar buf;
@@ -115,33 +115,43 @@ serial_read(GIOChannel *gio, GIOCondition condition, gpointer data) // GdkInputC
     gboolean lfReturnValue = TRUE;
     GError *lgerror;
    
-
-    while (n > 0)
+    //
+    // Running in Linux Mint on my laptop, instead of Raspbian on a
+    // Raspberry Pi or Libre AML-S906X-CC, if the device under test
+    // shuts off, app seems to hang here. In that case, much better
+    // to get rid of the while loop, even if it means calling serial_read()
+    // once for each received character!
+    // Probably want to do any parsing or display stuff outside
+    // this routine, which is effectively an interrupt-service routine.
+    // MAB 2023.01.18
+    //
+    //n = 1;
+    //while (n > 0 && n < sizeof(msg))
     {
-        readStatus = g_io_channel_read_chars (gio, &buf,1, &n, NULL);  // force to read 1 char at a time?
-        switch (readStatus)
-        {
-        case G_IO_STATUS_NORMAL:
-            break;
-        case G_IO_STATUS_ERROR:
-            isUSBConnectionOK = FALSE;
-            g_print("\r\n *** G_IO_STATUS_ERROR ***\r\n");
-            lfReturnValue = FALSE;
-            break;
-        case G_IO_STATUS_EOF:
-            isUSBConnectionOK = FALSE;
-            g_print("\r\n *** G_IO_STATUS_EOF *** \r\n");
-            lfReturnValue = FALSE;
-            break;
-        case G_IO_STATUS_AGAIN:
-            isUSBConnectionOK = FALSE;
-            g_print("\r\n *** G_IO_STATUS_AGAIN *** \r\n");
-            lfReturnValue = FALSE;
-            break;
-        default:
-            g_print("\r\n readStatus = %d\r\n", readStatus);
-            lfReturnValue = FALSE;
-            break;
+            readStatus = g_io_channel_read_chars(gio, &buf, 1, &n, NULL); // force to read 1 char at a time?
+            switch (readStatus)
+            {
+            case G_IO_STATUS_NORMAL:
+                break;
+            case G_IO_STATUS_ERROR:
+                isUSBConnectionOK = FALSE;
+                g_print("\r\n *** G_IO_STATUS_ERROR ***\r\n");
+                lfReturnValue = FALSE;
+                break;
+            case G_IO_STATUS_EOF:
+                isUSBConnectionOK = FALSE;
+                g_print("\r\n *** G_IO_STATUS_EOF *** \r\n");
+                lfReturnValue = FALSE;
+                break;
+            case G_IO_STATUS_AGAIN:
+                isUSBConnectionOK = FALSE;
+                g_print("\r\n *** G_IO_STATUS_AGAIN *** \r\n");
+                lfReturnValue = FALSE;
+                break;
+            default:
+                g_print("\r\n readStatus = %d\r\n", readStatus);
+                lfReturnValue = FALSE;
+                break;
         }
         if (n > 0)
         {
@@ -152,6 +162,12 @@ serial_read(GIOChannel *gio, GIOCondition condition, gpointer data) // GdkInputC
             if (count<2) count=2; // just in case \n received too early in msg
             msg[count-2] = '\0';  // overwrite \r\n
             //g_print("%s\r\n",msg);
+            ////////////////////////////////////////////////////////////
+            //// TEST MAB 2023.01.18
+            //display_receive_write(msg);
+            //display_receive_write("\r\n");
+            main_receive_msg_write(msg);
+            ////////////////////////////////////////////////////////////
 
             //////////////////////////////////////////////////////////
             // At this point msg[] may contain a Display JSON string.
@@ -218,7 +234,7 @@ serial_read(GIOChannel *gio, GIOCondition condition, gpointer data) // GdkInputC
             
             count = 0;
             msg[0] = '\0';  // finish up and restart
-            n = 0; // drop out after every complete message since ...read_chars seams to always block
+            n = 0; // drop out after every complete message since ...read_chars seems to always block
         }
     } // while (n>0)
     return lfReturnValue;
