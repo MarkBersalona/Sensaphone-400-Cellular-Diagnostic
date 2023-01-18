@@ -59,6 +59,8 @@ LDLIBSOPTIONS=
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
 	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/400_cellular_diagnostic
+	# TEST MAB 2023.01.18
+	cp ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/400_cellular_diagnostic ./
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/400_cellular_diagnostic: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
