@@ -152,6 +152,14 @@ display_main_initialize(void)
     gtk_widget_set_name((lblICCID),          "DiagnosticValue");
     gtk_widget_set_name((lblIMEI),           "DiagnosticValue");
     gtk_widget_set_name((lblLogfile),        "DiagnosticValue");
+
+    // Buttons
+    gtk_widget_set_name((btnNewMAC),      "button");
+    gtk_widget_set_name((btnNewBoardRev), "button");
+    gtk_widget_set_name((btnATCommand),   "button");
+    gtk_widget_set_name((btnMenu),        "button");
+    gtk_widget_set_name((btnRTD),         "button");
+    gtk_widget_set_name((btnReboot),      "button");
 		
     //
     // Initialize values
@@ -165,26 +173,7 @@ display_main_initialize(void)
     gtk_label_set_text(GTK_LABEL(lblICCID), "89148000005471114678");
     gtk_label_set_text(GTK_LABEL(lblIMEI), "355598110014663");
     gtk_label_set_text(GTK_LABEL(lblLogfile), "20230116 1634 400 Cellular.txt");
-    //sprintf(lcTempString, "v%s.%s.%s", VERSION_A, VERSION_B, VERSION_C);
-    //gtk_label_set_text(GTK_LABEL(lblDisplay), lcTempString);
 
-    // gtk_text_buffer_set_text(textbufStatus, "Hello, this is some text\r\n", -1);
-    // gtk_text_iter_forward_to_end(textiterStatusEnd);
-    // gtk_text_buffer_insert_at_cursor(textbufStatus, "Hope this is a 2nd line\r\n", -1);
-    // gtk_text_buffer_insert_at_cursor(textbufStatus, "Hope this is a 3rd line\r\n", -1);
-    // gtk_text_buffer_insert_at_cursor(textbufStatus, "Hope this is a 4th line\r\n", -1);
-    // gtk_text_buffer_insert_at_cursor(textbufStatus, "Hope this is a 5th line\r\n", -1);
-    // gtk_text_buffer_insert_at_cursor(textbufStatus, "Hope this is a 6th line\r\n", -1);
-    // gtk_text_buffer_insert_at_cursor(textbufStatus, "Hope this is a 7th line\r\n", -1);
-    // gtk_text_buffer_insert_at_cursor(textbufStatus, "Hope this is a 8th line\r\n", -1);
-    // gtk_text_buffer_insert_at_cursor(textbufStatus, "Hope this is a 2nd line\r\n", -1);
-    // gtk_text_buffer_insert_at_cursor(textbufStatus, "Hope this is a 3rd line\r\n", -1);
-    // gtk_text_buffer_insert_at_cursor(textbufStatus, "Hope this is a 4th line\r\n", -1);
-    // gtk_text_buffer_insert_at_cursor(textbufStatus, "Hope this is a 5th line\r\n", -1);
-    // gtk_text_buffer_insert_at_cursor(textbufStatus, "Hope this is a 6th line\r\n", -1);
-    // gtk_text_buffer_insert_at_cursor(textbufStatus, "Hope this is a 7th line\r\n", -1);
-    // gtk_text_buffer_insert_at_cursor(textbufStatus, "Hope this is a 8th line\r\n", -1);
-    display_status_write("Hello, this is some text\r\n");
 }
 // end display_main_initialize
 

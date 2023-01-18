@@ -8,7 +8,8 @@
 /*Main window*/
 window
 {
-    background-color: black;
+    /*background-color: black;*/
+    background-color: rgb(13, 83, 81);
 }
 
 /*Diagnostics pop-up dialog window*/
@@ -21,7 +22,7 @@ dialog
 /*Generic label*/
 label
 {
-    color: #33CCCC;
+    /*color: #33CCCC;*/
     /* For original Stratus Display */
     /*font: bold 18px DejaVu Sans, sans-serif;*/
     /* For Stratus Display Mk.2 */
@@ -44,6 +45,11 @@ label#ZoneStatusOK
 label#ZoneStatusAlarm
 {
     color: red;
+}
+/* Button labels */
+label#button
+{
+    color: black;
 }
 
 /*Main display, zone numbers*/
@@ -71,7 +77,7 @@ label#ConnectionError
 /*Diagnostics display, titles*/
 label#DiagnosticsTitle
 {
-    color: gray;
+    color: rgb(87, 225, 82);
 }
 
 /*Diagnostics display, values*/
