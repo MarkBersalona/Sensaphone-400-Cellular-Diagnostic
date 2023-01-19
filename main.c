@@ -339,7 +339,7 @@ int main(int argc, char** argv)
     display_status_write("                 Sensaphone 400 Cellular Diagnostic                  \r\n");
     sprintf(lcTempMainString, "                               v%s.%s.%s \r\n", VERSION_A,VERSION_B,VERSION_C);
     display_status_write(lcTempMainString);
-    display_status_write("                             2023.01.18                              \r\n");
+    display_status_write("                             2023.01.19                              \r\n");
     display_status_write("=================================<=>=================================\r\n");
 
     //

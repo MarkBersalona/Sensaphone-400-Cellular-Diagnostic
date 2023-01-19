@@ -51,16 +51,16 @@ GtkWidget *textviewReceive;
 GtkScrolledWindow *scrolledwindowReceive;
 GtkAdjustment *adjReceive;
 GtkTextBuffer *textbufReceive;
-// GtkTextIter *textiterReceiveStart;
-// GtkTextIter *textiterReceiveEnd;
+GtkTextIter textiterReceiveStart;
+GtkTextIter textiterReceiveEnd;
 // GtkTextMark *textmarkReceive;
 
 // Status view
 GtkScrolledWindow *scrolledwindowStatus;
 GtkAdjustment *adjStatus;
 GtkTextBuffer *textbufStatus;
-// GtkTextIter *textiterStatusStart;
-// GtkTextIter *textiterStatusEnd;
+GtkTextIter textiterStatusStart;
+GtkTextIter textiterStatusEnd;
 // GtkTextMark *textmarkStatus;
 
 char lcTempString[40];
@@ -124,16 +124,16 @@ display_main_initialize(void)
     // Receive text buffer
     scrolledwindowReceive = GTK_SCROLLED_WINDOW(gtk_builder_get_object(builder, "scrolledwindow2"));
     textbufReceive        = gtk_text_view_get_buffer(GTK_TEXT_VIEW(textviewReceive));
-    // gtk_text_buffer_get_start_iter(textbufStatus, textiterStatusStart);
-    // gtk_text_buffer_get_end_iter  (textbufStatus, textiterStatusEnd);
+    gtk_text_buffer_get_start_iter(textbufReceive, &textiterReceiveStart);
+    gtk_text_buffer_get_end_iter  (textbufReceive, &textiterReceiveEnd);
     // gtk_text_buffer_add_mark(textbufStatus, textmarkStatus, textiterStatusEnd);
     gtk_text_view_set_monospace(GTK_TEXT_VIEW(textviewReceive), TRUE);
     
     // Status text buffer
     scrolledwindowStatus = GTK_SCROLLED_WINDOW(gtk_builder_get_object(builder, "scrolledwindow1"));
     textbufStatus  = gtk_text_view_get_buffer(GTK_TEXT_VIEW(textviewStatus));
-    // gtk_text_buffer_get_start_iter(textbufStatus, textiterStatusStart);
-    // gtk_text_buffer_get_end_iter  (textbufStatus, textiterStatusEnd);
+    gtk_text_buffer_get_start_iter(textbufStatus, &textiterStatusStart);
+    gtk_text_buffer_get_end_iter  (textbufStatus, &textiterStatusEnd);
     // gtk_text_buffer_add_mark(textbufStatus, textmarkStatus, textiterStatusEnd);
     gtk_text_view_set_monospace(GTK_TEXT_VIEW(textviewStatus), TRUE);
     
@@ -204,12 +204,16 @@ display_main_initialize(void)
 void
 display_receive_write(char * paucWriteBuf)
 {
+    // Move cursor to end of text buffer
+    gtk_text_iter_forward_to_end(&textiterReceiveEnd);
+    gtk_text_buffer_place_cursor(textbufReceive, &textiterReceiveEnd);
+
     // Write contents of paucWriteBuf string buffer to Receive text buffer
-    gtk_text_buffer_insert_at_cursor   (textbufReceive, paucWriteBuf, -1);
+    gtk_text_buffer_insert(textbufReceive, &textiterReceiveEnd, paucWriteBuf, -1);
 
     // Move to bottom of Receive window
-    adjStatus = gtk_scrolled_window_get_vadjustment(scrolledwindowReceive);
-    gtk_adjustment_set_value( adjStatus, gtk_adjustment_get_upper(adjStatus) );
+    adjReceive = gtk_scrolled_window_get_vadjustment(scrolledwindowReceive);
+    gtk_adjustment_set_value( adjReceive, gtk_adjustment_get_upper(adjReceive) );
 }
 // end display_status_write
 
@@ -224,8 +228,12 @@ display_receive_write(char * paucWriteBuf)
 void
 display_status_write(char * paucWriteBuf)
 {
+    // Move cursor to end of text buffer
+    gtk_text_iter_forward_to_end(&textiterStatusEnd);
+    gtk_text_buffer_place_cursor(textbufStatus, &textiterStatusEnd);
+
     // Write contents of paucWriteBuf string buffer to Status text buffer
-    gtk_text_buffer_insert_at_cursor   (textbufStatus, paucWriteBuf, -1);
+    gtk_text_buffer_insert(textbufStatus, &textiterStatusEnd, paucWriteBuf, -1);
 
     // Move to bottom of Status window
     adjStatus = gtk_scrolled_window_get_vadjustment(scrolledwindowStatus);
