@@ -25,8 +25,6 @@
 #include "main.h"
 #include "gconfig.h"
 #include "serial.h"
-//#include "json.h"
-//#include "zone_db.h"
 #include "display.h"
 
 
@@ -69,10 +67,10 @@ GDateTime *gDateTime;
 
 ////////////////////////////////////////////////////////////////////////////
 // Name:         main_receive_msg_read
-// Description:  Read the next received string from the FIFO
+// Description:  Read a received string from the receive FIFO
 // Parameters:   None
-// Return:       Pointer to next received string, or NULL if no more strings
-//               available from the FIFO
+// Return:       Pointer to received string, or NULL if no more strings
+//               are available from the FIFO
 ////////////////////////////////////////////////////////////////////////////
 char * 
 main_receive_msg_read(void)
@@ -105,6 +103,11 @@ main_receive_msg_read(void)
 void 
 main_receive_msg_write(char *paucReceiveMsg)
 {
+    // Zeroize the FIFO entry about to get the received message string
+    memset(&gucReceiveFIFO[guiReceiveFIFOWriteIndex][0], 0, RECEIVE_FIFO_MSG_LENGTH_MAX);
+
+    // Copy the received message string into the FIFO entry,
+    // then point to the next FIFO entry to receive the next received message string
     memcpy(&gucReceiveFIFO[guiReceiveFIFOWriteIndex][0], paucReceiveMsg, strlen(paucReceiveMsg));
     if (++guiReceiveFIFOWriteIndex >= RECEIVE_FIFO_MSG_COUNT) guiReceiveFIFOWriteIndex = 0;
 }
@@ -114,7 +117,7 @@ main_receive_msg_write(char *paucReceiveMsg)
 
 ////////////////////////////////////////////////////////////////////////////
 // Name:         main_periodic
-// Description:  Main periodic code (1 second period)
+// Description:  Main periodic code
 // Parameters:   None
 // Return:       TRUE
 ////////////////////////////////////////////////////////////////////////////
@@ -200,10 +203,12 @@ main_periodic(gpointer data)
             isUSBConnectionOK = TRUE;
             isFirstSerialFail = TRUE;
             gIOPointer = g_io_channel_unix_new(fd);  // creates the correct reference for callback
+            
             // Set encoding
             g_io_channel_set_encoding(gIOPointer, NULL, NULL);
             g_print("\r\n%s() g_io_channel_get_encoding() returned %s\r\n", __FUNCTION__,
                     g_io_channel_get_encoding(gIOPointer));
+
             // Specify callback routines for serial read and error
             g_io_add_watch(gIOPointer, 
                            G_IO_IN, 
