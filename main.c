@@ -66,6 +66,60 @@ GDateTime *gDateTime;
 
 
 ////////////////////////////////////////////////////////////////////////////
+// Name:         main_parse_msg
+// Description:  Parse a string for detectable data
+// Parameters:   paucReceiveMsg - pointer to received NULL-terminated string
+// Return:       None
+////////////////////////////////////////////////////////////////////////////
+void 
+main_parse_msg(char *paucReceiveMsg)
+{
+    char *plcDetected;
+
+    // Look for *** WARNING ***
+    plcDetected = strstr((char*)paucReceiveMsg, "*** WARNING ***");
+    if (plcDetected)
+    {
+        memset (lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy (lcTempMainString, plcDetected, sizeof(lcTempMainString));
+        display_status_write(lcTempMainString);
+        display_status_write("\r\n");
+    }
+    
+    // Look for *** ERROR ***
+    plcDetected = strstr((char*)paucReceiveMsg, "*** ERROR ***");
+    if (plcDetected)
+    {
+        memset (lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy (lcTempMainString, plcDetected, sizeof(lcTempMainString));
+        display_status_write(lcTempMainString);
+        display_status_write("\r\n");
+    }
+    
+    // Look for "MAC address:"
+    plcDetected = strstr((char*)paucReceiveMsg, "MAC address: ");
+    if (plcDetected)
+    {
+        memset (lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy (lcTempMainString, plcDetected+13, sizeof(lcTempMainString));
+        display_status_write("Detected device MAC address: ");
+        display_status_write(lcTempMainString);
+        display_status_write("\r\n");
+        gtk_label_set_text(GTK_LABEL(lblMAC), lcTempMainString);
+    }
+    
+    // Look for "Network_Online_StateMachine: Transitioning from "
+    plcDetected = strstr((char*)paucReceiveMsg, "Network_Online_StateMachine: Transitioning from ");
+    if (plcDetected)
+    {
+        display_status_write(paucReceiveMsg);
+        display_status_write("\r\n");
+    }
+    
+}
+// end main_parse_msg
+
+////////////////////////////////////////////////////////////////////////////
 // Name:         main_receive_msg_read
 // Description:  Read a received string from the receive FIFO
 // Parameters:   None
@@ -233,11 +287,15 @@ main_periodic(gpointer data)
         plcReceivedMsgAvailable = main_receive_msg_read();
         if (plcReceivedMsgAvailable)
         {
+            // Reinitialize data age
+            gulElapsedTimeSinceDataUpdate_sec = 0;
+
             // Display received message
             display_receive_write(plcReceivedMsgAvailable);
             display_receive_write("\r\n");
 
             // Parse received message
+            main_parse_msg(plcReceivedMsgAvailable);
 
             // If log file is active, save received message
         }
