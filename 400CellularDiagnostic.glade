@@ -318,7 +318,7 @@
                     <property name="margin-right">10</property>
                     <property name="margin-top">10</property>
                     <property name="margin-bottom">10</property>
-                    <property name="active">1</property>
+                    <property name="active">0</property>
                     <items>
                       <item translatable="yes">Display menu</item>
                       <item translatable="yes">Sensaphone cert</item>
@@ -535,7 +535,7 @@
             </child>
             <child>
               <object class="GtkScrolledWindow" id="scrolledwindow1">
-                <property name="height-request">100</property>
+                <property name="height-request">150</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="margin-bottom">20</property>
@@ -543,7 +543,7 @@
                 <property name="shadow-type">in</property>
                 <child>
                   <object class="GtkTextView" id="textviewStatus">
-                    <property name="height-request">100</property>
+                    <property name="height-request">150</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                   </object>

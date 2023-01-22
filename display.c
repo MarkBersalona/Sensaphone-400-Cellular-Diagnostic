@@ -190,6 +190,12 @@ display_main_initialize(void)
     gtk_label_set_text(GTK_LABEL(lblIMEI), "355598110014663");
     gtk_label_set_text(GTK_LABEL(lblLogfile), "20230116 1634 400 Cellular.txt");
 
+    //
+    // Link button presses to callback routines
+    //
+    g_signal_connect(btnReboot, "clicked", G_CALLBACK(main_REBOOT_clicked), NULL);
+    g_signal_connect(btnRTD,    "clicked", G_CALLBACK(main_RTD_clicked), NULL);
+
 }
 // end display_main_initialize
 

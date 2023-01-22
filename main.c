@@ -66,6 +66,30 @@ GDateTime *gDateTime;
 
 
 ////////////////////////////////////////////////////////////////////////////
+// Name:         main_REBOOT_clicked
+// Description:  Callback routine - REBOOT button clicked
+// Parameters:   None
+// Return:       None
+////////////////////////////////////////////////////////////////////////////
+void main_REBOOT_clicked(void)
+{
+    display_status_write("REBOOT button pressed\r\n");
+}
+// end main_REBOOT_clicked
+
+////////////////////////////////////////////////////////////////////////////
+// Name:         main_RTD_clicked
+// Description:  Callback routine - RTD button clicked
+// Parameters:   None
+// Return:       None
+////////////////////////////////////////////////////////////////////////////
+void main_RTD_clicked(void)
+{
+    display_status_write("RESET to Defaults button pressed\r\n");
+}
+// end main_RTD_clicked
+
+////////////////////////////////////////////////////////////////////////////
 // Name:         main_parse_msg
 // Description:  Parse a string for detectable data
 // Parameters:   paucReceiveMsg - pointer to received NULL-terminated string
@@ -238,9 +262,10 @@ main_periodic(gpointer data)
         /* IO channel variable for file */
         GIOChannel *gIOPointer;
 
-        g_print("\r\nlulElapsed_sec=%d   serial_open returns %d\r\n",
-                lulElapsed_sec, 
-                fd = serial_open("/dev/ttyUSB0",115200));
+        // g_print("\r\nlulElapsed_sec=%d   serial_open returns %d\r\n",
+        //         lulElapsed_sec, 
+        //         fd = serial_open("/dev/ttyUSB0",115200));
+        fd = serial_open("/dev/ttyUSB0",115200);
         //g_print("  fd = %d\r\n", fd);
         if (fd<0)
         {

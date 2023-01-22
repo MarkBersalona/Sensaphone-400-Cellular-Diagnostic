@@ -41,6 +41,9 @@ extern "C" {
 ///////////////////////////////////////////////////////////////////////////////
 char * main_receive_msg_read(void);
 void main_receive_msg_write(char *paucReceiveMsg);
+void main_REBOOT_clicked(void);
+void main_RTD_clicked(void);
+
 
 
 
