@@ -195,6 +195,7 @@ display_main_initialize(void)
     //
     g_signal_connect(btnReboot, "clicked", G_CALLBACK(main_REBOOT_clicked), NULL);
     g_signal_connect(btnRTD,    "clicked", G_CALLBACK(main_RTD_clicked), NULL);
+    g_signal_connect(btnMenu,   "clicked", G_CALLBACK(main_MENU_clicked), NULL);
 
 }
 // end display_main_initialize

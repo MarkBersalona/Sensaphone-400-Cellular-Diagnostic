@@ -66,6 +66,29 @@ GDateTime *gDateTime;
 
 
 ////////////////////////////////////////////////////////////////////////////
+// Name:         main_MENU_clicked
+// Description:  Callback routine - MENU button clicked
+// Parameters:   None
+// Return:       None
+////////////////////////////////////////////////////////////////////////////
+void main_MENU_clicked(void)
+{
+    gint liMenuItemSelected = gtk_combo_box_get_active(cbtMenu);
+    if (-1 ==liMenuItemSelected)
+    {
+        // No menu item selected
+        display_status_write("MENU button pressed, but no menu item selected\r\n");
+    }
+    else
+    {
+        // A menu item has been selected
+        sprintf(lcTempMainString, "MENU button pressed, menu item %d selected\r\n", liMenuItemSelected);
+        display_status_write(lcTempMainString);
+    }
+}
+// end main_MENU_clicked
+
+////////////////////////////////////////////////////////////////////////////
 // Name:         main_REBOOT_clicked
 // Description:  Callback routine - REBOOT button clicked
 // Parameters:   None

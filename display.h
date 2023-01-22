@@ -23,7 +23,7 @@ extern GtkCssProvider *cssProvider;
 extern GtkWindow *window;
 extern GtkWidget *lblMAC, *lblBoardRev, *lblHumiditySensor, *lbl400FW;
 extern GtkWidget *lblTransceiver, *lblTransceiverFW, *lblICCID, *lblIMEI;
-
+extern GtkWidget *cbtMenu;
 
     
 ///////////////////////////////////////////////////////////////////////////////
