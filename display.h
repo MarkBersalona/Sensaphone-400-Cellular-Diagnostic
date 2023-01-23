@@ -33,15 +33,15 @@ extern GtkWidget *swLogfileEnable, *lblLogfile;
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+void display_clear_UUT_values(void);
+void display_diagnostics_enter(GtkWindow *parent);
+void display_diagnostics_exit(void);
 void display_main_initialize(void);
 void display_receive_write(char * paucWriteBuf);
 void display_status_write(char * paucWriteBuf);
 void display_update_zones(void);
 void display_update_display_connection(void);
 void display_update_data_age(void);
-void display_diagnostics_enter(GtkWindow *parent);
-void display_diagnostics_exit(void);
-
 
 
 

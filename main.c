@@ -151,6 +151,8 @@ void
 main_parse_msg(char *paucReceiveMsg)
 {
     char *plcDetected;
+    char *plcQuoteStart;
+    char *plcQuoteEnd;
 
     // Look for *** WARNING ***
     plcDetected = strstr((char*)paucReceiveMsg, "*** WARNING ***");
@@ -176,12 +178,121 @@ main_parse_msg(char *paucReceiveMsg)
     plcDetected = strstr((char*)paucReceiveMsg, "MAC address: ");
     if (plcDetected)
     {
+        ///////////////////////////////////////////////////////////////////////////
+        //// TEST MAB 2023.01.23
+        //// Assume that if we're reading a new MAC address, this is a new UUT.
+        display_clear_UUT_values();
+        ///////////////////////////////////////////////////////////////////////////
         memset (lcTempMainString, 0, sizeof(lcTempMainString));
         memcpy (lcTempMainString, plcDetected+13, sizeof(lcTempMainString));
         display_status_write("Detected device MAC address: ");
         display_status_write(lcTempMainString);
         display_status_write("\r\n");
         gtk_label_set_text(GTK_LABEL(lblMAC), lcTempMainString);
+    }
+    
+    // Look for "Model number is "
+    plcDetected = strstr((char*)paucReceiveMsg, "Model number is ");
+    if (plcDetected)
+    {
+        plcQuoteStart = strchr(plcDetected,   0x22); // search for double quote
+        plcQuoteEnd   = strchr(plcQuoteStart+1, 0x22); // search for double quote
+        if (plcQuoteStart && plcQuoteEnd) // both quotes found
+        {
+            memset (lcTempMainString, 0, sizeof(lcTempMainString));
+            memcpy (lcTempMainString, plcQuoteStart+1, plcQuoteEnd-plcQuoteStart-1);
+            display_status_write("Detected transceiver model: ");
+            display_status_write(lcTempMainString);
+            display_status_write("\r\n");
+            gtk_label_set_text(GTK_LABEL(lblTransceiver), lcTempMainString);
+        }
+    }
+    
+    // Look for "SARA-R5 FW version number is "
+    plcDetected = strstr((char*)paucReceiveMsg, "SARA-R5 FW version number is ");
+    if (plcDetected)
+    {
+        plcQuoteStart = strchr(plcDetected,   0x22); // search for double quote
+        plcQuoteEnd   = strchr(plcQuoteStart+1, 0x22); // search for double quote
+        if (plcQuoteStart && plcQuoteEnd) // both quotes found
+        {
+            memset (lcTempMainString, 0, sizeof(lcTempMainString));
+            memcpy (lcTempMainString, plcQuoteStart+1, plcQuoteEnd-plcQuoteStart-1);
+            display_status_write("Detected transceiver FW version: ");
+            display_status_write(lcTempMainString);
+            display_status_write("\r\n");
+            gtk_label_set_text(GTK_LABEL(lblTransceiverFW), lcTempMainString);
+        }
+    }
+    
+    // Look for "Humidity sensor is the "
+    plcDetected = strstr((char*)paucReceiveMsg, "Humidity sensor is the ");
+    if (plcDetected)
+    {
+        memset (lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy (lcTempMainString, plcDetected+23, sizeof(lcTempMainString));
+        display_status_write("Detected humidity sensor: ");
+        display_status_write(lcTempMainString);
+        display_status_write("\r\n");
+        gtk_label_set_text(GTK_LABEL(lblHumiditySensor), lcTempMainString);
+    }
+    
+    // Look for "Board revision = "
+    plcDetected = strstr((char*)paucReceiveMsg, "Board revision = ");
+    if (plcDetected)
+    {
+        memset (lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy (lcTempMainString, plcDetected+17, sizeof(lcTempMainString));
+        display_status_write("Detected Board revision: ");
+        display_status_write(lcTempMainString);
+        display_status_write("\r\n");
+        gtk_label_set_text(GTK_LABEL(lblBoardRev), lcTempMainString);
+    }
+    
+    // Look for "IMEI is "
+    plcDetected = strstr((char*)paucReceiveMsg, "IMEI is ");
+    if (plcDetected)
+    {
+        plcQuoteStart = strchr(plcDetected,   0x22); // search for double quote
+        plcQuoteEnd   = strchr(plcQuoteStart+1, 0x22); // search for double quote
+        if (plcQuoteStart && plcQuoteEnd) // both quotes found
+        {
+            memset (lcTempMainString, 0, sizeof(lcTempMainString));
+            memcpy (lcTempMainString, plcQuoteStart+1, plcQuoteEnd-plcQuoteStart-1);
+            display_status_write("Detected IMEI: ");
+            display_status_write(lcTempMainString);
+            display_status_write("\r\n");
+            gtk_label_set_text(GTK_LABEL(lblIMEI), lcTempMainString);
+        }
+    }
+    
+    // Look for "ICCID is "
+    plcDetected = strstr((char*)paucReceiveMsg, "ICCID is ");
+    if (plcDetected)
+    {
+        plcQuoteStart = strchr(plcDetected,   0x22); // search for double quote
+        plcQuoteEnd   = strchr(plcQuoteStart+1, 0x22); // search for double quote
+        if (plcQuoteStart && plcQuoteEnd) // both quotes found
+        {
+            memset (lcTempMainString, 0, sizeof(lcTempMainString));
+            memcpy (lcTempMainString, plcQuoteStart+1, plcQuoteEnd-plcQuoteStart-1);
+            display_status_write("Detected ICCID: ");
+            display_status_write(lcTempMainString);
+            display_status_write("\r\n");
+            gtk_label_set_text(GTK_LABEL(lblICCID), lcTempMainString);
+        }
+    }
+    
+    // Look for "400 Cellular firmware version is "
+    plcDetected = strstr((char*)paucReceiveMsg, "400 Cellular firmware version is ");
+    if (plcDetected)
+    {
+        memset (lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy (lcTempMainString, plcDetected+33, sizeof(lcTempMainString));
+        display_status_write("Detected 400 Cellular firmware version: ");
+        display_status_write(lcTempMainString);
+        display_status_write("\r\n");
+        gtk_label_set_text(GTK_LABEL(lbl400FW), lcTempMainString);
     }
     
     // Look for "Network_Online_StateMachine: Transitioning from "
