@@ -66,6 +66,35 @@ GDateTime *gDateTime;
 
 
 ////////////////////////////////////////////////////////////////////////////
+// Name:         main_LOGENABLE_state_set
+// Description:  Callback routine - logfile enable switch clicked
+// Parameters:   None
+// Return:       None
+////////////////////////////////////////////////////////////////////////////
+void main_LOGENABLE_state_set(void)
+{
+    gboolean lfIsLogfileEnabled = gtk_switch_get_active(GTK_SWITCH(swLogfileEnable));
+    if (lfIsLogfileEnabled)
+    {
+        // Logfile has just been enabled, build timestamp filename and open file
+        sprintf(lcTempMainString, "Logfile %s 400 Cellular.txt opened\r\n", g_date_time_format(gDateTime, "%Y%m%d %H%M"));
+        display_status_write(lcTempMainString);
+
+        // Set the switch state to ON
+        gtk_switch_set_state(GTK_SWITCH(swLogfileEnable), TRUE);
+    }
+    else
+    {
+        // Logfile has just been disabled, close the logfile and blank the displayed log filename
+        display_status_write("Logfile is now closed\r\n");
+
+        // Set the switch state to OFF
+        gtk_switch_set_state(GTK_SWITCH(swLogfileEnable), FALSE);
+    }
+}
+// end main_LOGENABLE_state_set
+
+////////////////////////////////////////////////////////////////////////////
 // Name:         main_MENU_clicked
 // Description:  Callback routine - MENU button clicked
 // Parameters:   None
@@ -73,7 +102,7 @@ GDateTime *gDateTime;
 ////////////////////////////////////////////////////////////////////////////
 void main_MENU_clicked(void)
 {
-    gint liMenuItemSelected = gtk_combo_box_get_active(cbtMenu);
+    gint liMenuItemSelected = gtk_combo_box_get_active(GTK_COMBO_BOX(cbtMenu));
     if (-1 ==liMenuItemSelected)
     {
         // No menu item selected
