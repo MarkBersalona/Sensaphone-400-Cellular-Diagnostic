@@ -32,6 +32,7 @@ extern gboolean isFirstSerialFail;
 ///////////////////////////////////////////////////////////////////////////////
 
 int serial_open(char *name, int baud);
+int serial_write(char * paucMessage);
 gboolean serial_read(GIOChannel *gio, GIOCondition condition, gpointer data); // GdkInputCondition condition )
 gboolean serial_error(GIOChannel *gio, GIOCondition condition, gpointer data);
 

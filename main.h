@@ -42,6 +42,7 @@ extern "C" {
 char * main_receive_msg_read(void);
 void main_receive_msg_write(char *paucReceiveMsg);
 
+void main_ATCommand_clicked(void);
 void main_LOGENABLE_state_set(void);
 void main_MENU_clicked(void);
 void main_REBOOT_clicked(void);
@@ -63,6 +64,9 @@ extern GtkBuilder *builder;
 
 // Elapsed time since last data update
 extern guint32 gulElapsedTimeSinceDataUpdate_sec;
+
+// I/O channel for serial-to-USB port
+extern GIOChannel *gIOChannelSerialUSB;
 
 
 #ifdef __cplusplus

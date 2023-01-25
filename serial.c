@@ -94,13 +94,16 @@ serial_open(char *name, int baud)
     if (tcflush (fd, TCIFLUSH) == -1) { return (-3); }
 /* Now, set the terminal attributes */
     if (tcsetattr (fd, TCSANOW, &t) == -1) { return (-3); }
+
     return fd;
 }
 // end serial_open
 
 ////////////////////////////////////////////////////////////////////////////
 // Name:         serial_read
-// Description:  Read serial port
+// Description:  Callback routine to read serial port
+//               Assumes it receives ASCII strings ending with CRLF
+//               Writes each string (NULL-terminated) to Receive FIFO
 // Parameters:   
 // Return:       
 ////////////////////////////////////////////////////////////////////////////
@@ -108,7 +111,7 @@ gboolean
 serial_read(GIOChannel *gio, GIOCondition condition, gpointer data) // GdkInputCondition condition )
 {
     static gsize n = 1;
-    static char msg[10000] = ""; // application dependent - convert back to static when processing works
+    static char ucSerialReadBuffer[10000] = "";
     static int  count = 0;
     gchar buf;
     GIOStatus readStatus;
@@ -116,17 +119,17 @@ serial_read(GIOChannel *gio, GIOCondition condition, gpointer data) // GdkInputC
     GError *lgerror;
    
     //
+    // MAB 2023.01.18
     // Running in Linux Mint on my laptop, instead of Raspbian on a
     // Raspberry Pi or Libre AML-S906X-CC, if the device under test
     // shuts off, app seems to hang here. In that case, much better
     // to get rid of the while loop, even if it means calling serial_read()
     // once for each received character!
     // Probably want to do any parsing or display stuff outside
-    // this routine, which is effectively an interrupt-service routine.
-    // MAB 2023.01.18
+    // this routine, which is effectively an interrupt service routine.
     //
     //n = 1;
-    //while (n > 0 && n < sizeof(msg))
+    //while (n > 0 && n < sizeof(ucSerialReadBuffer))
     {
         readStatus = g_io_channel_read_chars(gio, &buf, 1, &n, NULL); // force to read 1 char at a time?
         switch (readStatus)
@@ -155,89 +158,44 @@ serial_read(GIOChannel *gio, GIOCondition condition, gpointer data) // GdkInputC
         }
         if (n > 0)
         {
-            msg[count++] = buf;
+            ucSerialReadBuffer[count++] = buf;
         }
         if (buf == '\n')
         {
             if (count<2) count=2; // just in case \n received too early in msg
-            msg[count-2] = '\0';  // overwrite \r\n
+            ucSerialReadBuffer[count-2] = '\0';  // overwrite \r\n
             //g_print("%s\r\n",msg);
 
             // Save received string to receive FIFO
-            main_receive_msg_write(msg);
+            main_receive_msg_write(ucSerialReadBuffer);
 
-            //////////////////////////////////////////////////////////
-            // At this point msg[] may contain a Display JSON string.
-            // Try to detect these; if found, strip the preamble and
-            // save the JSON to the appropriate JSON buffer.
-            // char * lpCheckForJSON;
-            // lpCheckForJSON = strstr(msg, "DISPLAY ZONE VALUES >>> ");
-            // if (lpCheckForJSON != NULL)
-            // {
-            //     //g_print("DISPLAY ZONE VALUES detected\r\n");
-            //     memset (strJSONZoneValues, 0, sizeof(strJSONZoneValues));
-            //     strncpy(strJSONZoneValues, &msg[24], strlen(msg));
-            //     ucJSONParseCountdown = DELAY_JSON_PARSING_SEC;
-            // }
-            // lpCheckForJSON = strstr(msg, "DISPLAY ALARM VALUES >>> ");
-            // if (lpCheckForJSON != NULL)
-            // {
-            //     //g_print("DISPLAY ALARM VALUES detected\r\n");
-            //     memset (strJSONAlarmValues, 0, sizeof(strJSONAlarmValues));
-            //     strncpy(strJSONAlarmValues, &msg[25], strlen(msg));
-            //     //g_print("%s\r\n",strJSONAlarmValues);
-            //     ucJSONParseCountdown = DELAY_JSON_PARSING_SEC;
-            // }
-            // lpCheckForJSON = strstr(msg, "DISPLAY ZONE NAMES >>> ");
-            // if (lpCheckForJSON != NULL)
-            // {
-            //     //g_print("DISPLAY ZONE NAMES detected\r\n");
-            //     memset (strJSONZoneNames, 0, sizeof(strJSONZoneNames));
-            //     strncpy(strJSONZoneNames, &msg[23], strlen(msg));
-            //     //g_print("%s\r\n",strJSONZoneNames);
-            //     ucJSONParseCountdown = DELAY_JSON_PARSING_SEC;
-            // }
-            // lpCheckForJSON = strstr(msg, "DISPLAY ZONE TYPES >>> ");
-            // if (lpCheckForJSON != NULL)
-            // {
-            //     //g_print("DISPLAY ZONE TYPES detected\r\n");
-            //     memset (strJSONZoneTypes, 0, sizeof(strJSONZoneTypes));
-            //     strncpy(strJSONZoneTypes, &msg[23], strlen(msg));
-            //     //g_print("%s\r\n",strJSONZoneTypes);
-            //     ucJSONParseCountdown = DELAY_JSON_PARSING_SEC;
-            // }
-            // lpCheckForJSON = strstr(msg, "DISPLAY DIAGNOSTICS >>> ");
-            // if (lpCheckForJSON != NULL)
-            // {
-            //     //g_print("DISPLAY DIAGNOSTICS detected\r\n");
-            //     memset (strJSONDiagnostics, 0, sizeof(strJSONDiagnostics));
-            //     strncpy(strJSONDiagnostics, &msg[24], strlen(msg));
-            //     //g_print("%s\r\n",strJSONDiagnostics);
-            //     ucJSONParseCountdown = DELAY_JSON_PARSING_SEC;
-            // }
-            
-            // // Also check for the online connection error code
-            // // Although it isn't JSON, the prefix is similar
-            // lpCheckForJSON = strstr(msg, "DISPLAY ERROR CODE >>> ");
-            // if (lpCheckForJSON != NULL)
-            // {
-            //     //g_print("DISPLAY ERROR CODE detected\r\n");
-            //     memset (lcSerialTempString, 0, sizeof(lcSerialTempString));
-            //     strncpy(lcSerialTempString, &msg[23], strlen(msg));
-            //     ucConnectionErrorCode = atoi(lcSerialTempString);
-            //     //g_print("ucConnectionErrorCode = %d\r\n",ucConnectionErrorCode);
-            // }
-            //////////////////////////////////////////////////////////
-            
             count = 0;
-            //msg[0] = '\0';  // finish up and restart
-            memset(msg, 0, sizeof(msg));
+            memset(ucSerialReadBuffer, 0, sizeof(ucSerialReadBuffer));
             n = 0; // drop out after every complete message since ...read_chars seems to always block
         }
     } // while (n>0)
     return lfReturnValue;
 }
 // end serial_read
+
+////////////////////////////////////////////////////////////////////////////
+// Name:         serial_write
+// Description:  Write NULL-terminated string out the serial port
+// Parameters:   paucMessage - pointer to NULL-terminated string
+// Return:       Size of message written
+////////////////////////////////////////////////////////////////////////////
+int serial_write(char * paucMessage)
+{
+    gssize lsizeByteWritten;
+
+    // Write message out the serial port
+    g_io_channel_write_chars(gIOChannelSerialUSB, paucMessage, -1, &lsizeByteWritten, NULL);
+    // Send it out NOW!!
+    g_io_channel_flush(gIOChannelSerialUSB, NULL);
+
+    return (int)lsizeByteWritten;
+}
+// end serial_write
 
 
 ////////////////////////////////////////////////////////////////////////////
