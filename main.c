@@ -22,6 +22,7 @@
 //#include <termios.h>        // POSIX Terminal Control definitions
 #include <string.h>
 #include <time.h>
+#include <ctype.h>
 #include "main.h"
 #include "gconfig.h"
 #include "serial.h"
@@ -69,6 +70,73 @@ GIOChannel *gIOChannelSerialUSB;
 
 
 ////////////////////////////////////////////////////////////////////////////
+// Name:         is_valid_mac
+// Description:  Validate a given string is a MAC address
+//               Expects format xx-xx-xx-xx-xx-xx
+//                           or xx:xx:xx:xx:xx:xx
+//               where xx is a hexadecimal number in range [00:FF]
+//               case-insensitive
+// Parameters:   paucTestMAC - pointer to string to be tested
+// Return:       TRUE if valid MAC; FALSE otherwise
+////////////////////////////////////////////////////////////////////////////
+gboolean is_valid_mac(char* paucTestMAC)
+{
+    // Test if the length is correct
+    if (17 != strlen(paucTestMAC))
+    {
+        return FALSE;
+    }
+
+    // Test if delimiters are '-' or ':'
+    for (int i = 2; i < 17; i += 3)
+    {
+        if (paucTestMAC[i] != '-' && paucTestMAC[i] != ':')
+        {
+            // invalid delimiter
+            return FALSE;
+        }
+    }
+
+    // Test if digits are hex
+    for (int i = 0; i < 17; ++i)
+    {
+        if ( !isxdigit(paucTestMAC[i]) )
+        {
+            // Ignore the indices of the delimiters
+            if ( i!=2 && i!=5 && i!=8 && i!=11 && i!=14)
+            {
+                return FALSE;
+            }
+        }
+    }
+
+    // Delimiters are OK
+    // Digits are hex
+    // Must be a properly-formatted MAC address
+    return TRUE;
+}
+// end is_valid_mac
+
+////////////////////////////////////////////////////////////////////////////
+// Name:         trim
+// Description:  Trims the given string of leading and trailing spaces
+//               Uses isspace() to determine what's a "space"
+//               By Johannes Schaub, 2008.12.09
+//               stackoverflow.com/questions/352055/
+//                 best-algorithm-to-strip-leading-and-trailing-spaces-in-c
+// Parameters:   Pointer to start of string to trim
+// Return:       Pointer to null-terminated trimmed string
+////////////////////////////////////////////////////////////////////////////
+char* trim(char* paucInputString)
+{
+    char* e = paucInputString + strlen(paucInputString) - 1;
+    while (*paucInputString && isspace(*paucInputString)) paucInputString++;
+    while (e > paucInputString && isspace(*e)) *e-- = '\0';
+    return paucInputString;
+}
+// end trim
+
+////////////////////////////////////////////////////////////////////////////
 // Name:         main_ATCommand_clicked
 // Description:  Callback routine - ATCommand button clicked
 //               Send the user-entered AT command to the SARA-R5 on the 400 Cellular
@@ -106,6 +174,50 @@ void main_ATCommand_clicked(void)
 
 
 ////////////////////////////////////////////////////////////////////////////
+// Name:         main_BOARDREV_clicked
+// Description:  Callback routine - BoardRev button clicked
+//               Send the user-entered Board rev to the 400 Cellular
+// Parameters:   the contents of the Board rev text entry
+// Return:       None
+////////////////////////////////////////////////////////////////////////////
+void main_BOARDREV_clicked(void)
+{
+    char lcBoardRev[100];
+    guint16 luiBoardRevLength;
+
+    display_status_write("Board rev button pressed\r\n");
+
+    luiBoardRevLength = gtk_entry_get_text_length(GTK_ENTRY(txtentNewBoardRev));
+    //sprintf(lcTempMainString, "luiBoardRevLength length = %d chars\r\n", luiBoardRevLength);
+    //display_status_write(lcTempMainString);
+    if (luiBoardRevLength > 0)
+    {
+        // Get the contents of the Board rev text entry
+        memset(lcBoardRev, 0, sizeof(lcBoardRev));
+        memcpy(lcBoardRev, trim((char*)gtk_entry_get_text(GTK_ENTRY(txtentNewBoardRev))), 1);
+
+        // Send the formatted Board rev Menu to the 400 Cellular
+        if (isalpha(lcBoardRev[0]))
+        {
+            //sprintf(lcTempMainString, "New Board rev = >>%s<<\r\n", lcBoardRev);
+            //display_status_write(lcTempMainString);
+            sprintf(lcTempMainString, "+++MENU:B %s", lcBoardRev);
+            serial_write(lcTempMainString);
+        }
+        else
+        {
+            sprintf(lcTempMainString, "WARNING - '%s' is an invalid Board rev\r\n", lcBoardRev);
+            display_status_write(lcTempMainString);
+        }
+    }
+    else
+    {
+        display_status_write("WARNING - Board rev appears blank\r\n");
+    }
+}
+// end main_BOARDREV_clicked
+
+////////////////////////////////////////////////////////////////////////////
 // Name:         main_LOGENABLE_state_set
 // Description:  Callback routine - logfile enable switch clicked
 // Parameters:   None
@@ -133,6 +245,50 @@ void main_LOGENABLE_state_set(void)
     }
 }
 // end main_LOGENABLE_state_set
+
+////////////////////////////////////////////////////////////////////////////
+// Name:         main_MAC_clicked
+// Description:  Callback routine - MAC button clicked
+//               Send the user-entered MAC to the 400 Cellular
+// Parameters:   the contents of the MAC text entry
+// Return:       None
+////////////////////////////////////////////////////////////////////////////
+void main_MAC_clicked(void)
+{
+    char lcMACAddress[100];
+    guint16 luiMACAddressLength;
+
+    display_status_write("MAC button pressed\r\n");
+
+    luiMACAddressLength = gtk_entry_get_text_length(GTK_ENTRY(txtentNewMAC));
+    //sprintf(lcTempMainString, "luiMACAddressLength length = %d chars\r\n", luiMACAddressLength);
+    //display_status_write(lcTempMainString);
+    if (luiMACAddressLength > 0)
+    {
+        // Get the contents of the MAC text entry
+        memset(lcMACAddress, 0, sizeof(lcMACAddress));
+        memcpy(lcMACAddress, trim((char*)gtk_entry_get_text(GTK_ENTRY(txtentNewMAC))), luiMACAddressLength);
+
+        // Send the formatted MAC Menu to the 400 Cellular
+        if (is_valid_mac(lcMACAddress))
+        {
+            //sprintf(lcTempMainString, "New MAC address = >>%s<<\r\n", lcMACAddress);
+            //display_status_write(lcTempMainString);
+            sprintf(lcTempMainString, "+++MENU:M %s", lcMACAddress);
+            serial_write(lcTempMainString);
+        }
+        else
+        {
+            sprintf(lcTempMainString, "WARNING - '%s' is an invalid MAC address\r\n", lcMACAddress);
+            display_status_write(lcTempMainString);
+        }
+    }
+    else
+    {
+        display_status_write("WARNING - MAC address appears blank\r\n");
+    }
+}
+// end main_MAC_clicked
 
 ////////////////////////////////////////////////////////////////////////////
 // Name:         main_MENU_clicked
@@ -172,7 +328,10 @@ void main_MENU_clicked(void)
 ////////////////////////////////////////////////////////////////////////////
 void main_REBOOT_clicked(void)
 {
-    display_status_write("REBOOT button pressed\r\n");
+    //display_status_write("REBOOT button pressed\r\n");
+    // Send the formatted menu command to the 400 Cellular
+    sprintf(lcTempMainString, "+++MENU:Z");
+    serial_write(lcTempMainString);
 }
 // end main_REBOOT_clicked
 
@@ -184,7 +343,10 @@ void main_REBOOT_clicked(void)
 ////////////////////////////////////////////////////////////////////////////
 void main_RTD_clicked(void)
 {
-    display_status_write("RESET to Defaults button pressed\r\n");
+    //display_status_write("RESET to Defaults button pressed\r\n");
+    // Send the formatted menu command to the 400 Cellular
+    sprintf(lcTempMainString, "+++MENU:X");
+    serial_write(lcTempMainString);
 }
 // end main_RTD_clicked
 
@@ -422,6 +584,16 @@ main_receive_msg_write(char *paucReceiveMsg)
 }
 // end main_receive_msg_write
 
+////////////////////////////////////////////////////////////////////////////
+// Name:         is_valid_mac
+// Description:  Validate a given string is a MAC address
+//               Expects format xx-xx-xx-xx-xx-xx
+//                           or xx:xx:xx:xx:xx:xx
+//               where xx is a hexadecimal number in range [00:FF]
+//               case-insensitive
+// Parameters:   paucTestMAC - pointer to string to be tested
+// Return:       TRUE if valid MAC; FALSE otherwise
+////////////////////////////////////////////////////////////////////////////
 
 
 ////////////////////////////////////////////////////////////////////////////
