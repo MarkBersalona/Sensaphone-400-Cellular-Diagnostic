@@ -151,8 +151,15 @@ void main_MENU_clicked(void)
     else
     {
         // A menu item has been selected
-        sprintf(lcTempMainString, "MENU button pressed, menu item %d selected\r\n", liMenuItemSelected);
+        sprintf(lcTempMainString, "MENU button pressed, menu item %d (%s, %s) selected\r\n", 
+                                                    liMenuItemSelected, 
+                                                    pucMenuCMD[liMenuItemSelected], 
+                                                    pucMenuItems[liMenuItemSelected]);
         display_status_write(lcTempMainString);
+
+        // Send the formatted menu command to the 400 Cellular
+        sprintf(lcTempMainString, "+++MENU:%s", pucMenuCMD[liMenuItemSelected]);
+        serial_write(lcTempMainString);
     }
 }
 // end main_MENU_clicked

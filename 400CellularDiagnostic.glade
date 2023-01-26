@@ -321,27 +321,6 @@
                     <property name="active">0</property>
                     <items>
                       <item translatable="yes">Display menu</item>
-                      <item translatable="yes">Sensaphone cert</item>
-                      <item translatable="yes">Cellular info</item>
-                      <item translatable="yes">App CRC</item>
-                      <item translatable="yes">App to ext. flash</item>
-                      <item translatable="yes">App from ext. flash</item>
-                      <item translatable="yes">SARA-R5 defaults</item>
-                      <item translatable="yes">Airplane mode on/off</item>
-                      <item translatable="yes">Calib. zones 1-4</item>
-                      <item translatable="yes">Write zone configs</item>
-                      <item translatable="yes">Read  zone configs</item>
-                      <item translatable="yes">SPI flash test (big)</item>
-                      <item translatable="yes">SPI flash test (small)</item>
-                      <item translatable="yes">ACK all alarms</item>
-                      <item translatable="yes">Read MAC/SN</item>
-                      <item translatable="yes">Read Board rev.</item>
-                      <item translatable="yes">Toggle lamps</item>
-                      <item translatable="yes">Toggle relay</item>
-                      <item translatable="yes">Ping server</item>
-                      <item translatable="yes">Close sockets</item>
-                      <item translatable="yes">RESET to defaults</item>
-                      <item translatable="yes">REBOOT</item>
                     </items>
                   </object>
                   <packing>

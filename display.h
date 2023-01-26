@@ -28,6 +28,10 @@ extern GtkWidget *cbtMenu;
 extern GtkWidget *swLogfileEnable, *lblLogfile;
 
     
+// Menu tables
+extern char* pucMenuItems[];
+extern char* pucMenuCMD[];
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Public routines

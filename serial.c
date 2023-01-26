@@ -188,10 +188,13 @@ int serial_write(char * paucMessage)
 {
     gssize lsizeByteWritten;
 
-    // Write message out the serial port
-    g_io_channel_write_chars(gIOChannelSerialUSB, paucMessage, -1, &lsizeByteWritten, NULL);
-    // Send it out NOW!!
-    g_io_channel_flush(gIOChannelSerialUSB, NULL);
+    if (isUSBConnectionOK)
+    {
+        // Write message out the serial port
+        g_io_channel_write_chars(gIOChannelSerialUSB, paucMessage, -1, &lsizeByteWritten, NULL);
+        // Send it out NOW!!
+        g_io_channel_flush(gIOChannelSerialUSB, NULL);
+    }
 
     return (int)lsizeByteWritten;
 }

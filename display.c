@@ -63,6 +63,72 @@ GtkTextIter textiterStatusStart;
 GtkTextIter textiterStatusEnd;
 // GtkTextMark *textmarkStatus;
 
+// Menu table
+char* pucMenuItems[] =
+{
+    "Display menu",
+    "Sensaphone cert",
+    "Cellular info",
+    "App CRC",
+    "App to ext. flash",
+
+    "App from ext. flash",
+    "SARA-R5 defaults",
+    "Airplane mode on/off",
+    "Calib. zones 1-4",
+    "Write zone configs",
+
+    "Read  zone configs",
+    "SPI flash test (big)",
+    "SPI flash test (small)",
+    "ACK all alarms",
+    "Read MAC/SN",
+
+    "Read Board rev.",
+    "Toggle lamps",
+    "Toggle relay",
+    "Ping server",
+    "Close sockets",
+
+    "RESET to defaults",
+    "REBOOT",
+
+    "ENDOFMENU"
+};
+char* pucMenuCMD[] =
+{
+    "0", // Display menu
+    "2", // Sensaphone cert
+    "3", // Cellular info
+    "4", // App CRC
+    "5", // App to ext. flash
+
+    "6", // App from ext. flash
+    "8", // SARA-R5 defaults
+    "A", // Airplane mode on/off
+    "C", // Calib. zones 1-4
+    "E", // Write zone configs
+    
+    "e", // Read  zone configs
+    "F", // SPI flash test (big)
+    "f", // SPI flash test (small)
+    "K", // ACK all alarms
+    "m", // Read MAC/SN
+    
+    "b", // Read Board rev.
+    "L", // Toggle lamps
+    "R", // Toggle relay
+    "P", // Ping server
+    "S", // Close sockets
+    
+    "X", // RESET to defaults
+    "Z", // REBOOT
+
+    "-", // end of menu
+ 
+    
+};
+
 char lcTempString[40];
 
 ////////////////////////////////////////////////////////////////////////////
@@ -182,6 +248,12 @@ display_main_initialize(void)
 	//
     display_clear_UUT_values();
     gtk_label_set_text(GTK_LABEL(lblLogfile), "20230116 1634 400 Cellular.txt");
+    // Add items to the menu combo box
+    int i = 1; // skipping the first menu item, because it's already in the menu combo box
+    while (!strstr(pucMenuItems[i], "ENDOFMENU"))
+    {
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(cbtMenu), pucMenuItems[i++]);
+    }
 
     //
     // Link button presses to callback routines
