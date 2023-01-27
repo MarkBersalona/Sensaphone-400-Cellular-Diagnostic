@@ -43,6 +43,22 @@ GtkWidget *btnNewMAC, *btnNewBoardRev, *btnATCommand;
 GtkWidget *cbtMenu, *btnMenu;
 GtkWidget *btnRTD, *btnReboot;
 
+GtkWidget *lblZoneTitle, *lblTypeTitle, *lblValueTitle, *lblAlarmTitle;
+
+GtkWidget *lblZonePower, *lblZoneBattery, *lblZoneLithium, *lblZoneIntTemp, *lblZoneHumidity;
+GtkWidget *lblZone1, *lblZone2, *lblZone3, *lblZone4, *lblZoneRelay;
+GtkWidget *lblTypePower, *lblTypeBattery, *lblTypeLithium, *lblTypeIntTemp, *lblTypeHumidity;
+GtkWidget *lblTypeZone1, *lblTypeZone2, *lblTypeZone3, *lblTypeZone4, *lblTypeRelay;
+GtkWidget *lblValuePower, *lblValueBattery, *lblValueLithium, *lblValueIntTemp, *lblValueHumidity;
+GtkWidget *lblValueZone1, *lblValueZone2, *lblValueZone3, *lblValueZone4, *lblValueRelay;
+GtkWidget *lblAlarmPower, *lblAlarmBattery, *lblAlarmLithium, *lblAlarmIntTemp, *lblAlarmHumidity;
+GtkWidget *lblAlarmZone1, *lblAlarmZone2, *lblAlarmZone3, *lblAlarmZone4, *lblAlarmRelay;
+
+GtkWidget *lblLatitudeTitle, *lblLongitudeTitle;
+GtkWidget *lblLatitude, *lblLongitude;
+GtkWidget *lblGPSTitle, *lblGLONASSTitle, *lblGalileoTitle, *lblBeiDouTitle, *lblQNSSTitle;
+GtkWidget *lblGPS, *lblGLONASS, *lblGalileo, *lblBeiDou, *lblQNSS;
+
 GtkWidget *lblStatusTitle, *textviewStatus;
 GtkWidget *lblReceiveTitle, *lblLogfileTitle, *swLogfileEnable, *lblLogfile;
 GtkWidget *textviewReceive;
@@ -178,6 +194,70 @@ display_main_initialize(void)
     btnRTD              = GTK_WIDGET(gtk_builder_get_object(builder, "btnRTD"));
     btnReboot           = GTK_WIDGET(gtk_builder_get_object(builder, "btnReboot"));
 		
+    lblZoneTitle  = GTK_WIDGET(gtk_builder_get_object(builder, "lblZoneTitle"));
+    lblTypeTitle  = GTK_WIDGET(gtk_builder_get_object(builder, "lblTypeTitle"));
+    lblValueTitle = GTK_WIDGET(gtk_builder_get_object(builder, "lblValueTitle"));
+    lblAlarmTitle = GTK_WIDGET(gtk_builder_get_object(builder, "lblAlarmTitle"));
+		
+    lblZonePower    = GTK_WIDGET(gtk_builder_get_object(builder, "lblZonePower"));
+    lblZoneBattery  = GTK_WIDGET(gtk_builder_get_object(builder, "lblZoneBattery"));
+    lblZoneLithium  = GTK_WIDGET(gtk_builder_get_object(builder, "lblZoneLithium"));
+    lblZoneIntTemp  = GTK_WIDGET(gtk_builder_get_object(builder, "lblZoneIntTemp"));
+    lblZoneHumidity = GTK_WIDGET(gtk_builder_get_object(builder, "lblZoneHumidity"));
+    lblZone1        = GTK_WIDGET(gtk_builder_get_object(builder, "lblZone1"));
+    lblZone2        = GTK_WIDGET(gtk_builder_get_object(builder, "lblZone2"));
+    lblZone3        = GTK_WIDGET(gtk_builder_get_object(builder, "lblZone3"));
+    lblZone4        = GTK_WIDGET(gtk_builder_get_object(builder, "lblZone4"));
+    lblZoneRelay    = GTK_WIDGET(gtk_builder_get_object(builder, "lblZoneRelay"));
+
+    lblTypePower    = GTK_WIDGET(gtk_builder_get_object(builder, "lblTypePower"));
+    lblTypeBattery  = GTK_WIDGET(gtk_builder_get_object(builder, "lblTypeBattery"));
+    lblTypeLithium  = GTK_WIDGET(gtk_builder_get_object(builder, "lblTypeLithium"));
+    lblTypeIntTemp  = GTK_WIDGET(gtk_builder_get_object(builder, "lblTypeIntTemp"));
+    lblTypeHumidity = GTK_WIDGET(gtk_builder_get_object(builder, "lblTypeHumidity"));
+    lblTypeZone1    = GTK_WIDGET(gtk_builder_get_object(builder, "lblTypeZone1"));
+    lblTypeZone2    = GTK_WIDGET(gtk_builder_get_object(builder, "lblTypeZone2"));
+    lblTypeZone3    = GTK_WIDGET(gtk_builder_get_object(builder, "lblTypeZone3"));
+    lblTypeZone4    = GTK_WIDGET(gtk_builder_get_object(builder, "lblTypeZone4"));
+    lblTypeRelay    = GTK_WIDGET(gtk_builder_get_object(builder, "lblTypeRelay"));
+
+    lblValuePower    = GTK_WIDGET(gtk_builder_get_object(builder, "lblValuePower"));
+    lblValueBattery  = GTK_WIDGET(gtk_builder_get_object(builder, "lblValueBattery"));
+    lblValueLithium  = GTK_WIDGET(gtk_builder_get_object(builder, "lblValueLithium"));
+    lblValueIntTemp  = GTK_WIDGET(gtk_builder_get_object(builder, "lblValueIntTemp"));
+    lblValueHumidity = GTK_WIDGET(gtk_builder_get_object(builder, "lblValueHumidity"));
+    lblValueZone1    = GTK_WIDGET(gtk_builder_get_object(builder, "lblValueZone1"));
+    lblValueZone2    = GTK_WIDGET(gtk_builder_get_object(builder, "lblValueZone2"));
+    lblValueZone3    = GTK_WIDGET(gtk_builder_get_object(builder, "lblValueZone3"));
+    lblValueZone4    = GTK_WIDGET(gtk_builder_get_object(builder, "lblValueZone4"));
+    lblValueRelay    = GTK_WIDGET(gtk_builder_get_object(builder, "lblValueRelay"));
+
+    lblAlarmPower    = GTK_WIDGET(gtk_builder_get_object(builder, "lblAlarmPower"));
+    lblAlarmBattery  = GTK_WIDGET(gtk_builder_get_object(builder, "lblAlarmBattery"));
+    lblAlarmLithium  = GTK_WIDGET(gtk_builder_get_object(builder, "lblAlarmLithium"));
+    lblAlarmIntTemp  = GTK_WIDGET(gtk_builder_get_object(builder, "lblAlarmIntTemp"));
+    lblAlarmHumidity = GTK_WIDGET(gtk_builder_get_object(builder, "lblAlarmHumidity"));
+    lblAlarmZone1    = GTK_WIDGET(gtk_builder_get_object(builder, "lblAlarmZone1"));
+    lblAlarmZone2    = GTK_WIDGET(gtk_builder_get_object(builder, "lblAlarmZone2"));
+    lblAlarmZone3    = GTK_WIDGET(gtk_builder_get_object(builder, "lblAlarmZone3"));
+    lblAlarmZone4    = GTK_WIDGET(gtk_builder_get_object(builder, "lblAlarmZone4"));
+    lblAlarmRelay    = GTK_WIDGET(gtk_builder_get_object(builder, "lblAlarmRelay"));
+
+    lblLatitudeTitle   = GTK_WIDGET(gtk_builder_get_object(builder, "lblLatitudeTitle"));
+    lblLongitudeTitle  = GTK_WIDGET(gtk_builder_get_object(builder, "lblLongitudeTitle"));
+    lblLatitude        = GTK_WIDGET(gtk_builder_get_object(builder, "lblLatitude"));
+    lblLongitude       = GTK_WIDGET(gtk_builder_get_object(builder, "lblLongitude"));
+    lblGPSTitle        = GTK_WIDGET(gtk_builder_get_object(builder, "lblGPSTitle"));
+    lblGLONASSTitle    = GTK_WIDGET(gtk_builder_get_object(builder, "lblGLONASSTitle"));
+    lblGalileoTitle    = GTK_WIDGET(gtk_builder_get_object(builder, "lblGalileoTitle"));
+    lblBeiDouTitle     = GTK_WIDGET(gtk_builder_get_object(builder, "lblBeiDouTitle"));
+    lblQNSSTitle       = GTK_WIDGET(gtk_builder_get_object(builder, "lblQNSSTitle"));
+    lblGPS             = GTK_WIDGET(gtk_builder_get_object(builder, "lblGPS"));
+    lblGLONASS         = GTK_WIDGET(gtk_builder_get_object(builder, "lblGLONASS"));
+    lblGalileo         = GTK_WIDGET(gtk_builder_get_object(builder, "lblGalileo"));
+    lblBeiDou          = GTK_WIDGET(gtk_builder_get_object(builder, "lblBeiDou"));
+    lblQNSS            = GTK_WIDGET(gtk_builder_get_object(builder, "lblQNSS"));
+
     lblStatusTitle  = GTK_WIDGET(gtk_builder_get_object(builder, "lblStatusTitle"));
     textviewStatus  = GTK_WIDGET(gtk_builder_get_object(builder, "textviewStatus"));
 		
@@ -222,6 +302,17 @@ display_main_initialize(void)
     gtk_widget_set_name((lblStatusTitle),         "DiagnosticsTitle");
     gtk_widget_set_name((lblReceiveTitle),        "DiagnosticsTitle");
     gtk_widget_set_name((lblLogfileTitle),        "DiagnosticsTitle");
+    gtk_widget_set_name((lblZoneTitle),        "DiagnosticsTitle");
+    gtk_widget_set_name((lblTypeTitle),        "DiagnosticsTitle");
+    gtk_widget_set_name((lblValueTitle),        "DiagnosticsTitle");
+    gtk_widget_set_name((lblAlarmTitle),        "DiagnosticsTitle");
+    gtk_widget_set_name((lblLatitudeTitle),        "DiagnosticsTitle");
+    gtk_widget_set_name((lblLongitudeTitle),        "DiagnosticsTitle");
+    gtk_widget_set_name((lblGPSTitle),        "DiagnosticsTitle");
+    gtk_widget_set_name((lblGLONASSTitle),        "DiagnosticsTitle");
+    gtk_widget_set_name((lblGalileoTitle),        "DiagnosticsTitle");
+    gtk_widget_set_name((lblBeiDouTitle),        "DiagnosticsTitle");
+    gtk_widget_set_name((lblQNSSTitle),        "DiagnosticsTitle");
 
 		
 	// Values
@@ -234,6 +325,41 @@ display_main_initialize(void)
     gtk_widget_set_name((lblICCID),          "DiagnosticValue");
     gtk_widget_set_name((lblIMEI),           "DiagnosticValue");
     gtk_widget_set_name((lblLogfile),        "DiagnosticValue");
+
+    gtk_widget_set_name((lblTypeZone1),        "DiagnosticValue");
+    gtk_widget_set_name((lblTypeZone2),        "DiagnosticValue");
+    gtk_widget_set_name((lblTypeZone3),        "DiagnosticValue");
+    gtk_widget_set_name((lblTypeZone4),        "DiagnosticValue");
+
+    gtk_widget_set_name((lblValuePower),        "DiagnosticValue");
+    gtk_widget_set_name((lblValueBattery),      "DiagnosticValue");
+    gtk_widget_set_name((lblValueLithium),      "DiagnosticValue");
+    gtk_widget_set_name((lblValueIntTemp),      "DiagnosticValue");
+    gtk_widget_set_name((lblValueHumidity),     "DiagnosticValue");
+    gtk_widget_set_name((lblValueZone1),        "DiagnosticValue");
+    gtk_widget_set_name((lblValueZone2),        "DiagnosticValue");
+    gtk_widget_set_name((lblValueZone3),        "DiagnosticValue");
+    gtk_widget_set_name((lblValueZone4),        "DiagnosticValue");
+    gtk_widget_set_name((lblValueRelay),        "DiagnosticValue");
+
+    gtk_widget_set_name((lblAlarmPower),        "DiagnosticValue");
+    gtk_widget_set_name((lblAlarmBattery),      "DiagnosticValue");
+    gtk_widget_set_name((lblAlarmLithium),      "DiagnosticValue");
+    gtk_widget_set_name((lblAlarmIntTemp),      "DiagnosticValue");
+    gtk_widget_set_name((lblAlarmHumidity),     "DiagnosticValue");
+    gtk_widget_set_name((lblAlarmZone1),        "DiagnosticValue");
+    gtk_widget_set_name((lblAlarmZone2),        "DiagnosticValue");
+    gtk_widget_set_name((lblAlarmZone3),        "DiagnosticValue");
+    gtk_widget_set_name((lblAlarmZone4),        "DiagnosticValue");
+    gtk_widget_set_name((lblAlarmRelay),        "DiagnosticValue");
+
+    gtk_widget_set_name((lblLatitude),        "DiagnosticValue");
+    gtk_widget_set_name((lblLongitude),        "DiagnosticValue");
+    gtk_widget_set_name((lblGPS),        "DiagnosticValue");
+    gtk_widget_set_name((lblGLONASS),        "DiagnosticValue");
+    gtk_widget_set_name((lblGalileo),        "DiagnosticValue");
+    gtk_widget_set_name((lblBeiDou),        "DiagnosticValue");
+    gtk_widget_set_name((lblQNSS),        "DiagnosticValue");
 
     // Buttons
     gtk_widget_set_name((btnNewMAC),      "button");
@@ -286,6 +412,42 @@ void display_clear_UUT_values(void)
     gtk_label_set_text(GTK_LABEL(lblTransceiverFW), "XX.XX");
     gtk_label_set_text(GTK_LABEL(lblICCID), "--------------------");
     gtk_label_set_text(GTK_LABEL(lblIMEI), "---------------");
+    
+    gtk_label_set_text(GTK_LABEL(lblTypeZone1), "------");
+    gtk_label_set_text(GTK_LABEL(lblTypeZone2), "------");
+    gtk_label_set_text(GTK_LABEL(lblTypeZone3), "------");
+    gtk_label_set_text(GTK_LABEL(lblTypeZone4), "------");
+    
+    gtk_label_set_text(GTK_LABEL(lblValuePower), "------");
+    gtk_label_set_text(GTK_LABEL(lblValueBattery), "------");
+    gtk_label_set_text(GTK_LABEL(lblValueLithium), "------");
+    gtk_label_set_text(GTK_LABEL(lblValueIntTemp), "------");
+    gtk_label_set_text(GTK_LABEL(lblValueHumidity), "------");
+    gtk_label_set_text(GTK_LABEL(lblValueZone1), "------");
+    gtk_label_set_text(GTK_LABEL(lblValueZone2), "------");
+    gtk_label_set_text(GTK_LABEL(lblValueZone3), "------");
+    gtk_label_set_text(GTK_LABEL(lblValueZone4), "------");
+    gtk_label_set_text(GTK_LABEL(lblValueRelay), "------");
+    
+    gtk_label_set_text(GTK_LABEL(lblAlarmPower), "------");
+    gtk_label_set_text(GTK_LABEL(lblAlarmBattery), "------");
+    gtk_label_set_text(GTK_LABEL(lblAlarmLithium), "------");
+    gtk_label_set_text(GTK_LABEL(lblAlarmIntTemp), "------");
+    gtk_label_set_text(GTK_LABEL(lblAlarmHumidity), "------");
+    gtk_label_set_text(GTK_LABEL(lblAlarmZone1), "------");
+    gtk_label_set_text(GTK_LABEL(lblAlarmZone2), "------");
+    gtk_label_set_text(GTK_LABEL(lblAlarmZone3), "------");
+    gtk_label_set_text(GTK_LABEL(lblAlarmZone4), "------");
+    gtk_label_set_text(GTK_LABEL(lblAlarmRelay), "------");
+    
+    
+    gtk_label_set_text(GTK_LABEL(lblLatitude),  "------");
+    gtk_label_set_text(GTK_LABEL(lblLongitude), "------");
+    gtk_label_set_text(GTK_LABEL(lblGPS),       "0");
+    gtk_label_set_text(GTK_LABEL(lblGLONASS),   "0");
+    gtk_label_set_text(GTK_LABEL(lblGalileo),   "0");
+    gtk_label_set_text(GTK_LABEL(lblBeiDou),    "0");
+    gtk_label_set_text(GTK_LABEL(lblQNSS),      "0");
 }
 // end display_clear_UUT_values
 

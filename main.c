@@ -362,6 +362,14 @@ main_parse_msg(char *paucReceiveMsg)
     char *plcDetected;
     char *plcQuoteStart;
     char *plcQuoteEnd;
+    char *plcPercentage;
+    char *plcHumidity;
+    char lcZoneNumberBuf[3];
+    uint8_t lucZoneNumber;
+    char lcZoneTypeBuf[4];
+    uint8_t lucZoneType;
+    int liZoneValue;
+    char lcZoneTypeName[20];
 
     // Look for *** WARNING ***
     plcDetected = strstr((char*)paucReceiveMsg, "*** WARNING ***");
@@ -531,6 +539,222 @@ main_parse_msg(char *paucReceiveMsg)
         // Send a sacrificial dummy string to "initialize" serial_write()
         // and 400 Cellular Diagnostic receive
         serial_write("+++");
+    }
+    
+    // Look for "Periodic battery status: Main power "
+    plcDetected = strstr((char*)paucReceiveMsg, "Periodic battery status: Main power ");
+    if (plcDetected)
+    {
+        // Write the 400 Cellular Power status to the Power Value label
+        memset (lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy (lcTempMainString, plcDetected+36, strlen(trim(plcDetected+36)));
+        //display_status_write("Detected 400 Cellular power status: ");
+        //display_status_write(lcTempMainString);
+        //display_status_write("\r\n");
+        gtk_label_set_text(GTK_LABEL(lblValuePower), lcTempMainString);
+    }
+    
+    // Look for "Periodic battery status: Battery voltage " then "Percentage = "
+    plcDetected = strstr((char*)paucReceiveMsg, "Periodic battery status: Battery voltage ");
+    if (plcDetected)
+    {
+        plcPercentage = strstr((char*)plcDetected, "Percentage = ");
+
+        // Write the 400 Cellular Battery percentage to the Battery Value label
+        memset (lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy (lcTempMainString, plcPercentage+13, strlen(trim(plcPercentage+13)));
+        gtk_label_set_text(GTK_LABEL(lblValueBattery), lcTempMainString);
+    }
+    
+    // Look for "Lithium average A/D count" then "Percentage = "
+    plcDetected = strstr((char*)paucReceiveMsg, "Lithium average A/D count");
+    if (plcDetected)
+    {
+        plcPercentage = strstr((char*)plcDetected, "Percentage = ");
+
+        // Write the 400 Cellular Lithium percentage to the Lithium Value label
+        memset (lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy (lcTempMainString, plcPercentage+13, strlen(trim(plcPercentage+13)));
+        gtk_label_set_text(GTK_LABEL(lblValueLithium), lcTempMainString);
+    }
+    
+    // Look for "Internal  Temperature = " then "Humidity = "
+    plcDetected = strstr((char*)paucReceiveMsg, "Internal  Temperature = ");
+    if (plcDetected)
+    {
+        plcHumidity = strstr((char*)paucReceiveMsg, "Humidity = ");
+
+        // Write the 400 Cellular Internal Temperature to the Internal Temperature Value label
+        memset (lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy (lcTempMainString, plcDetected+24, plcHumidity-(plcDetected+24)-1);
+        gtk_label_set_text(GTK_LABEL(lblValueIntTemp), trim(lcTempMainString));
+
+        // Write the 400 Cellular Humidity to the Humidity Value label
+        memset (lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy (lcTempMainString, plcHumidity+11, strlen(trim(plcHumidity+11)));
+        gtk_label_set_text(GTK_LABEL(lblValueHumidity), trim(lcTempMainString));
+    }
+    
+    // Look for the periodic input zone readouts
+    plcDetected = strstr((char*)paucReceiveMsg, "InputTask: Zone ");
+    if (plcDetected)
+    {
+        // Get the zone number
+        memset(lcZoneNumberBuf, 0, sizeof(lcZoneNumberBuf));
+        memcpy(lcZoneNumberBuf, plcDetected+16, 2);
+        lucZoneNumber = atoi(trim(lcZoneNumberBuf));
+
+        // Get the type number; look up the type name and save it
+        char *plcTypeDetected = strstr((char*)paucReceiveMsg, "type=");
+        memset(lcZoneTypeBuf, 0, sizeof(lcZoneTypeBuf));
+        memcpy(lcZoneTypeBuf, plcTypeDetected+5, 3);
+        lucZoneType = atoi(trim(lcZoneTypeBuf));
+        memset(lcZoneTypeName, 0, sizeof(lcZoneTypeName));
+        switch (lucZoneType)
+        {
+            case  0: sprintf(lcZoneTypeName, "Normally Open");                   break;
+            case  1: sprintf(lcZoneTypeName, "Normally Closed");                 break;
+            case  2: sprintf(lcZoneTypeName, "Temp 2.8K F");                     break;
+            case  3: sprintf(lcZoneTypeName, "Temp 2.8K C");                     break;
+            case 29: sprintf(lcZoneTypeName, "Runtime NO");                      break;
+            case 30: sprintf(lcZoneTypeName, "Runtime NC");                      break;
+            default: sprintf(lcZoneTypeName, "Unexpected type=%d", lucZoneType); break;
+        }
+
+        // Get the value
+        char *plcValueDetected = strstr((char*)paucReceiveMsg, "Value=");
+        memset(lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy(lcTempMainString, plcValueDetected+6, strlen(plcValueDetected+6));
+
+        // Write the zone type name and zone value to the appropriate zone labels
+        switch (lucZoneNumber)
+        {
+            case 1:
+                gtk_label_set_text(GTK_LABEL(lblTypeZone1),  trim(lcZoneTypeName));
+                gtk_label_set_text(GTK_LABEL(lblValueZone1), trim(lcTempMainString));
+                break;
+            case 2:
+                gtk_label_set_text(GTK_LABEL(lblTypeZone2),  trim(lcZoneTypeName));
+                gtk_label_set_text(GTK_LABEL(lblValueZone2), trim(lcTempMainString));
+                break;
+            case 3:
+                gtk_label_set_text(GTK_LABEL(lblTypeZone3),  trim(lcZoneTypeName));
+                gtk_label_set_text(GTK_LABEL(lblValueZone3), trim(lcTempMainString));
+                break;
+            case 4:
+                gtk_label_set_text(GTK_LABEL(lblTypeZone4),  trim(lcZoneTypeName));
+                gtk_label_set_text(GTK_LABEL(lblValueZone4), trim(lcTempMainString));
+                break;
+            default:
+                sprintf(lcTempMainString, "ERROR - bad zone number %d\r\n", lucZoneNumber);
+                display_status_write(lcTempMainString);
+                break;
+        }
+    }
+
+    // Look for "Relay has been turned ON"
+    plcDetected = strstr((char*)paucReceiveMsg, "Relay has been turned ON");
+    if (plcDetected)
+    {
+        // Write "CLOSED" to Relay value label
+        gtk_label_set_text(GTK_LABEL(lblValueRelay), "CLOSED");
+    }
+    
+    // Look for "Relay has been turned OFF"
+    plcDetected = strstr((char*)paucReceiveMsg, "Relay has been turned OFF");
+    if (plcDetected)
+    {
+        // Write "OPEN" to Relay value label
+        gtk_label_set_text(GTK_LABEL(lblValueRelay), "OPEN");
+    }
+    
+    // Look for "UGRMC string is INVALID" - meaning failed to get lat/long from satellites
+    plcDetected = strstr((char*)paucReceiveMsg, "UGRMC string is INVALID");
+    if (plcDetected)
+    {
+        // Write "-----" to lat/long labels
+        gtk_label_set_text(GTK_LABEL(lblLatitude),  "-----");
+        gtk_label_set_text(GTK_LABEL(lblLongitude), "-----");
+    }
+    
+    // Look for "UGRMC string is VALID" - we got lat/long from satellites
+    plcDetected = strstr((char*)paucReceiveMsg, "UGRMC string is VALID");
+    if (plcDetected)
+    {
+        char *plcLatitudeDetected  = strstr((char*)paucReceiveMsg, "Latitude ");
+        char *plcLongitudeDetected = strstr((char*)paucReceiveMsg, "Longitude ");
+
+        // Get the latitude, write it to the latitude label
+        memset(lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy(lcTempMainString, plcLatitudeDetected+9, plcLongitudeDetected-(plcLatitudeDetected+9)-1);
+        gtk_label_set_text(GTK_LABEL(lblLatitude), trim(lcTempMainString));
+
+        // Get the longitude, write it to the longitude label
+        memset(lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy(lcTempMainString, plcLongitudeDetected+10, strlen(plcLongitudeDetected+10));
+        gtk_label_set_text(GTK_LABEL(lblLongitude), trim(lcTempMainString));
+    }
+    
+    // Look for "UGGSV satellite counts: "
+    plcDetected = strstr((char*)paucReceiveMsg, "UGGSV satellite counts: ");
+    if (plcDetected)
+    {
+        char *plcNONEDetected  = strstr((char*)paucReceiveMsg, "NONE");
+        char *plcGPSDetected = strstr((char*)paucReceiveMsg, "GPS=");
+        char *plcGLONASSDetected = strstr((char*)paucReceiveMsg, "GLONASS=");
+        char *plcGalileoDetected = strstr((char*)paucReceiveMsg, "Galileo=");
+        char *plcBeiDouDetected = strstr((char*)paucReceiveMsg, "BeiDou=");
+        char *plcQNSSDetected = strstr((char*)paucReceiveMsg, "QNSS=");
+
+        // If NONE detected, zeroize all the satellite counts
+        if (plcNONEDetected)
+        {
+            gtk_label_set_text(GTK_LABEL(lblGPS), "0");
+            gtk_label_set_text(GTK_LABEL(lblGLONASS), "0");
+            gtk_label_set_text(GTK_LABEL(lblGalileo), "0");
+            gtk_label_set_text(GTK_LABEL(lblBeiDou), "0");
+            gtk_label_set_text(GTK_LABEL(lblQNSS), "0");
+        }
+
+        // If GPS detected, write count to its label
+        if (plcGPSDetected)
+        {
+            memset(lcTempMainString, 0, sizeof(lcTempMainString));
+            memcpy(lcTempMainString, plcGPSDetected+4, 4);
+            gtk_label_set_text(GTK_LABEL(lblGPS), trim(lcTempMainString));
+        }
+
+        // If GLONASS detected, write count to its label
+        if (plcGLONASSDetected)
+        {
+            memset(lcTempMainString, 0, sizeof(lcTempMainString));
+            memcpy(lcTempMainString, plcGLONASSDetected+8, 4);
+            gtk_label_set_text(GTK_LABEL(lblGLONASS), trim(lcTempMainString));
+        }
+
+        // If Galileo detected, write count to its label
+        if (plcGalileoDetected)
+        {
+            memset(lcTempMainString, 0, sizeof(lcTempMainString));
+            memcpy(lcTempMainString, plcGalileoDetected+8, 4);
+            gtk_label_set_text(GTK_LABEL(lblGalileo), trim(lcTempMainString));
+        }
+
+        // If BeiDou detected, write count to its label
+        if (plcBeiDouDetected)
+        {
+            memset(lcTempMainString, 0, sizeof(lcTempMainString));
+            memcpy(lcTempMainString, plcBeiDouDetected+7, 4);
+            gtk_label_set_text(GTK_LABEL(lblBeiDou), trim(lcTempMainString));
+        }
+
+        // If QNSS detected, write count to its label
+        if (plcQNSSDetected)
+        {
+            memset(lcTempMainString, 0, sizeof(lcTempMainString));
+            memcpy(lcTempMainString, plcQNSSDetected+5, 4);
+            gtk_label_set_text(GTK_LABEL(lblQNSS), trim(lcTempMainString));
+        }
     }
     
 }
@@ -832,6 +1056,15 @@ int main(int argc, char** argv)
     sprintf(lcTempMainString, "                             %s     \r\n", VERSION_DATE);
     display_status_write(lcTempMainString);
     display_status_write("=================================<=>=================================\r\n");
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    //// TEST MAB 2023.01.26
+    //// To simulate parsing of satellite info, push test strings into the Receive FIFO
+    //main_receive_msg_write("Network_Detect_GNSS_LatLong: UGRMC string is VALID:     Latitude 39.8701455     Longitude -75.4413740");
+    //main_receive_msg_write("Network_Detect_GNSS_Satellites: UGGSV satellite counts: GPS=11    GLONASS=7");
+    
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
 
     //
     // Kick off GTK main loop
