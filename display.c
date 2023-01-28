@@ -302,18 +302,35 @@ display_main_initialize(void)
     gtk_widget_set_name((lblStatusTitle),         "DiagnosticsTitle");
     gtk_widget_set_name((lblReceiveTitle),        "DiagnosticsTitle");
     gtk_widget_set_name((lblLogfileTitle),        "DiagnosticsTitle");
-    gtk_widget_set_name((lblZoneTitle),        "DiagnosticsTitle");
-    gtk_widget_set_name((lblTypeTitle),        "DiagnosticsTitle");
-    gtk_widget_set_name((lblValueTitle),        "DiagnosticsTitle");
-    gtk_widget_set_name((lblAlarmTitle),        "DiagnosticsTitle");
-    gtk_widget_set_name((lblLatitudeTitle),        "DiagnosticsTitle");
-    gtk_widget_set_name((lblLongitudeTitle),        "DiagnosticsTitle");
-    gtk_widget_set_name((lblGPSTitle),        "DiagnosticsTitle");
+    gtk_widget_set_name((lblZoneTitle),           "DiagnosticsTitle");
+    gtk_widget_set_name((lblTypeTitle),           "DiagnosticsTitle");
+    gtk_widget_set_name((lblValueTitle),          "DiagnosticsTitle");
+    gtk_widget_set_name((lblAlarmTitle),          "DiagnosticsTitle");
+    gtk_widget_set_name((lblLatitudeTitle),       "DiagnosticsTitle");
+    gtk_widget_set_name((lblLongitudeTitle),      "DiagnosticsTitle");
+    gtk_widget_set_name((lblGPSTitle),            "DiagnosticsTitle");
     gtk_widget_set_name((lblGLONASSTitle),        "DiagnosticsTitle");
     gtk_widget_set_name((lblGalileoTitle),        "DiagnosticsTitle");
-    gtk_widget_set_name((lblBeiDouTitle),        "DiagnosticsTitle");
-    gtk_widget_set_name((lblQNSSTitle),        "DiagnosticsTitle");
+    gtk_widget_set_name((lblBeiDouTitle),         "DiagnosticsTitle");
+    gtk_widget_set_name((lblQNSSTitle),           "DiagnosticsTitle");
 
+    // Fixed label values
+    gtk_widget_set_name((lblZonePower),    "DiagnosticsFixed");
+    gtk_widget_set_name((lblZoneBattery),  "DiagnosticsFixed");
+    gtk_widget_set_name((lblZoneLithium),  "DiagnosticsFixed");
+    gtk_widget_set_name((lblZoneIntTemp),  "DiagnosticsFixed");
+    gtk_widget_set_name((lblZoneHumidity), "DiagnosticsFixed");
+    gtk_widget_set_name((lblZone1),        "DiagnosticsFixed");
+    gtk_widget_set_name((lblZone2),        "DiagnosticsFixed");
+    gtk_widget_set_name((lblZone3),        "DiagnosticsFixed");
+    gtk_widget_set_name((lblZone4),        "DiagnosticsFixed");
+    gtk_widget_set_name((lblZoneRelay),    "DiagnosticsFixed");
+    gtk_widget_set_name((lblTypePower),    "DiagnosticsFixed");
+    gtk_widget_set_name((lblTypeBattery),  "DiagnosticsFixed");
+    gtk_widget_set_name((lblTypeLithium),  "DiagnosticsFixed");
+    gtk_widget_set_name((lblTypeIntTemp),  "DiagnosticsFixed");
+    gtk_widget_set_name((lblTypeHumidity), "DiagnosticsFixed");
+    gtk_widget_set_name((lblTypeRelay),    "DiagnosticsFixed");
 		
 	// Values
     gtk_widget_set_name((lblMAC),            "DiagnosticValue");
@@ -353,13 +370,13 @@ display_main_initialize(void)
     gtk_widget_set_name((lblAlarmZone4),        "DiagnosticValue");
     gtk_widget_set_name((lblAlarmRelay),        "DiagnosticValue");
 
-    gtk_widget_set_name((lblLatitude),        "DiagnosticValue");
-    gtk_widget_set_name((lblLongitude),        "DiagnosticValue");
-    gtk_widget_set_name((lblGPS),        "DiagnosticValue");
-    gtk_widget_set_name((lblGLONASS),        "DiagnosticValue");
-    gtk_widget_set_name((lblGalileo),        "DiagnosticValue");
-    gtk_widget_set_name((lblBeiDou),        "DiagnosticValue");
-    gtk_widget_set_name((lblQNSS),        "DiagnosticValue");
+    gtk_widget_set_name((lblLatitude),          "DiagnosticValue");
+    gtk_widget_set_name((lblLongitude),         "DiagnosticValue");
+    gtk_widget_set_name((lblGPS),               "DiagnosticValue");
+    gtk_widget_set_name((lblGLONASS),           "DiagnosticValue");
+    gtk_widget_set_name((lblGalileo),           "DiagnosticValue");
+    gtk_widget_set_name((lblBeiDou),            "DiagnosticValue");
+    gtk_widget_set_name((lblQNSS),              "DiagnosticValue");
 
     // Buttons
     gtk_widget_set_name((btnNewMAC),      "button");

@@ -707,7 +707,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="lblIntTemp">
+                  <object class="GtkLabel" id="lblTypeIntTemp">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>

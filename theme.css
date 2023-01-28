@@ -81,6 +81,11 @@ label#DiagnosticsTitle
     /*color: rgb(87, 225, 82);*/
     color: rgb(255, 251, 0);
 }
+label#DiagnosticsFixed
+{
+    /*color: rgb(87, 225, 82);*/
+    color: black;
+}
 
 /*Diagnostics display, values*/
 label#DiagnosticValue
