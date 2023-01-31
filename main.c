@@ -69,6 +69,17 @@ GDateTime *gDateTime;
 GIOChannel *gIOChannelSerialUSB;
 
 
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Utility functions
+//
+///////////////////////////////////////////////////////////////////////////////
+
 ////////////////////////////////////////////////////////////////////////////
 // Name:         is_valid_mac
 // Description:  Validate a given string is a MAC address
@@ -135,6 +146,18 @@ char* trim(char* paucInputString)
     return paucInputString;
 }
 // end trim
+
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Callbacks
+//
+///////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////
 // Name:         main_ATCommand_clicked
@@ -350,6 +373,18 @@ void main_RTD_clicked(void)
 }
 // end main_RTD_clicked
 
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Main application
+//
+///////////////////////////////////////////////////////////////////////////////
+
 ////////////////////////////////////////////////////////////////////////////
 // Name:         main_parse_msg
 // Description:  Parse a string for detectable data
@@ -364,12 +399,24 @@ main_parse_msg(char *paucReceiveMsg)
     char *plcQuoteEnd;
     char *plcPercentage;
     char *plcHumidity;
-    char lcZoneNumberBuf[3];
+    char *plcDetectedParam;
+
+    // For zone number, type and type description
+    char lcZoneNumberBuf[4];
     uint8_t lucZoneNumber;
     char lcZoneTypeBuf[4];
     uint8_t lucZoneType;
     int liZoneValue;
     char lcZoneTypeName[20];
+
+    // For zone alarm statuses
+    char lcZoneAlarmBuf[4];
+    uint8_t lucZoneAlarm;
+    char lcZoneRangeBuf[4];
+    uint8_t lucZoneRange;
+    char lcZoneUnackBuf[4];
+    uint8_t lucZoneUnack;
+    char lcZoneAlarmColor[30];
 
     // Look for *** WARNING ***
     plcDetected = strstr((char*)paucReceiveMsg, "*** WARNING ***");
@@ -757,6 +804,114 @@ main_parse_msg(char *paucReceiveMsg)
         }
     }
     
+    // Look for "Alarm change:", then "Zone=", "Alarm=", "Range=" and "Unack="
+    plcDetected = strstr((char*)paucReceiveMsg, "Alarm change:");
+    if (plcDetected)
+    {
+        // Display the alarm change in Status
+        memset (lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy (lcTempMainString, plcDetected, strlen(trim(plcDetected)));
+        display_status_write(lcTempMainString);
+        display_status_write("\r\n");
+
+        // Get the zone number
+        plcDetectedParam = strstr((char*)paucReceiveMsg, "Zone=");
+        memset (lcZoneNumberBuf, 0, sizeof(lcZoneNumberBuf));
+        memcpy (lcZoneNumberBuf, plcDetectedParam+5, 3);
+        lucZoneNumber = (char)atoi(trim(lcZoneNumberBuf));
+
+        // Get the zone alarm
+        plcDetectedParam = strstr((char*)paucReceiveMsg, "Alarm=");
+        memset (lcZoneAlarmBuf, 0, sizeof(lcZoneAlarmBuf));
+        memcpy (lcZoneAlarmBuf, plcDetectedParam+6, 3);
+        lucZoneAlarm = (char)atoi(trim(lcZoneAlarmBuf));
+
+        // Get the zone range
+        plcDetectedParam = strstr((char*)paucReceiveMsg, "Range=");
+        memset (lcZoneRangeBuf, 0, sizeof(lcZoneRangeBuf));
+        memcpy (lcZoneRangeBuf, plcDetectedParam+6, 3);
+        lucZoneRange = (char)atoi(trim(lcZoneRangeBuf));
+
+        // Get the zone unack
+        plcDetectedParam = strstr((char*)paucReceiveMsg, "Unack=");
+        memset (lcZoneUnackBuf, 0, sizeof(lcZoneUnackBuf));
+        memcpy (lcZoneUnackBuf, plcDetectedParam+6, 3);
+        lucZoneUnack = (char)atoi(trim(lcZoneUnackBuf));
+
+        // Prepare the alarm status to display
+        memset (lcTempMainString, 0, sizeof(lcTempMainString));
+        if (VAL_ALARM_NONE==lucZoneAlarm && VAL_RANGE_OK==lucZoneRange && 0==lucZoneUnack)
+        {
+            sprintf(lcTempMainString, "OK");
+            sprintf(lcZoneAlarmColor, "ZoneStatusOK");
+        }
+        else if (0==lucZoneUnack)
+        {
+            sprintf(lcZoneAlarmColor, "ZoneStatusAlarm");
+            if (MSK_ALARM_LOW==lucZoneAlarm)
+                sprintf(lcTempMainString, "LO");
+            else if (MSK_ALARM_HIGH==lucZoneAlarm)
+                sprintf(lcTempMainString, "HI");
+            else if (MSK_ALARM_RESPONSE==lucZoneAlarm)
+                sprintf(lcTempMainString, "NR");
+            else
+                sprintf(lcTempMainString, "??");
+        }
+        else // (0!=lucZoneUnack)
+        {
+            sprintf(lcZoneAlarmColor, "ZoneStatusAlarm");
+            if (MSK_ALARM_LOW==lucZoneAlarm)
+                sprintf(lcTempMainString, "U-LO");
+            else if (MSK_ALARM_HIGH==lucZoneAlarm)
+                sprintf(lcTempMainString, "U-HI");
+            else if (MSK_ALARM_RESPONSE==lucZoneAlarm)
+                sprintf(lcTempMainString, "U-NR");
+            else
+                sprintf(lcTempMainString, "U-??");
+        }
+
+        // Select the alarm label to update
+        switch (lucZoneNumber)
+        {
+            case 0: 
+                gtk_label_set_text(GTK_LABEL(lblAlarmPower), trim(lcTempMainString)); 
+                gtk_widget_set_name((lblAlarmPower), lcZoneAlarmColor); 
+                break;
+            case 1: 
+                gtk_label_set_text(GTK_LABEL(lblAlarmBattery), trim(lcTempMainString)); 
+                gtk_widget_set_name((lblAlarmBattery), lcZoneAlarmColor); 
+                break;
+            case 2: 
+                gtk_label_set_text(GTK_LABEL(lblAlarmLithium), trim(lcTempMainString)); 
+                gtk_widget_set_name((lblAlarmLithium), lcZoneAlarmColor); 
+                break;
+            case 3: 
+                gtk_label_set_text(GTK_LABEL(lblAlarmIntTemp), trim(lcTempMainString)); 
+                gtk_widget_set_name((lblAlarmIntTemp), lcZoneAlarmColor); 
+                break;
+            case 4: 
+                gtk_label_set_text(GTK_LABEL(lblAlarmHumidity), trim(lcTempMainString)); 
+                gtk_widget_set_name((lblAlarmHumidity), lcZoneAlarmColor); 
+                break;
+            case 5: 
+                gtk_label_set_text(GTK_LABEL(lblAlarmZone1), trim(lcTempMainString)); 
+                gtk_widget_set_name((lblAlarmZone1), lcZoneAlarmColor); 
+                break;
+            case 6: 
+                gtk_label_set_text(GTK_LABEL(lblAlarmZone2), trim(lcTempMainString)); 
+                gtk_widget_set_name((lblAlarmZone2), lcZoneAlarmColor); 
+                break;
+            case 7: 
+                gtk_label_set_text(GTK_LABEL(lblAlarmZone3), trim(lcTempMainString)); 
+                gtk_widget_set_name((lblAlarmZone3), lcZoneAlarmColor); 
+                break;
+            case 8: 
+                gtk_label_set_text(GTK_LABEL(lblAlarmZone4), trim(lcTempMainString)); 
+                gtk_widget_set_name((lblAlarmZone4), lcZoneAlarmColor); 
+                break;
+        }
+    }
+    
 }
 // end main_parse_msg
 
@@ -807,17 +962,6 @@ main_receive_msg_write(char *paucReceiveMsg)
     if (++guiReceiveFIFOWriteIndex >= RECEIVE_FIFO_MSG_COUNT) guiReceiveFIFOWriteIndex = 0;
 }
 // end main_receive_msg_write
-
-////////////////////////////////////////////////////////////////////////////
-// Name:         is_valid_mac
-// Description:  Validate a given string is a MAC address
-//               Expects format xx-xx-xx-xx-xx-xx
-//                           or xx:xx:xx:xx:xx:xx
-//               where xx is a hexadecimal number in range [00:FF]
-//               case-insensitive
-// Parameters:   paucTestMAC - pointer to string to be tested
-// Return:       TRUE if valid MAC; FALSE otherwise
-////////////////////////////////////////////////////////////////////////////
 
 
 ////////////////////////////////////////////////////////////////////////////
@@ -971,13 +1115,6 @@ int main(int argc, char** argv)
 
     gtk_init(&argc, &argv);
     
-    // g_print("\r\n");
-    // g_print("=================================<=>=================================\r\n");
-    // g_print("                 Sensaphone 400 Cellular Diagnostic                  \r\n");
-    // g_print("                               v%s.%s.%s \r\n", VERSION_A,VERSION_B,VERSION_C);
-    // g_print("                             2023.01.17                              \r\n");
-    // g_print("=================================<=>=================================\r\n");
-
     //
     // Initalize any globals needed
     //
@@ -1012,27 +1149,7 @@ int main(int argc, char** argv)
     window = GTK_WINDOW(gtk_builder_get_object(builder, "window1"));
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
     
-/*     // "UP" icon button, to scroll to higher zones
-    evntUp = GTK_WIDGET(gtk_builder_get_object(builder, "evntUp"));
-    g_signal_connect(evntUp, "button-press-event", G_CALLBACK(zone_db_click_next), NULL);
-    // "STOP" icon button, to start/stop auto-scrolling of zones
-    evntStop = GTK_WIDGET(gtk_builder_get_object(builder, "evntStop"));
-    g_signal_connect(evntStop, "button-press-event", G_CALLBACK(zone_db_enable_scroll), NULL);
-    // "DOWN" icon button, to scroll to lower zones
-    evntDown = GTK_WIDGET(gtk_builder_get_object(builder, "evntDown"));
-    g_signal_connect(evntDown, "button-press-event", G_CALLBACK(zone_db_click_prev), NULL);
-    // "GEAR" icon button, to bring up the Diagnostics window
-    evntDiagnostics = GTK_WIDGET(gtk_builder_get_object(builder, "evntDiagnostics"));
-    g_signal_connect(evntDiagnostics, "button-press-event", G_CALLBACK(display_diagnostics_enter), GTK_WINDOW(window));
- */ 
-/*     // Diagnostics window
-    dialog = GTK_WIDGET(gtk_builder_get_object(builder, "dialog1"));
-    g_signal_connect(dialog, "destroy", G_CALLBACK(gtk_widget_hide), GTK_WIDGET(dialog));
-    gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(window));
-    // "EXIT" icon button, to leave the Diagnostics window to return to Main window
-    evntExit = GTK_WIDGET(gtk_builder_get_object(builder, "evntExit"));
-    g_signal_connect(evntExit, "button-press-event", G_CALLBACK(display_diagnostics_exit), NULL);
- */
+
     //
     // Initialize the Main window
     //

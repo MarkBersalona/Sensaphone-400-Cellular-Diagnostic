@@ -30,7 +30,7 @@ laptop I cloned it to /home/mark/GTKProjects/Sensaphone-400-Cellular-Diagnostic
 The 400 Cellular monitors the following inputs, or *zones*:
 - 0: Power - the DC mains input; raw value is 0 if disconnected, 0x7FFF if onnected
 - 1:Battery - the rechargeable battery, used as power backup if mains power is disconnected; expressed as a percentage, from 0-100
-- 2: Lithium - the CR2 lithium cell, used to maintain the real-time clock; expressed as a percentage, from 0-100
+- 2: Lithium - the CR2032 lithium cell, used to maintain the real-time clock; expressed as a percentage, from 0-100
 - 3: Internal temperature - the temperature reading from the on-board humidity sensor; value is in Celsius
 - 4: Internal humidity - the humidity reading from the on-board humidity sensor; expressed as a percentage, from 0-100
 - 5: Analog input 1, colloquially "Zone 1"

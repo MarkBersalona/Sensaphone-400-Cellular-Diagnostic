@@ -31,6 +31,8 @@ extern GtkWidget *lblTypePower, *lblTypeBattery, *lblTypeLithium, *lblTypeIntTem
 extern GtkWidget *lblTypeZone1, *lblTypeZone2, *lblTypeZone3, *lblTypeZone4, *lblTypeRelay;
 extern GtkWidget *lblValuePower, *lblValueBattery, *lblValueLithium, *lblValueIntTemp, *lblValueHumidity;
 extern GtkWidget *lblValueZone1, *lblValueZone2, *lblValueZone3, *lblValueZone4, *lblValueRelay;
+extern GtkWidget *lblAlarmPower, *lblAlarmBattery, *lblAlarmLithium, *lblAlarmIntTemp, *lblAlarmHumidity;
+extern GtkWidget *lblAlarmZone1, *lblAlarmZone2, *lblAlarmZone3, *lblAlarmZone4, *lblAlarmRelay;
 
 extern GtkWidget *lblLatitude, *lblLongitude;
 extern GtkWidget *lblGPS, *lblGLONASS, *lblGalileo, *lblBeiDou, *lblQNSS;
