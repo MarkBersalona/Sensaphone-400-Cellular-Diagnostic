@@ -36,6 +36,8 @@ GtkWidget *lblMACTitle, *lblBoardRevTitle, *lblHumiditySensorTitle, *lbl400FWTit
 GtkWidget *lblMAC, *lblBoardRev, *lblHumiditySensor, *lbl400FW;
 GtkWidget *lblTransceiverTitle, *lblTransceiverFWTitle, *lblICCIDTitle, *lblIMEITitle;
 GtkWidget *lblTransceiver, *lblTransceiverFW, *lblICCID, *lblIMEI;
+GtkWidget *lblRTCTitle, *lblConnectionTitle;
+GtkWidget *lblRTC, *lblConnection;
 
 GtkWidget *lblNewMACTitle, *lblNewBoardRevTitle, *lblATCommandTitle;
 GtkWidget *txtentNewMAC, *txtentNewBoardRev, *txtentATCommand;
@@ -168,6 +170,8 @@ display_main_initialize(void)
     lblHumiditySensor      = GTK_WIDGET(gtk_builder_get_object(builder, "lblHumiditySensor"));
     lbl400FWTitle          = GTK_WIDGET(gtk_builder_get_object(builder, "lbl400FWTitle"));
     lbl400FW               = GTK_WIDGET(gtk_builder_get_object(builder, "lbl400FW"));
+    lblRTCTitle            = GTK_WIDGET(gtk_builder_get_object(builder, "lblRTCTitle"));
+    lblRTC                 = GTK_WIDGET(gtk_builder_get_object(builder, "lblRTC"));
 		
     lblTransceiverTitle   = GTK_WIDGET(gtk_builder_get_object(builder, "lblTransceiverTitle"));
     lblTransceiver        = GTK_WIDGET(gtk_builder_get_object(builder, "lblTransceiver"));
@@ -177,6 +181,8 @@ display_main_initialize(void)
     lblICCID              = GTK_WIDGET(gtk_builder_get_object(builder, "lblICCID"));
     lblIMEITitle          = GTK_WIDGET(gtk_builder_get_object(builder, "lblIMEITitle"));
     lblIMEI               = GTK_WIDGET(gtk_builder_get_object(builder, "lblIMEI"));
+    lblConnectionTitle    = GTK_WIDGET(gtk_builder_get_object(builder, "lblConnectionTitle"));
+    lblConnection         = GTK_WIDGET(gtk_builder_get_object(builder, "lblConnection"));
 		
     lblNewMACTitle      = GTK_WIDGET(gtk_builder_get_object(builder, "lblNewMACTitle"));
     txtentNewMAC        = GTK_WIDGET(gtk_builder_get_object(builder, "txtentNewMAC"));
@@ -292,10 +298,12 @@ display_main_initialize(void)
     gtk_widget_set_name((lblBoardRevTitle),       "DiagnosticsTitle");
     gtk_widget_set_name((lblHumiditySensorTitle), "DiagnosticsTitle");
     gtk_widget_set_name((lbl400FWTitle),          "DiagnosticsTitle");
+    gtk_widget_set_name((lblRTCTitle),            "DiagnosticsTitle");
     gtk_widget_set_name((lblTransceiverTitle),    "DiagnosticsTitle");
     gtk_widget_set_name((lblTransceiverFWTitle),  "DiagnosticsTitle");
     gtk_widget_set_name((lblICCIDTitle),          "DiagnosticsTitle");
     gtk_widget_set_name((lblIMEITitle),           "DiagnosticsTitle");
+    gtk_widget_set_name((lblConnectionTitle),     "DiagnosticsTitle");
     gtk_widget_set_name((lblNewMACTitle),         "DiagnosticsTitle");
     gtk_widget_set_name((lblNewBoardRevTitle),    "DiagnosticsTitle");
     gtk_widget_set_name((lblATCommandTitle),      "DiagnosticsTitle");
@@ -337,10 +345,12 @@ display_main_initialize(void)
     gtk_widget_set_name((lblBoardRev),       "DiagnosticValue");
     gtk_widget_set_name((lblHumiditySensor), "DiagnosticValue");
     gtk_widget_set_name((lbl400FW),          "DiagnosticValue");
+    gtk_widget_set_name((lblRTC),            "DiagnosticValue");
     gtk_widget_set_name((lblTransceiver),    "DiagnosticValue");
     gtk_widget_set_name((lblTransceiverFW),  "DiagnosticValue");
     gtk_widget_set_name((lblICCID),          "DiagnosticValue");
     gtk_widget_set_name((lblIMEI),           "DiagnosticValue");
+    gtk_widget_set_name((lblConnection),     "DiagnosticValue");
     gtk_widget_set_name((lblLogfile),        "DiagnosticValue");
 
     gtk_widget_set_name((lblTypeZone1),        "DiagnosticValue");
@@ -425,10 +435,12 @@ void display_clear_UUT_values(void)
     gtk_label_set_text(GTK_LABEL(lblBoardRev), "-");
     gtk_label_set_text(GTK_LABEL(lblHumiditySensor), "---------------");
     gtk_label_set_text(GTK_LABEL(lbl400FW), "vX.X.X");
+    gtk_label_set_text(GTK_LABEL(lblRTC), "---------------");
     gtk_label_set_text(GTK_LABEL(lblTransceiver), "-------------------");
     gtk_label_set_text(GTK_LABEL(lblTransceiverFW), "XX.XX");
     gtk_label_set_text(GTK_LABEL(lblICCID), "--------------------");
     gtk_label_set_text(GTK_LABEL(lblIMEI), "---------------");
+    gtk_label_set_text(GTK_LABEL(lblConnection), "---------------");
     
     gtk_label_set_text(GTK_LABEL(lblTypeZone1), "------");
     gtk_label_set_text(GTK_LABEL(lblTypeZone2), "------");

@@ -26,6 +26,7 @@ extern GtkWidget *lblTransceiver, *lblTransceiverFW, *lblICCID, *lblIMEI;
 extern GtkWidget *txtentNewMAC, *txtentNewBoardRev, *txtentATCommand;
 extern GtkWidget *cbtMenu;
 extern GtkWidget *swLogfileEnable, *lblLogfile;
+extern GtkWidget *lblRTC, *lblConnection;
 
 extern GtkWidget *lblTypePower, *lblTypeBattery, *lblTypeLithium, *lblTypeIntTemp, *lblTypeHumidity;
 extern GtkWidget *lblTypeZone1, *lblTypeZone2, *lblTypeZone3, *lblTypeZone4, *lblTypeRelay;
@@ -36,6 +37,11 @@ extern GtkWidget *lblAlarmZone1, *lblAlarmZone2, *lblAlarmZone3, *lblAlarmZone4,
 
 extern GtkWidget *lblLatitude, *lblLongitude;
 extern GtkWidget *lblGPS, *lblGLONASS, *lblGalileo, *lblBeiDou, *lblQNSS;
+
+extern GtkTextBuffer *textbufStatus;
+extern GtkTextIter textiterStatusEnd;
+extern GtkScrolledWindow *scrolledwindowStatus;
+extern GtkAdjustment *adjStatus;
 
     
 // Menu tables

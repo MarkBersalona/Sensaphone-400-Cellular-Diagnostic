@@ -20,7 +20,7 @@
         <property name="vexpand">True</property>
         <property name="orientation">vertical</property>
         <child>
-          <!-- n-columns=4 n-rows=4 -->
+          <!-- n-columns=4 n-rows=5 -->
           <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -247,6 +247,61 @@
               <packing>
                 <property name="left-attach">3</property>
                 <property name="top-attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="lblRTCTitle">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">end</property>
+                <property name="margin-left">20</property>
+                <property name="margin-right">10</property>
+                <property name="label" translatable="yes">Device time (UTC)</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="lblRTC">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <property name="margin-right">10</property>
+                <property name="hexpand">True</property>
+                <property name="label" translatable="yes">2023.02.03 18:42</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="lblConnectionTitle">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">end</property>
+                <property name="margin-right">10</property>
+                <property name="label" translatable="yes">Connection</property>
+              </object>
+              <packing>
+                <property name="left-attach">2</property>
+                <property name="top-attach">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="lblConnection">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <property name="margin-right">20</property>
+                <property name="hexpand">True</property>
+                <property name="label" translatable="yes">REGISTERING</property>
+              </object>
+              <packing>
+                <property name="left-attach">3</property>
+                <property name="top-attach">4</property>
               </packing>
             </child>
           </object>

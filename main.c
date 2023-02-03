@@ -576,6 +576,12 @@ main_parse_msg(char *paucReceiveMsg)
         // Write the 400 Cellular's network online state transition to Status
         display_status_write(paucReceiveMsg);
         display_status_write("\r\n");
+
+        // Get the new connection state
+        plcDetectedParam = strstr((char*)paucReceiveMsg, " to ");
+        memset (lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy (lcTempMainString, plcDetectedParam+4, strlen(trim(plcDetectedParam+4)));
+        gtk_label_set_text(GTK_LABEL(lblConnection), lcTempMainString);
     }
     
     // Look for "+++ Start DIAGNOSTIC MODE +++"
@@ -911,6 +917,22 @@ main_parse_msg(char *paucReceiveMsg)
                 break;
         }
     }
+
+    // Look for "RTC is " followed by "UTC"
+    plcDetected = strstr((char*)paucReceiveMsg, "RTC is ");
+    if (plcDetected)
+    {
+        // Look for "UTC"
+        plcDetectedParam = strstr((char*)paucReceiveMsg, "UTC");
+
+        // Get date and time, excluding the seconds and UTC
+        memset(lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy(lcTempMainString, plcDetected+7, (plcDetectedParam-4)-(plcDetected+7));
+
+        // Write device RTC to RTC label
+        gtk_label_set_text(GTK_LABEL(lblRTC),  lcTempMainString);
+    }
+    
     
 }
 // end main_parse_msg
@@ -996,6 +1018,10 @@ main_periodic(gpointer data)
         {
             display_update_data_age();
         }
+
+        // Force Status window to bottom
+        adjStatus = gtk_scrolled_window_get_vadjustment(scrolledwindowStatus);
+        gtk_adjustment_set_value( adjStatus, gtk_adjustment_get_upper(adjStatus) );
 
         if (lulElapsed_sec%60 == 0)
         {
