@@ -1000,10 +1000,10 @@ main_periodic(gpointer data)
         if (lulElapsed_sec%60 == 0)
         {
             // Updates every minute
-            sprintf(lcTempMainString, "%s: UNIX timestamp %d\t", __FUNCTION__, gulUNIXTimestamp);
-            display_status_write(lcTempMainString);
-            sprintf(lcTempMainString, "Local time %s\r\n", g_date_time_format(gDateTime, "%Y-%m-%d %H:%M"));
-            display_status_write(lcTempMainString);
+            // sprintf(lcTempMainString, "%s: UNIX timestamp %d\t", __FUNCTION__, gulUNIXTimestamp);
+            // display_status_write(lcTempMainString);
+            // sprintf(lcTempMainString, "Local time %s\r\n", g_date_time_format(gDateTime, "%Y-%m-%d %H:%M"));
+            // display_status_write(lcTempMainString);
         }
 
         if (lulElapsed_sec%(60*60) == 0)
