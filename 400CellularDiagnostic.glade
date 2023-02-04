@@ -1414,7 +1414,6 @@
                     <property name="can-focus">True</property>
                     <property name="margin-left">10</property>
                     <property name="margin-right">10</property>
-                    <property name="active">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -1429,7 +1428,9 @@
                     <property name="halign">start</property>
                     <property name="margin-left">10</property>
                     <property name="margin-right">20</property>
-                    <property name="label" translatable="yes">20230113 1043 400 Cellular.txt</property>
+                    <property name="label" translatable="yes">20230203 1836 400 Cellular.txt</property>
+                    <property name="width-chars">25</property>
+                    <property name="max-width-chars">100</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>

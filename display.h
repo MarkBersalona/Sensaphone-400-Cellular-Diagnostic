@@ -38,6 +38,8 @@ extern GtkWidget *lblAlarmZone1, *lblAlarmZone2, *lblAlarmZone3, *lblAlarmZone4,
 extern GtkWidget *lblLatitude, *lblLongitude;
 extern GtkWidget *lblGPS, *lblGLONASS, *lblGalileo, *lblBeiDou, *lblQNSS;
 
+extern GtkWidget *lblLogfile;
+
 extern GtkTextBuffer *textbufStatus;
 extern GtkTextIter textiterStatusEnd;
 extern GtkScrolledWindow *scrolledwindowStatus;

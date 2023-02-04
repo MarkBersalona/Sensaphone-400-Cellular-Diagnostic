@@ -109,3 +109,9 @@ separator
     color: gray;
     background-color: gray;
 }
+
+/* textview styling */
+textview
+{
+    font: 9px Monoid, DejaVu Sans Mono, monospace;
+}

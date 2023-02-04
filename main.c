@@ -65,6 +65,9 @@ guint32 gulElapsedTimeSinceDataUpdate_sec;
 // Glib date/time
 GDateTime *gDateTime;
 
+// Logfile filename
+char lcLogfileName[100];
+
 // I/O channel for serial-to-USB port
 GIOChannel *gIOChannelSerialUSB;
 
@@ -252,8 +255,12 @@ void main_LOGENABLE_state_set(void)
     if (lfIsLogfileEnabled)
     {
         // Logfile has just been enabled, build timestamp filename and open file
-        sprintf(lcTempMainString, "Logfile %s 400 Cellular.txt opened\r\n", g_date_time_format(gDateTime, "%Y%m%d %H%M"));
+        memset(lcLogfileName, 0, sizeof(lcLogfileName));
+        sprintf(lcLogfileName, "%s 400 Cellular.txt", g_date_time_format(gDateTime, "%Y%m%d %H%M"));
+        sprintf(lcTempMainString, "Logfile %s opened\r\n", lcLogfileName);
         display_status_write(lcTempMainString);
+        gtk_label_set_text(GTK_LABEL(lblLogfile), lcLogfileName);
+
 
         // Set the switch state to ON
         gtk_switch_set_state(GTK_SWITCH(swLogfileEnable), TRUE);
@@ -261,7 +268,9 @@ void main_LOGENABLE_state_set(void)
     else
     {
         // Logfile has just been disabled, close the logfile and blank the displayed log filename
-        display_status_write("Logfile is now closed\r\n");
+        sprintf(lcTempMainString, "Logfile %s is now closed\r\n", lcLogfileName);
+        display_status_write(lcTempMainString);
+        gtk_label_set_text(GTK_LABEL(lblLogfile), "------------------------------------------");
 
         // Set the switch state to OFF
         gtk_switch_set_state(GTK_SWITCH(swLogfileEnable), FALSE);

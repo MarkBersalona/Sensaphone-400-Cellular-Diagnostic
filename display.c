@@ -400,7 +400,7 @@ display_main_initialize(void)
     // Initialize values
 	//
     display_clear_UUT_values();
-    gtk_label_set_text(GTK_LABEL(lblLogfile), "20230116 1634 400 Cellular.txt");
+    gtk_label_set_text(GTK_LABEL(lblLogfile), "------------------------------------------");
     // Add items to the menu combo box
     int i = 1; // skipping the first menu item, because it's already in the menu combo box
     while (!strstr(pucMenuItems[i], "ENDOFMENU"))
