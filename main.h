@@ -49,39 +49,40 @@ extern "C"
 #define VAL_RANGE_NOT_RESPONDING     0x04 // IMS and Wireless
 #define VAL_RANGE_ROUTE_DOWN         0x05 // IP TODO convert to bitmask-compatible value, e.g. 0x10
 
-    ///////////////////////////////////////////////////////////////////////////////
-    //
-    // Public routines
-    //
-    ///////////////////////////////////////////////////////////////////////////////
-    char *main_receive_msg_read(void);
-    void main_receive_msg_write(char *paucReceiveMsg);
+///////////////////////////////////////////////////////////////////////////////
+//
+// Public routines
+//
+///////////////////////////////////////////////////////////////////////////////
+char *main_receive_msg_read(void);
+void main_receive_msg_write(char *paucReceiveMsg);
 
-    void main_ATCommand_clicked(void);
-    void main_BOARDREV_clicked(void);
-    void main_LOGENABLE_state_set(void);
-    void main_MAC_clicked(void);
-    void main_MENU_clicked(void);
-    void main_REBOOT_clicked(void);
-    void main_RTD_clicked(void);
+void main_ATCommand_clicked(void);
+void main_BOARDREV_clicked(void);
+void main_LOGENABLE_state_set(void);
+void main_MAC_clicked(void);
+void main_MENU_clicked(void);
+void main_REBOOT_clicked(void);
+void main_RTD_clicked(void);
 
-    gboolean is_valid_mac(char *paucTestMAC);
-    char *trim(char *paucInputString);
+gboolean is_valid_mac(char *paucTestMAC);
+char *trim(char *paucInputString);
+int main_logfile_write(char * paucMessage);
 
-    ///////////////////////////////////////////////////////////////////////////////
-    //
-    // Public variables
-    //
-    ///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+//
+// Public variables
+//
+///////////////////////////////////////////////////////////////////////////////
 
-    // GTK builder
-    extern GtkBuilder *builder;
+// GTK builder
+extern GtkBuilder *builder;
 
-    // Elapsed time since last data update
-    extern guint32 gulElapsedTimeSinceDataUpdate_sec;
+// Elapsed time since last data update
+extern guint32 gulElapsedTimeSinceDataUpdate_sec;
 
-    // I/O channel for serial-to-USB port
-    extern GIOChannel *gIOChannelSerialUSB;
+// I/O channel for serial-to-USB port
+extern GIOChannel *gIOChannelSerialUSB;
 
 #ifdef __cplusplus
 }

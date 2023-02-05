@@ -65,8 +65,10 @@ guint32 gulElapsedTimeSinceDataUpdate_sec;
 // Glib date/time
 GDateTime *gDateTime;
 
-// Logfile filename
+// Logfile
+GIOChannel *gioChannelLogfile;
 char lcLogfileName[100];
+gboolean lfIsLogfileEnabled;
 
 // I/O channel for serial-to-USB port
 GIOChannel *gIOChannelSerialUSB;
@@ -251,7 +253,7 @@ void main_BOARDREV_clicked(void)
 ////////////////////////////////////////////////////////////////////////////
 void main_LOGENABLE_state_set(void)
 {
-    gboolean lfIsLogfileEnabled = gtk_switch_get_active(GTK_SWITCH(swLogfileEnable));
+    lfIsLogfileEnabled = gtk_switch_get_active(GTK_SWITCH(swLogfileEnable));
     if (lfIsLogfileEnabled)
     {
         // Logfile has just been enabled, build timestamp filename and open file
@@ -260,7 +262,15 @@ void main_LOGENABLE_state_set(void)
         sprintf(lcTempMainString, "Logfile %s opened\r\n", lcLogfileName);
         display_status_write(lcTempMainString);
         gtk_label_set_text(GTK_LABEL(lblLogfile), lcLogfileName);
+        // (Open file for append, which creates new file if file doesn't exist yet)
+        gioChannelLogfile = g_io_channel_new_file(lcLogfileName, "a", NULL);
+        //g_io_channel_set_encoding(gioChannelLogfile, NULL, NULL);
 
+        // Write intro text to logfile
+        memset(lcTempMainString, 0, sizeof(lcTempMainString));
+        sprintf(lcTempMainString, "---------- Sensaphone 400 Cellular logfile, opened %s local time -----------", 
+                                                          g_date_time_format(gDateTime, "%Y.%m.%d %H:%M") );
+        main_logfile_write(lcTempMainString);
 
         // Set the switch state to ON
         gtk_switch_set_state(GTK_SWITCH(swLogfileEnable), TRUE);
@@ -268,6 +278,7 @@ void main_LOGENABLE_state_set(void)
     else
     {
         // Logfile has just been disabled, close the logfile and blank the displayed log filename
+        g_io_channel_shutdown(gioChannelLogfile, TRUE, NULL);
         sprintf(lcTempMainString, "Logfile %s is now closed\r\n", lcLogfileName);
         display_status_write(lcTempMainString);
         gtk_label_set_text(GTK_LABEL(lblLogfile), "------------------------------------------");
@@ -976,6 +987,30 @@ main_receive_msg_read(void)
 
 
 ////////////////////////////////////////////////////////////////////////////
+// Name:         main_logfile_write
+// Description:  Write NULL-terminated string to logfile
+//               Assumes logfile already exists
+// Parameters:   paucMessage - pointer to NULL-terminated string
+// Return:       Size of message written
+////////////////////////////////////////////////////////////////////////////
+int main_logfile_write(char * paucMessage)
+{
+    gssize lsizeByteWritten = 0;
+
+    if (lfIsLogfileEnabled)
+    {
+        // Write message to logfile
+        g_io_channel_write_chars(gioChannelLogfile, paucMessage, -1, &lsizeByteWritten, NULL);
+        g_io_channel_write_chars(gioChannelLogfile, "\r\n",      -1, NULL, NULL);
+        // Send it out NOW!!
+        //g_io_channel_flush(gioChannelLogfile, NULL);
+    }
+
+    return (int)lsizeByteWritten;
+}
+// end main_logfile_write
+
+////////////////////////////////////////////////////////////////////////////
 // Name:         main_receive_msg_write
 // Description:  Write a received string to the FIFO
 // Parameters:   paucReceiveMsg - pointer to received NULL-terminated string
@@ -1128,6 +1163,7 @@ main_periodic(gpointer data)
             main_parse_msg(plcReceivedMsgAvailable);
 
             // If log file is active, save received message
+            main_logfile_write(plcReceivedMsgAvailable);
         }
     } while (plcReceivedMsgAvailable);
     
@@ -1156,7 +1192,8 @@ int main(int argc, char** argv)
     gulElapsedTimeSinceDataUpdate_sec = 0;
     //gDateTime = g_date_time_new_now_utc();
     gDateTime = g_date_time_new_now_local();
-    
+    lfIsLogfileEnabled = FALSE;
+
     //
     // Enable CSS styling (colors, fonts, text sizes)
     //
