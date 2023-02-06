@@ -64,6 +64,14 @@ guint32 gulUNIXTimestamp;
 guint32 gulElapsedTimeSinceDataUpdate_sec;
 // Glib date/time
 GDateTime *gDateTime;
+// Countdown minutes to Status timestamp
+guint16 guiStatusTimestampCountdown_minutes = 0;
+guint8  guiStatusTimestampCountdownIndex    = 0;
+guint8  uiStatusTimestampCountdownIndex_OLD = 0;
+guint16 uiStatusTimestampCountdownTable[11] = 
+{
+    5, 6, 6, 7, 8, 10, 13, 18, 28, 39, 60
+};
 
 // Logfile
 GIOChannel *gioChannelLogfile;
@@ -1050,7 +1058,9 @@ main_periodic(gpointer data)
     //////////////////////////////////////////////////////////
     if (gulUNIXTimestamp != g_get_real_time()/1000000)
     {
+        //
         // Updates every second
+        //
         gulUNIXTimestamp = g_get_real_time()/1000000;
         //gDateTime = g_date_time_new_now_utc();
         gDateTime = g_date_time_new_now_local();
@@ -1069,21 +1079,45 @@ main_periodic(gpointer data)
 
         if (lulElapsed_sec%60 == 0)
         {
-            // Updates every minute
-            // sprintf(lcTempMainString, "%s: UNIX timestamp %d\t", __FUNCTION__, gulUNIXTimestamp);
-            // display_status_write(lcTempMainString);
-            // sprintf(lcTempMainString, "Local time %s\r\n", g_date_time_format(gDateTime, "%Y-%m-%d %H:%M"));
-            // display_status_write(lcTempMainString);
+            //
+            // Updates every ELAPSED minute
+            //
+            if (--guiStatusTimestampCountdown_minutes)
+            {
+                // Do nothing, not yet time to display Status timestamp
+            }
+            else
+            {
+                // Save old table index
+                uiStatusTimestampCountdownIndex_OLD = guiStatusTimestampCountdownIndex;
+
+                // Print timestamp in Status
+                sprintf(lcTempMainString, "%s: UNIX timestamp %d\t", __FUNCTION__, gulUNIXTimestamp);
+                display_status_write(lcTempMainString);
+                sprintf(lcTempMainString, "Local time %s\r\n", g_date_time_format(gDateTime, "%Y-%m-%d %H:%M"));
+                display_status_write(lcTempMainString);
+
+                // Restore table index; update if needed
+                guiStatusTimestampCountdownIndex = uiStatusTimestampCountdownIndex_OLD;
+                if (guiStatusTimestampCountdownIndex<10) ++guiStatusTimestampCountdownIndex;
+
+                // Reset minute countdown for Status timestamp
+                guiStatusTimestampCountdown_minutes = uiStatusTimestampCountdownTable[guiStatusTimestampCountdownIndex];
+            }
         }
 
         if (lulElapsed_sec%(60*60) == 0)
         {
-            // Updates every hour
+            //
+            // Updates every ELAPSED hour
+            //
         }
 
         if (lulElapsed_sec%(60*60*24) == 0)
         {
-            // Updates every 24-hour day
+            //
+            // Updates every ELAPSED 24-hour day
+            //
         }
     }
     
@@ -1193,6 +1227,7 @@ int main(int argc, char** argv)
     //gDateTime = g_date_time_new_now_utc();
     gDateTime = g_date_time_new_now_local();
     lfIsLogfileEnabled = FALSE;
+    guiStatusTimestampCountdown_minutes = 1;
 
     //
     // Enable CSS styling (colors, fonts, text sizes)

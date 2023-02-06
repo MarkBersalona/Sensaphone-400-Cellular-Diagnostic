@@ -84,6 +84,11 @@ extern guint32 gulElapsedTimeSinceDataUpdate_sec;
 // I/O channel for serial-to-USB port
 extern GIOChannel *gIOChannelSerialUSB;
 
+// Status timestamp-related
+extern guint16 guiStatusTimestampCountdown_minutes;
+extern guint8  guiStatusTimestampCountdownIndex;
+
+
 #ifdef __cplusplus
 }
 #endif

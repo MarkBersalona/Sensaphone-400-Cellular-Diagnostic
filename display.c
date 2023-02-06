@@ -535,6 +535,9 @@ display_status_write(char * paucWriteBuf)
     // Move to bottom of Status window
     adjStatus = gtk_scrolled_window_get_vadjustment(scrolledwindowStatus);
     gtk_adjustment_set_value( adjStatus, gtk_adjustment_get_upper(adjStatus) );
+
+    // Reset Status timestamp timer
+    guiStatusTimestampCountdownIndex = 0;
 }
 // end display_status_write
 
