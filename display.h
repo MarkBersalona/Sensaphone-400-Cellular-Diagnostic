@@ -27,6 +27,7 @@ extern GtkWidget *txtentNewMAC, *txtentNewBoardRev, *txtentATCommand;
 extern GtkWidget *cbtMenu;
 extern GtkWidget *swLogfileEnable, *lblLogfile;
 extern GtkWidget *lblRTC, *lblConnection;
+extern GtkWidget *lblRSSI, *lblRSRP, *lblRSRQ, *lblSignalQuality;
 
 extern GtkWidget *lblTypePower, *lblTypeBattery, *lblTypeLithium, *lblTypeIntTemp, *lblTypeHumidity;
 extern GtkWidget *lblTypeZone1, *lblTypeZone2, *lblTypeZone3, *lblTypeZone4, *lblTypeRelay;

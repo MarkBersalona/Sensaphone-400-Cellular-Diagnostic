@@ -45,6 +45,9 @@ GtkWidget *btnNewMAC, *btnNewBoardRev, *btnATCommand;
 GtkWidget *cbtMenu, *btnMenu;
 GtkWidget *btnRTD, *btnReboot;
 
+GtkWidget *lblRSSITitle, *lblRSRPTitle, *lblRSRQTitle, *lblSignalQualityTitle;
+GtkWidget *lblRSSI, *lblRSRP, *lblRSRQ, *lblSignalQuality;
+
 GtkWidget *lblZoneTitle, *lblTypeTitle, *lblValueTitle, *lblAlarmTitle;
 
 GtkWidget *lblZonePower, *lblZoneBattery, *lblZoneLithium, *lblZoneIntTemp, *lblZoneHumidity;
@@ -193,7 +196,16 @@ display_main_initialize(void)
     lblATCommandTitle   = GTK_WIDGET(gtk_builder_get_object(builder, "lblATCommandTitle"));
     txtentATCommand     = GTK_WIDGET(gtk_builder_get_object(builder, "txtentATCommand"));
     btnATCommand        = GTK_WIDGET(gtk_builder_get_object(builder, "btnATCommand"));
-		
+
+    lblRSSITitle          = GTK_WIDGET(gtk_builder_get_object(builder, "lblRSSITitle"));
+    lblRSSI               = GTK_WIDGET(gtk_builder_get_object(builder, "lblRSSI"));
+    lblRSRPTitle          = GTK_WIDGET(gtk_builder_get_object(builder, "lblRSRPTitle"));
+    lblRSRP               = GTK_WIDGET(gtk_builder_get_object(builder, "lblRSRP"));
+    lblRSRQTitle          = GTK_WIDGET(gtk_builder_get_object(builder, "lblRSRQTitle"));
+    lblRSRQ               = GTK_WIDGET(gtk_builder_get_object(builder, "lblRSRQ"));
+    lblSignalQualityTitle = GTK_WIDGET(gtk_builder_get_object(builder, "lblSignalQualityTitle"));
+    lblSignalQuality      = GTK_WIDGET(gtk_builder_get_object(builder, "lblSignalQuality"));
+
     cbtMenu             = GTK_WIDGET(gtk_builder_get_object(builder, "cbtMenu"));
     btnMenu             = GTK_WIDGET(gtk_builder_get_object(builder, "btnMenu"));
 		
@@ -321,6 +333,10 @@ display_main_initialize(void)
     gtk_widget_set_name((lblGalileoTitle),        "DiagnosticsTitle");
     gtk_widget_set_name((lblBeiDouTitle),         "DiagnosticsTitle");
     gtk_widget_set_name((lblQNSSTitle),           "DiagnosticsTitle");
+    gtk_widget_set_name((lblRSSITitle),           "DiagnosticsTitle");
+    gtk_widget_set_name((lblRSRPTitle),           "DiagnosticsTitle");
+    gtk_widget_set_name((lblRSRQTitle),           "DiagnosticsTitle");
+    gtk_widget_set_name((lblSignalQualityTitle),  "DiagnosticsTitle");
 
     // Fixed label values
     gtk_widget_set_name((lblZonePower),    "DiagnosticsFixed");
@@ -350,6 +366,10 @@ display_main_initialize(void)
     gtk_widget_set_name((lblTransceiverFW),  "DiagnosticValue");
     gtk_widget_set_name((lblICCID),          "DiagnosticValue");
     gtk_widget_set_name((lblIMEI),           "DiagnosticValue");
+    gtk_widget_set_name((lblRSSI),           "DiagnosticValue");
+    gtk_widget_set_name((lblRSRP),           "DiagnosticValue");
+    gtk_widget_set_name((lblRSRQ),           "DiagnosticValue");
+    gtk_widget_set_name((lblSignalQuality),  "DiagnosticValue");
     gtk_widget_set_name((lblConnection),     "DiagnosticValue");
     gtk_widget_set_name((lblLogfile),        "DiagnosticValue");
 
@@ -441,7 +461,12 @@ void display_clear_UUT_values(void)
     gtk_label_set_text(GTK_LABEL(lblICCID), "--------------------");
     gtk_label_set_text(GTK_LABEL(lblIMEI), "---------------");
     gtk_label_set_text(GTK_LABEL(lblConnection), "---------------");
-    
+
+    gtk_label_set_text(GTK_LABEL(lblRSSI), "----");
+    gtk_label_set_text(GTK_LABEL(lblRSRP), "----");
+    gtk_label_set_text(GTK_LABEL(lblRSRQ), "----");
+    gtk_label_set_text(GTK_LABEL(lblSignalQuality), "------------");
+
     gtk_label_set_text(GTK_LABEL(lblTypeZone1), "------");
     gtk_label_set_text(GTK_LABEL(lblTypeZone2), "------");
     gtk_label_set_text(GTK_LABEL(lblTypeZone3), "------");
