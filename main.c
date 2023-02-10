@@ -428,6 +428,7 @@ main_parse_msg(char *paucReceiveMsg)
     char *plcPercentage;
     char *plcHumidity;
     char *plcDetectedParam;
+    char *plcSpace;
 
     // For zone number, type and type description
     char lcZoneNumberBuf[4];
@@ -961,7 +962,38 @@ main_parse_msg(char *paucReceiveMsg)
         gtk_label_set_text(GTK_LABEL(lblRTC),  lcTempMainString);
     }
     
-    
+    // Look for "Cellular signal quality: " followed by "RSSI=", "RSRQ=", "RSRP=" and "QUALITY="
+    plcDetected = strstr((char*)paucReceiveMsg, "Cellular signal quality: ");
+    if (plcDetected)
+    {
+        // Look for "RSSI=" and get RSSI, display it to RSSI label
+        plcDetectedParam = strstr((char*)paucReceiveMsg, "RSSI=");
+        plcSpace = strchr(plcDetectedParam+1, 0x20); // search for 1st space character
+        memset(lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy(lcTempMainString, plcDetectedParam+5, plcSpace-(plcDetectedParam+5));
+        gtk_label_set_text(GTK_LABEL(lblRSSI),  lcTempMainString);
+        
+        // Look for "RSRQ=" and get RSRQ, display it to RSRQ label
+        plcDetectedParam = strstr((char*)paucReceiveMsg, "RSRQ=");
+        plcSpace = strchr(plcDetectedParam+1, 0x20); // search for 1st space character
+        memset(lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy(lcTempMainString, plcDetectedParam+5, plcSpace-(plcDetectedParam+5));
+        gtk_label_set_text(GTK_LABEL(lblRSRQ),  lcTempMainString);
+        
+        // Look for "RSRP=" and get RSRP, display it to RSRP label
+        plcDetectedParam = strstr((char*)paucReceiveMsg, "RSRP=");
+        plcSpace = strchr(plcDetectedParam+1, 0x20); // search for 1st space character
+        memset(lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy(lcTempMainString, plcDetectedParam+5, plcSpace-(plcDetectedParam+5));
+        gtk_label_set_text(GTK_LABEL(lblRSRP),  lcTempMainString);
+        
+        // Look for "QUALITY=" and get QUALITY, display it to QUALITY label
+        plcDetectedParam = strstr((char*)paucReceiveMsg, "QUALITY=");
+        memset(lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy(lcTempMainString, plcDetectedParam+8, strlen(plcDetectedParam+8));
+        gtk_label_set_text(GTK_LABEL(lblSignalQuality),  trim(lcTempMainString));
+    }
+
 }
 // end main_parse_msg
 
@@ -1027,6 +1059,8 @@ int main_logfile_write(char * paucMessage)
 void 
 main_receive_msg_write(char *paucReceiveMsg)
 {
+    static char lcFIFOWarning[200];
+
     // Zeroize the FIFO entry about to get the received message string
     memset(&gucReceiveFIFO[guiReceiveFIFOWriteIndex][0], 0, RECEIVE_FIFO_MSG_LENGTH_MAX);
 
@@ -1034,6 +1068,20 @@ main_receive_msg_write(char *paucReceiveMsg)
     // then point to the next FIFO entry to receive the next received message string
     memcpy(&gucReceiveFIFO[guiReceiveFIFOWriteIndex][0], paucReceiveMsg, strlen(paucReceiveMsg));
     if (++guiReceiveFIFOWriteIndex >= RECEIVE_FIFO_MSG_COUNT) guiReceiveFIFOWriteIndex = 0;
+
+    // Check if the FIFO is almost full
+    int liFIFOCount = guiReceiveFIFOWriteIndex - guiReceiveFIFOReadIndex;
+    if (liFIFOCount < 0) liFIFOCount += RECEIVE_FIFO_MSG_COUNT;
+    if (liFIFOCount > RECEIVE_FIFO_MSG_COUNT - 25)
+    {
+        sprintf(lcFIFOWarning, "WARNING - receive FIFO is almost full\r\n");
+        display_status_write(lcFIFOWarning);
+    }
+    else if (liFIFOCount == RECEIVE_FIFO_MSG_COUNT/2)
+    {
+        sprintf(lcFIFOWarning, "WARNING - receive FIFO is half-full\r\n");
+        display_status_write(lcFIFOWarning);
+    }
 }
 // end main_receive_msg_write
 
