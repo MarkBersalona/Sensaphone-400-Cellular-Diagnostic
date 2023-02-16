@@ -563,6 +563,7 @@ display_status_write(char * paucWriteBuf)
 
     // Reset Status timestamp timer
     guiStatusTimestampCountdownIndex = 0;
+    guiStatusTimestampCountdown_minutes = 1;
 }
 // end display_status_write
 

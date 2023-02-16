@@ -1152,7 +1152,20 @@ main_periodic(gpointer data)
                 // Reset minute countdown for Status timestamp
                 guiStatusTimestampCountdown_minutes = uiStatusTimestampCountdownTable[guiStatusTimestampCountdownIndex];
             }
+
         }
+
+        if (lulElapsed_sec%(5*60) == 0)
+        {
+            //
+            // Updates every ELAPSED 5 minutes
+            //
+            // Periodically clear the Receive text buffer
+            gtk_text_buffer_get_start_iter(textbufReceive, &textiterReceiveStart);
+            gtk_text_buffer_get_end_iter  (textbufReceive, &textiterReceiveEnd);
+            gtk_text_buffer_delete(textbufReceive, &textiterReceiveStart, &textiterReceiveEnd);
+        }
+
 
         if (lulElapsed_sec%(60*60) == 0)
         {
@@ -1237,15 +1250,17 @@ main_periodic(gpointer data)
             // Reinitialize data age
             gulElapsedTimeSinceDataUpdate_sec = 0;
 
+            // If log file is active, save received message
+            // (save it to the logfile NOW; if something unexpected
+            //  is triggering the app to crash, perhaps it'll be saved)
+            main_logfile_write(plcReceivedMsgAvailable);
+
             // Display received message
             display_receive_write(plcReceivedMsgAvailable);
             display_receive_write("\r\n");
 
             // Parse received message
             main_parse_msg(plcReceivedMsgAvailable);
-
-            // If log file is active, save received message
-            main_logfile_write(plcReceivedMsgAvailable);
         }
     } while (plcReceivedMsgAvailable);
     
