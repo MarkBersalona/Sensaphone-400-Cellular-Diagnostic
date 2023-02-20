@@ -608,9 +608,12 @@ main_parse_msg(char *paucReceiveMsg)
 
         // Get the new connection state
         plcDetectedParam = strstr((char*)paucReceiveMsg, " to ");
-        memset (lcTempMainString, 0, sizeof(lcTempMainString));
-        memcpy (lcTempMainString, plcDetectedParam+4, strlen(trim(plcDetectedParam+4)));
-        gtk_label_set_text(GTK_LABEL(lblConnection), lcTempMainString);
+        if (plcDetectedParam)
+        {
+            memset (lcTempMainString, 0, sizeof(lcTempMainString));
+            memcpy (lcTempMainString, plcDetectedParam+4, strlen(trim(plcDetectedParam+4)));
+            gtk_label_set_text(GTK_LABEL(lblConnection), lcTempMainString);
+        }
     }
     
     // Look for "+++ Start DIAGNOSTIC MODE +++"
@@ -641,11 +644,13 @@ main_parse_msg(char *paucReceiveMsg)
     if (plcDetected)
     {
         plcPercentage = strstr((char*)plcDetected, "Percentage = ");
-
-        // Write the 400 Cellular Battery percentage to the Battery Value label
-        memset (lcTempMainString, 0, sizeof(lcTempMainString));
-        memcpy (lcTempMainString, plcPercentage+13, strlen(trim(plcPercentage+13)));
-        gtk_label_set_text(GTK_LABEL(lblValueBattery), lcTempMainString);
+        if (plcPercentage)
+        {
+            // Write the 400 Cellular Battery percentage to the Battery Value label
+            memset (lcTempMainString, 0, sizeof(lcTempMainString));
+            memcpy (lcTempMainString, plcPercentage+13, strlen(trim(plcPercentage+13)));
+            gtk_label_set_text(GTK_LABEL(lblValueBattery), lcTempMainString);
+        }
     }
     
     // Look for "Lithium average A/D count" then "Percentage = "
@@ -653,11 +658,13 @@ main_parse_msg(char *paucReceiveMsg)
     if (plcDetected)
     {
         plcPercentage = strstr((char*)plcDetected, "Percentage = ");
-
-        // Write the 400 Cellular Lithium percentage to the Lithium Value label
-        memset (lcTempMainString, 0, sizeof(lcTempMainString));
-        memcpy (lcTempMainString, plcPercentage+13, strlen(trim(plcPercentage+13)));
-        gtk_label_set_text(GTK_LABEL(lblValueLithium), lcTempMainString);
+        if (plcPercentage)
+        {
+            // Write the 400 Cellular Lithium percentage to the Lithium Value label
+            memset (lcTempMainString, 0, sizeof(lcTempMainString));
+            memcpy (lcTempMainString, plcPercentage+13, strlen(trim(plcPercentage+13)));
+            gtk_label_set_text(GTK_LABEL(lblValueLithium), lcTempMainString);
+        }
     }
     
     // Look for "Internal  Temperature = " then "Humidity = "
@@ -665,16 +672,18 @@ main_parse_msg(char *paucReceiveMsg)
     if (plcDetected)
     {
         plcHumidity = strstr((char*)paucReceiveMsg, "Humidity = ");
+        if (plcHumidity)
+        {
+            // Write the 400 Cellular Internal Temperature to the Internal Temperature Value label
+            memset (lcTempMainString, 0, sizeof(lcTempMainString));
+            memcpy (lcTempMainString, plcDetected+24, plcHumidity-(plcDetected+24)-1);
+            gtk_label_set_text(GTK_LABEL(lblValueIntTemp), trim(lcTempMainString));
 
-        // Write the 400 Cellular Internal Temperature to the Internal Temperature Value label
-        memset (lcTempMainString, 0, sizeof(lcTempMainString));
-        memcpy (lcTempMainString, plcDetected+24, plcHumidity-(plcDetected+24)-1);
-        gtk_label_set_text(GTK_LABEL(lblValueIntTemp), trim(lcTempMainString));
-
-        // Write the 400 Cellular Humidity to the Humidity Value label
-        memset (lcTempMainString, 0, sizeof(lcTempMainString));
-        memcpy (lcTempMainString, plcHumidity+11, strlen(trim(plcHumidity+11)));
-        gtk_label_set_text(GTK_LABEL(lblValueHumidity), trim(lcTempMainString));
+            // Write the 400 Cellular Humidity to the Humidity Value label
+            memset (lcTempMainString, 0, sizeof(lcTempMainString));
+            memcpy (lcTempMainString, plcHumidity+11, strlen(trim(plcHumidity+11)));
+            gtk_label_set_text(GTK_LABEL(lblValueHumidity), trim(lcTempMainString));
+        }
     }
     
     // Look for the periodic input zone readouts
@@ -688,25 +697,31 @@ main_parse_msg(char *paucReceiveMsg)
 
         // Get the type number; look up the type name and save it
         char *plcTypeDetected = strstr((char*)paucReceiveMsg, "type=");
-        memset(lcZoneTypeBuf, 0, sizeof(lcZoneTypeBuf));
-        memcpy(lcZoneTypeBuf, plcTypeDetected+5, 3);
-        lucZoneType = atoi(trim(lcZoneTypeBuf));
-        memset(lcZoneTypeName, 0, sizeof(lcZoneTypeName));
-        switch (lucZoneType)
+        if (plcTypeDetected)
         {
-            case  0: sprintf(lcZoneTypeName, "Normally Open");                   break;
-            case  1: sprintf(lcZoneTypeName, "Normally Closed");                 break;
-            case  2: sprintf(lcZoneTypeName, "Temp 2.8K F");                     break;
-            case  3: sprintf(lcZoneTypeName, "Temp 2.8K C");                     break;
-            case 29: sprintf(lcZoneTypeName, "Runtime NO");                      break;
-            case 30: sprintf(lcZoneTypeName, "Runtime NC");                      break;
-            default: sprintf(lcZoneTypeName, "Unexpected type=%d", lucZoneType); break;
+            memset(lcZoneTypeBuf, 0, sizeof(lcZoneTypeBuf));
+            memcpy(lcZoneTypeBuf, plcTypeDetected+5, 3);
+            lucZoneType = atoi(trim(lcZoneTypeBuf));
+            memset(lcZoneTypeName, 0, sizeof(lcZoneTypeName));
+            switch (lucZoneType)
+            {
+                case  0: sprintf(lcZoneTypeName, "Normally Open");                   break;
+                case  1: sprintf(lcZoneTypeName, "Normally Closed");                 break;
+                case  2: sprintf(lcZoneTypeName, "Temp 2.8K F");                     break;
+                case  3: sprintf(lcZoneTypeName, "Temp 2.8K C");                     break;
+                case 29: sprintf(lcZoneTypeName, "Runtime NO");                      break;
+                case 30: sprintf(lcZoneTypeName, "Runtime NC");                      break;
+                default: sprintf(lcZoneTypeName, "Unexpected type=%d", lucZoneType); break;
+            }
         }
 
         // Get the value
         char *plcValueDetected = strstr((char*)paucReceiveMsg, "Value=");
-        memset(lcTempMainString, 0, sizeof(lcTempMainString));
-        memcpy(lcTempMainString, plcValueDetected+6, strlen(plcValueDetected+6));
+        if (plcValueDetected)
+        {
+            memset(lcTempMainString, 0, sizeof(lcTempMainString));
+            memcpy(lcTempMainString, plcValueDetected+6, strlen(plcValueDetected+6));
+        }
 
         // Write the zone type name and zone value to the appropriate zone labels
         switch (lucZoneNumber)
@@ -766,15 +781,21 @@ main_parse_msg(char *paucReceiveMsg)
         char *plcLatitudeDetected  = strstr((char*)paucReceiveMsg, "Latitude ");
         char *plcLongitudeDetected = strstr((char*)paucReceiveMsg, "Longitude ");
 
-        // Get the latitude, write it to the latitude label
-        memset(lcTempMainString, 0, sizeof(lcTempMainString));
-        memcpy(lcTempMainString, plcLatitudeDetected+9, plcLongitudeDetected-(plcLatitudeDetected+9)-1);
-        gtk_label_set_text(GTK_LABEL(lblLatitude), trim(lcTempMainString));
+        if (plcLatitudeDetected)
+        {
+            // Get the latitude, write it to the latitude label
+            memset(lcTempMainString, 0, sizeof(lcTempMainString));
+            memcpy(lcTempMainString, plcLatitudeDetected+9, plcLongitudeDetected-(plcLatitudeDetected+9)-1);
+            gtk_label_set_text(GTK_LABEL(lblLatitude), trim(lcTempMainString));
+        }
 
-        // Get the longitude, write it to the longitude label
-        memset(lcTempMainString, 0, sizeof(lcTempMainString));
-        memcpy(lcTempMainString, plcLongitudeDetected+10, strlen(plcLongitudeDetected+10));
-        gtk_label_set_text(GTK_LABEL(lblLongitude), trim(lcTempMainString));
+        if (plcLongitudeDetected)
+        {
+            // Get the longitude, write it to the longitude label
+            memset(lcTempMainString, 0, sizeof(lcTempMainString));
+            memcpy(lcTempMainString, plcLongitudeDetected+10, strlen(plcLongitudeDetected+10));
+            gtk_label_set_text(GTK_LABEL(lblLongitude), trim(lcTempMainString));
+        }
     }
     
     // Look for "UGGSV satellite counts: "
@@ -851,27 +872,39 @@ main_parse_msg(char *paucReceiveMsg)
 
         // Get the zone number
         plcDetectedParam = strstr((char*)paucReceiveMsg, "Zone=");
-        memset (lcZoneNumberBuf, 0, sizeof(lcZoneNumberBuf));
-        memcpy (lcZoneNumberBuf, plcDetectedParam+5, 3);
-        lucZoneNumber = (char)atoi(trim(lcZoneNumberBuf));
+        if (plcDetectedParam)
+        {
+            memset (lcZoneNumberBuf, 0, sizeof(lcZoneNumberBuf));
+            memcpy (lcZoneNumberBuf, plcDetectedParam+5, 3);
+            lucZoneNumber = (char)atoi(trim(lcZoneNumberBuf));
+        }
 
         // Get the zone alarm
-        plcDetectedParam = strstr((char*)paucReceiveMsg, "Alarm=");
-        memset (lcZoneAlarmBuf, 0, sizeof(lcZoneAlarmBuf));
-        memcpy (lcZoneAlarmBuf, plcDetectedParam+6, 3);
-        lucZoneAlarm = (char)atoi(trim(lcZoneAlarmBuf));
+        if (plcDetectedParam)
+        {
+            plcDetectedParam = strstr((char*)paucReceiveMsg, "Alarm=");
+            memset (lcZoneAlarmBuf, 0, sizeof(lcZoneAlarmBuf));
+            memcpy (lcZoneAlarmBuf, plcDetectedParam+6, 3);
+            lucZoneAlarm = (char)atoi(trim(lcZoneAlarmBuf));
+        }
 
         // Get the zone range
-        plcDetectedParam = strstr((char*)paucReceiveMsg, "Range=");
-        memset (lcZoneRangeBuf, 0, sizeof(lcZoneRangeBuf));
-        memcpy (lcZoneRangeBuf, plcDetectedParam+6, 3);
-        lucZoneRange = (char)atoi(trim(lcZoneRangeBuf));
+        if (plcDetectedParam)
+        {
+            plcDetectedParam = strstr((char*)paucReceiveMsg, "Range=");
+            memset (lcZoneRangeBuf, 0, sizeof(lcZoneRangeBuf));
+            memcpy (lcZoneRangeBuf, plcDetectedParam+6, 3);
+            lucZoneRange = (char)atoi(trim(lcZoneRangeBuf));
+        }
 
         // Get the zone unack
-        plcDetectedParam = strstr((char*)paucReceiveMsg, "Unack=");
-        memset (lcZoneUnackBuf, 0, sizeof(lcZoneUnackBuf));
-        memcpy (lcZoneUnackBuf, plcDetectedParam+6, 3);
-        lucZoneUnack = (char)atoi(trim(lcZoneUnackBuf));
+        if (plcDetectedParam)
+        {
+            plcDetectedParam = strstr((char*)paucReceiveMsg, "Unack=");
+            memset (lcZoneUnackBuf, 0, sizeof(lcZoneUnackBuf));
+            memcpy (lcZoneUnackBuf, plcDetectedParam+6, 3);
+            lucZoneUnack = (char)atoi(trim(lcZoneUnackBuf));
+        }
 
         // Prepare the alarm status to display
         memset (lcTempMainString, 0, sizeof(lcTempMainString));
@@ -969,29 +1002,41 @@ main_parse_msg(char *paucReceiveMsg)
         // Look for "RSSI=" and get RSSI, display it to RSSI label
         plcDetectedParam = strstr((char*)paucReceiveMsg, "RSSI=");
         plcSpace = strchr(plcDetectedParam+1, 0x20); // search for 1st space character
-        memset(lcTempMainString, 0, sizeof(lcTempMainString));
-        memcpy(lcTempMainString, plcDetectedParam+5, plcSpace-(plcDetectedParam+5));
-        gtk_label_set_text(GTK_LABEL(lblRSSI),  lcTempMainString);
+        if (plcDetectedParam && plcSpace)
+        {
+            memset(lcTempMainString, 0, sizeof(lcTempMainString));
+            memcpy(lcTempMainString, plcDetectedParam+5, plcSpace-(plcDetectedParam+5));
+            gtk_label_set_text(GTK_LABEL(lblRSSI),  lcTempMainString);
+        }
         
         // Look for "RSRQ=" and get RSRQ, display it to RSRQ label
         plcDetectedParam = strstr((char*)paucReceiveMsg, "RSRQ=");
         plcSpace = strchr(plcDetectedParam+1, 0x20); // search for 1st space character
-        memset(lcTempMainString, 0, sizeof(lcTempMainString));
-        memcpy(lcTempMainString, plcDetectedParam+5, plcSpace-(plcDetectedParam+5));
-        gtk_label_set_text(GTK_LABEL(lblRSRQ),  lcTempMainString);
+        if (plcDetectedParam && plcSpace)
+        {
+            memset(lcTempMainString, 0, sizeof(lcTempMainString));
+            memcpy(lcTempMainString, plcDetectedParam+5, plcSpace-(plcDetectedParam+5));
+            gtk_label_set_text(GTK_LABEL(lblRSRQ),  lcTempMainString);
+        }
         
         // Look for "RSRP=" and get RSRP, display it to RSRP label
         plcDetectedParam = strstr((char*)paucReceiveMsg, "RSRP=");
         plcSpace = strchr(plcDetectedParam+1, 0x20); // search for 1st space character
-        memset(lcTempMainString, 0, sizeof(lcTempMainString));
-        memcpy(lcTempMainString, plcDetectedParam+5, plcSpace-(plcDetectedParam+5));
-        gtk_label_set_text(GTK_LABEL(lblRSRP),  lcTempMainString);
+        if (plcDetectedParam && plcSpace)
+        {
+            memset(lcTempMainString, 0, sizeof(lcTempMainString));
+            memcpy(lcTempMainString, plcDetectedParam+5, plcSpace-(plcDetectedParam+5));
+            gtk_label_set_text(GTK_LABEL(lblRSRP),  lcTempMainString);
+        }
         
         // Look for "QUALITY=" and get QUALITY, display it to QUALITY label
         plcDetectedParam = strstr((char*)paucReceiveMsg, "QUALITY=");
-        memset(lcTempMainString, 0, sizeof(lcTempMainString));
-        memcpy(lcTempMainString, plcDetectedParam+8, strlen(plcDetectedParam+8));
-        gtk_label_set_text(GTK_LABEL(lblSignalQuality),  trim(lcTempMainString));
+        if (plcDetectedParam)
+        {
+            memset(lcTempMainString, 0, sizeof(lcTempMainString));
+            memcpy(lcTempMainString, plcDetectedParam+8, strlen(plcDetectedParam+8));
+            gtk_label_set_text(GTK_LABEL(lblSignalQuality),  trim(lcTempMainString));
+        }
     }
 
 }
@@ -1074,13 +1119,15 @@ main_receive_msg_write(char *paucReceiveMsg)
     if (liFIFOCount < 0) liFIFOCount += RECEIVE_FIFO_MSG_COUNT;
     if (liFIFOCount > RECEIVE_FIFO_MSG_COUNT - 25)
     {
-        sprintf(lcFIFOWarning, "WARNING - receive FIFO is almost full\r\n");
+        sprintf(lcFIFOWarning, "\r\nWARNING - receive FIFO is almost full\r\n");
         display_status_write(lcFIFOWarning);
+        //main_logfile_write(lcFIFOWarning);
     }
     else if (liFIFOCount == RECEIVE_FIFO_MSG_COUNT/2)
     {
-        sprintf(lcFIFOWarning, "WARNING - receive FIFO is half-full\r\n");
+        sprintf(lcFIFOWarning, "\r\nWARNING - receive FIFO is half-full\r\n");
         display_status_write(lcFIFOWarning);
+        //main_logfile_write(lcFIFOWarning);
     }
 }
 // end main_receive_msg_write
