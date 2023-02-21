@@ -880,27 +880,27 @@ main_parse_msg(char *paucReceiveMsg)
         }
 
         // Get the zone alarm
+        plcDetectedParam = strstr((char*)paucReceiveMsg, "Alarm=");
         if (plcDetectedParam)
         {
-            plcDetectedParam = strstr((char*)paucReceiveMsg, "Alarm=");
             memset (lcZoneAlarmBuf, 0, sizeof(lcZoneAlarmBuf));
             memcpy (lcZoneAlarmBuf, plcDetectedParam+6, 3);
             lucZoneAlarm = (char)atoi(trim(lcZoneAlarmBuf));
         }
 
         // Get the zone range
+        plcDetectedParam = strstr((char*)paucReceiveMsg, "Range=");
         if (plcDetectedParam)
         {
-            plcDetectedParam = strstr((char*)paucReceiveMsg, "Range=");
             memset (lcZoneRangeBuf, 0, sizeof(lcZoneRangeBuf));
             memcpy (lcZoneRangeBuf, plcDetectedParam+6, 3);
             lucZoneRange = (char)atoi(trim(lcZoneRangeBuf));
         }
 
         // Get the zone unack
+        plcDetectedParam = strstr((char*)paucReceiveMsg, "Unack=");
         if (plcDetectedParam)
         {
-            plcDetectedParam = strstr((char*)paucReceiveMsg, "Unack=");
             memset (lcZoneUnackBuf, 0, sizeof(lcZoneUnackBuf));
             memcpy (lcZoneUnackBuf, plcDetectedParam+6, 3);
             lucZoneUnack = (char)atoi(trim(lcZoneUnackBuf));
@@ -987,12 +987,15 @@ main_parse_msg(char *paucReceiveMsg)
         // Look for "UTC"
         plcDetectedParam = strstr((char*)paucReceiveMsg, "UTC");
 
-        // Get date and time, excluding the seconds and UTC
-        memset(lcTempMainString, 0, sizeof(lcTempMainString));
-        memcpy(lcTempMainString, plcDetected+7, (plcDetectedParam-4)-(plcDetected+7));
+        if (plcDetectedParam)
+        {
+            // Get date and time, excluding the seconds and UTC
+            memset(lcTempMainString, 0, sizeof(lcTempMainString));
+            memcpy(lcTempMainString, plcDetected+7, (plcDetectedParam-4)-(plcDetected+7));
 
-        // Write device RTC to RTC label
-        gtk_label_set_text(GTK_LABEL(lblRTC),  lcTempMainString);
+            // Write device RTC to RTC label
+            gtk_label_set_text(GTK_LABEL(lblRTC),  lcTempMainString);
+        }
     }
     
     // Look for "Cellular signal quality: " followed by "RSSI=", "RSRQ=", "RSRP=" and "QUALITY="
