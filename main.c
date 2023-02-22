@@ -81,7 +81,8 @@ gboolean lfIsLogfileEnabled;
 // I/O channel for serial-to-USB port
 GIOChannel *gIOChannelSerialUSB;
 
-
+// Sticky error status
+char gucStickyErrorStatus[200];
 
 
 
@@ -467,6 +468,9 @@ main_parse_msg(char *paucReceiveMsg)
         memcpy (lcTempMainString, plcDetected, sizeof(lcTempMainString));
         display_status_write(lcTempMainString);
         display_status_write("\r\n");
+
+        // Save error message as a sticky one
+        strcpy(gucStickyErrorStatus, lcTempMainString);
     }
     
     // Look for "MAC address:"
@@ -1148,6 +1152,7 @@ main_periodic(gpointer data)
     static guint32 lulElapsed_sec = 0;
     char* plcReceivedMsgAvailable;
     static int fd;
+    static guint8 lucStickyErrorCount = 3;
     
     //////////////////////////////////////////////////////////
     //
@@ -1203,6 +1208,26 @@ main_periodic(gpointer data)
                 guiStatusTimestampCountdown_minutes = uiStatusTimestampCountdownTable[guiStatusTimestampCountdownIndex];
             }
 
+            // Display sticky error status (if any) to Status for N minutes
+            if (strlen(gucStickyErrorStatus) > 0)
+            {
+                if (lucStickyErrorCount > 0)
+                {
+                    // Display sticky error status
+                    --lucStickyErrorCount;
+                    display_status_write(gucStickyErrorStatus);
+                    display_status_write("\r\n");
+                    sprintf(lcTempMainString, "Status: %s", gucStickyErrorStatus);
+                    gtk_label_set_text(GTK_LABEL(lblStatusTitle),  lcTempMainString);
+                }
+                else
+                {
+                    // Clear sticky error status, prep for the next one
+                    memset(gucStickyErrorStatus, 0x00, sizeof(gucStickyErrorStatus));
+                    lucStickyErrorCount = 3;
+                    gtk_label_set_text(GTK_LABEL(lblStatusTitle),  "Status");
+                }
+            }
         }
 
         if (lulElapsed_sec%(5*60) == 0)
@@ -1341,6 +1366,7 @@ int main(int argc, char** argv)
     gDateTime = g_date_time_new_now_local();
     lfIsLogfileEnabled = FALSE;
     guiStatusTimestampCountdown_minutes = 1;
+    memset (gucStickyErrorStatus, 0x00, sizeof(gucStickyErrorStatus));
 
     //
     // Enable CSS styling (colors, fonts, text sizes)

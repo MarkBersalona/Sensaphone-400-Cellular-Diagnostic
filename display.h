@@ -41,6 +41,7 @@ extern GtkWidget *lblGPS, *lblGLONASS, *lblGalileo, *lblBeiDou, *lblQNSS;
 
 extern GtkWidget *lblLogfile;
 
+extern GtkWidget *lblStatusTitle;
 extern GtkTextBuffer *textbufStatus;
 extern GtkTextBuffer *textbufReceive;
 extern GtkTextIter textiterReceiveStart;
