@@ -51,7 +51,7 @@
 // GTK builder
 GtkBuilder *builder;
 
-char lcTempMainString[200];
+char lcTempMainString[250];
 
 // Receive message FIFO
 char gucReceiveFIFO[RECEIVE_FIFO_MSG_COUNT][RECEIVE_FIFO_MSG_LENGTH_MAX];
@@ -384,6 +384,9 @@ void main_REBOOT_clicked(void)
     // Send the formatted menu command to the 400 Cellular
     sprintf(lcTempMainString, "+++MENU:Z");
     serial_write(lcTempMainString);
+
+    // Reset display
+    display_clear_UUT_values();
 }
 // end main_REBOOT_clicked
 
@@ -399,6 +402,9 @@ void main_RTD_clicked(void)
     // Send the formatted menu command to the 400 Cellular
     sprintf(lcTempMainString, "+++MENU:X");
     serial_write(lcTempMainString);
+
+    // Reset display
+    display_clear_UUT_values();
 }
 // end main_RTD_clicked
 
@@ -473,15 +479,19 @@ main_parse_msg(char *paucReceiveMsg)
         strcpy(gucStickyErrorStatus, lcTempMainString);
     }
     
+    // Look for "Sensaphone 400 starting..."
+    plcDetected = strstr((char*)paucReceiveMsg, "Sensaphone 400 starting...");
+    if (plcDetected)
+    {
+        // This is a new UUT or the old UUT restarting
+        // Either way, reset the Diagnostic tool display
+        display_clear_UUT_values();
+    }
+    
     // Look for "MAC address:"
     plcDetected = strstr((char*)paucReceiveMsg, "MAC address: ");
     if (plcDetected)
     {
-        ///////////////////////////////////////////////////////////////////////////
-        //// TEST MAB 2023.01.23
-        //// Assume that if we're reading a new MAC address, this is a new UUT.
-        display_clear_UUT_values();
-        ///////////////////////////////////////////////////////////////////////////
         // Write the MAC address to Status and to the MAC label
         memset (lcTempMainString, 0, sizeof(lcTempMainString));
         memcpy (lcTempMainString, plcDetected+13, strlen(plcDetected+13));
