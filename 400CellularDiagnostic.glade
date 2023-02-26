@@ -93,6 +93,7 @@
                 <property name="margin-right">10</property>
                 <property name="hexpand">True</property>
                 <property name="label" translatable="yes">00-3F-00-00-00-00</property>
+                <property name="selectable">True</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -107,6 +108,7 @@
                 <property name="margin-right">10</property>
                 <property name="hexpand">True</property>
                 <property name="label" translatable="yes">D</property>
+                <property name="selectable">True</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -121,6 +123,7 @@
                 <property name="margin-right">10</property>
                 <property name="hexpand">True</property>
                 <property name="label" translatable="yes">Sensirion SHTC3</property>
+                <property name="selectable">True</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -135,6 +138,7 @@
                 <property name="margin-right">10</property>
                 <property name="hexpand">True</property>
                 <property name="label" translatable="yes">v0.7.5</property>
+                <property name="selectable">True</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -201,6 +205,7 @@
                 <property name="margin-right">20</property>
                 <property name="hexpand">True</property>
                 <property name="label" translatable="yes">SARA-R510M8S-01B-00</property>
+                <property name="selectable">True</property>
               </object>
               <packing>
                 <property name="left-attach">3</property>
@@ -215,6 +220,7 @@
                 <property name="margin-right">20</property>
                 <property name="hexpand">True</property>
                 <property name="label" translatable="yes">03.15</property>
+                <property name="selectable">True</property>
               </object>
               <packing>
                 <property name="left-attach">3</property>
@@ -229,6 +235,7 @@
                 <property name="margin-right">20</property>
                 <property name="hexpand">True</property>
                 <property name="label" translatable="yes">89148000005471114678</property>
+                <property name="selectable">True</property>
               </object>
               <packing>
                 <property name="left-attach">3</property>
@@ -243,6 +250,7 @@
                 <property name="margin-right">20</property>
                 <property name="hexpand">True</property>
                 <property name="label" translatable="yes">355598110014663</property>
+                <property name="selectable">True</property>
               </object>
               <packing>
                 <property name="left-attach">3</property>
@@ -271,6 +279,7 @@
                 <property name="margin-right">10</property>
                 <property name="hexpand">True</property>
                 <property name="label" translatable="yes">2023.02.03 18:42</property>
+                <property name="selectable">True</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -364,6 +373,7 @@
                 <property name="margin-right">20</property>
                 <property name="hexpand">True</property>
                 <property name="label" translatable="yes">-35.0</property>
+                <property name="selectable">True</property>
               </object>
               <packing>
                 <property name="left-attach">5</property>
@@ -378,6 +388,7 @@
                 <property name="margin-right">20</property>
                 <property name="hexpand">True</property>
                 <property name="label" translatable="yes">-43.0</property>
+                <property name="selectable">True</property>
               </object>
               <packing>
                 <property name="left-attach">5</property>
@@ -392,6 +403,7 @@
                 <property name="margin-right">20</property>
                 <property name="hexpand">True</property>
                 <property name="label" translatable="yes">-10.5</property>
+                <property name="selectable">True</property>
               </object>
               <packing>
                 <property name="left-attach">5</property>
@@ -977,6 +989,7 @@
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes">100%</property>
+                    <property name="selectable">True</property>
                   </object>
                   <packing>
                     <property name="left-attach">2</property>
@@ -989,6 +1002,7 @@
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes">100%</property>
+                    <property name="selectable">True</property>
                   </object>
                   <packing>
                     <property name="left-attach">2</property>
@@ -1001,6 +1015,7 @@
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes">26 C</property>
+                    <property name="selectable">True</property>
                   </object>
                   <packing>
                     <property name="left-attach">2</property>
@@ -1013,6 +1028,7 @@
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes">35%</property>
+                    <property name="selectable">True</property>
                   </object>
                   <packing>
                     <property name="left-attach">2</property>
@@ -1025,6 +1041,7 @@
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes">74682</property>
+                    <property name="selectable">True</property>
                   </object>
                   <packing>
                     <property name="left-attach">2</property>
@@ -1037,6 +1054,7 @@
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes">OPEN</property>
+                    <property name="selectable">True</property>
                   </object>
                   <packing>
                     <property name="left-attach">2</property>
@@ -1049,6 +1067,7 @@
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes">75213</property>
+                    <property name="selectable">True</property>
                   </object>
                   <packing>
                     <property name="left-attach">2</property>
@@ -1061,6 +1080,7 @@
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes">24</property>
+                    <property name="selectable">True</property>
                   </object>
                   <packing>
                     <property name="left-attach">2</property>
@@ -1073,6 +1093,7 @@
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes">OPEN</property>
+                    <property name="selectable">True</property>
                   </object>
                   <packing>
                     <property name="left-attach">2</property>
@@ -1233,6 +1254,7 @@
                     <property name="margin-left">5</property>
                     <property name="margin-right">20</property>
                     <property name="label" translatable="yes">27.593</property>
+                    <property name="selectable">True</property>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -1260,6 +1282,7 @@
                     <property name="margin-left">5</property>
                     <property name="margin-right">20</property>
                     <property name="label" translatable="yes">-50.23</property>
+                    <property name="selectable">True</property>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
