@@ -512,6 +512,16 @@ void display_clear_UUT_values(void)
     gtk_label_set_text(GTK_LABEL(lblGalileo),   "0");
     gtk_label_set_text(GTK_LABEL(lblBeiDou),    "0");
     gtk_label_set_text(GTK_LABEL(lblQNSS),      "0");
+
+    // Clear the Status text buffer
+    gtk_text_buffer_get_start_iter(textbufStatus, &textiterStatusStart);
+    gtk_text_buffer_get_end_iter  (textbufStatus, &textiterStatusEnd);
+    gtk_text_buffer_delete(textbufStatus, &textiterStatusStart, &textiterStatusEnd);
+
+    // Clear the Receive text buffer
+    gtk_text_buffer_get_start_iter(textbufReceive, &textiterReceiveStart);
+    gtk_text_buffer_get_end_iter  (textbufReceive, &textiterReceiveEnd);
+    gtk_text_buffer_delete(textbufReceive, &textiterReceiveStart, &textiterReceiveEnd);
 }
 // end display_clear_UUT_values
 
