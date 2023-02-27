@@ -88,6 +88,7 @@ GtkTextIter textiterStatusEnd;
 char* pucMenuItems[] =
 {
     "Display menu",
+    "Erase ext. flash",
     "Sensaphone cert",
     "Cellular info",
     "App CRC",
@@ -119,6 +120,7 @@ char* pucMenuItems[] =
 char* pucMenuCMD[] =
 {
     "0", // Display menu
+    "1", // Erase ext. flash
     "2", // Sensaphone cert
     "3", // Cellular info
     "4", // App CRC
