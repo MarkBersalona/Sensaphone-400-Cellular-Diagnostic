@@ -585,18 +585,12 @@ main_parse_msg(char *paucReceiveMsg)
     plcDetected = strstr((char*)paucReceiveMsg, "ICCID is ");
     if (plcDetected)
     {
-        plcQuoteStart = strchr(plcDetected,   0x22); // search for double quote
-        plcQuoteEnd   = strchr(plcQuoteStart+1, 0x22); // search for double quote
-        if (plcQuoteStart && plcQuoteEnd) // both quotes found
-        {
-            // Write the ICCID to Status and to the ICCID label
-            memset (lcTempMainString, 0, sizeof(lcTempMainString));
-            memcpy (lcTempMainString, plcQuoteStart+1, plcQuoteEnd-plcQuoteStart-1);
-            display_status_write("Detected ICCID: ");
-            display_status_write(lcTempMainString);
-            display_status_write("\r\n");
-            gtk_label_set_text(GTK_LABEL(lblICCID), lcTempMainString);
-        }
+        memset (lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy (lcTempMainString, plcDetected+9, strlen(plcDetected+9));
+        display_status_write("Detected ICCID: ");
+        display_status_write(lcTempMainString);
+        display_status_write("\r\n");
+        gtk_label_set_text(GTK_LABEL(lblICCID), lcTempMainString);
     }
     
     // Look for "400 Cellular firmware version is "
