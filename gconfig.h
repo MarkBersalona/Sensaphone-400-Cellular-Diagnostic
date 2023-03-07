@@ -22,8 +22,8 @@ extern "C" {
 // version number
 #define VERSION_A     "0"
 #define VERSION_B     "4"
-#define VERSION_C     "8"
-#define VERSION_DATE  "2023.03.02"
+#define VERSION_C     "9"
+#define VERSION_DATE  "2023.03.07"
     
 // Period of the periodic callback
 #define MAIN_PERIODIC_INTERVAL_MSEC (250)

@@ -84,7 +84,31 @@ GIOChannel *gIOChannelSerialUSB;
 // Sticky error status
 char gucStickyErrorStatus[200];
 
+// Error codes
+char* pucErrorCodes[] =
+{
+    "Secure connection to Sensaphone established",
+    "Online IDLE state",
+    "Online REGISTERING state",
+    "Online WAITING state",
+    "Online NEGOTIATING state",
 
+    "Online CONNECTED state",
+    "Network registration failed",
+    "Network negotiation failed",
+    "Receive timeout",
+    "Server closed the socket",
+
+    "Transmit failure",
+    "uBlox SARA-R5 failed to initialize",
+    "uBlox SARA-R5 updating",
+    "uBlox SARA-R5 update failed",
+    "uBlox SARA-R5 unresponsive",
+
+    "WebSocket PONG frame expected but timed out",
+    "Too many Alarm/Update POST ACK timeouts",
+    "Unspecified ERROR",
+};
 
 
 
@@ -486,6 +510,22 @@ main_parse_msg(char *paucReceiveMsg)
         // This is a new UUT or the old UUT restarting
         // Either way, reset the Diagnostic tool display
         display_clear_UUT_values();
+    }
+    
+    // Look for "**ERROR CODE** geOnlineConnectionError = "
+    plcDetected = strstr((char*)paucReceiveMsg, "**ERROR CODE** geOnlineConnectionError = ");
+    if (plcDetected)
+    {
+        // Get the error code
+        memset (lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy (lcTempMainString, plcDetected+41, strlen(plcDetected+41));
+        int liErrorCode = atoi(lcTempMainString);
+        sprintf(lcTempMainString, "*** ERROR CODE *** %s", pucErrorCodes[liErrorCode]);
+        display_status_write(lcTempMainString);
+        display_status_write("\r\n");
+
+        // Save error code as a sticky one
+        strcpy(gucStickyErrorStatus, lcTempMainString);
     }
     
     // Look for "MAC address:"
@@ -1156,7 +1196,8 @@ main_periodic(gpointer data)
     static guint32 lulElapsed_sec = 0;
     char* plcReceivedMsgAvailable;
     static int fd;
-    static guint8 lucStickyErrorCount = 3;
+    #define STICKY_ERROR_COUNT_PERIOD_SECONDS 180
+    static guint8 lucStickyErrorCount = STICKY_ERROR_COUNT_PERIOD_SECONDS;
     
     //////////////////////////////////////////////////////////
     //
@@ -1184,6 +1225,34 @@ main_periodic(gpointer data)
         adjStatus = gtk_scrolled_window_get_vadjustment(scrolledwindowStatus);
         gtk_adjustment_set_value( adjStatus, gtk_adjustment_get_upper(adjStatus) );
 
+        // Display sticky error status (if any) to Status for N minutes
+        if (strlen(gucStickyErrorStatus) > 0)
+        {
+            if (lucStickyErrorCount > 0)
+            {
+                // Display sticky error status
+                --lucStickyErrorCount;
+                if (lulElapsed_sec%60 == 0)
+                {
+                    display_status_write(gucStickyErrorStatus);
+                    display_status_write("\r\n");
+                }
+                sprintf(lcTempMainString, "Status: %s", gucStickyErrorStatus);
+                gtk_label_set_text(GTK_LABEL(lblStatusTitle),  lcTempMainString);
+            }
+            else
+            {
+                // Clear sticky error status, prep for the next one
+                memset(gucStickyErrorStatus, 0x00, sizeof(gucStickyErrorStatus));
+                lucStickyErrorCount = STICKY_ERROR_COUNT_PERIOD_SECONDS;
+                gtk_label_set_text(GTK_LABEL(lblStatusTitle),  "Status");
+            }
+        }
+        else
+        {
+            lucStickyErrorCount = STICKY_ERROR_COUNT_PERIOD_SECONDS;
+        }
+
         if (lulElapsed_sec%60 == 0)
         {
             //
@@ -1210,27 +1279,6 @@ main_periodic(gpointer data)
 
                 // Reset minute countdown for Status timestamp
                 guiStatusTimestampCountdown_minutes = uiStatusTimestampCountdownTable[guiStatusTimestampCountdownIndex];
-            }
-
-            // Display sticky error status (if any) to Status for N minutes
-            if (strlen(gucStickyErrorStatus) > 0)
-            {
-                if (lucStickyErrorCount > 0)
-                {
-                    // Display sticky error status
-                    --lucStickyErrorCount;
-                    display_status_write(gucStickyErrorStatus);
-                    display_status_write("\r\n");
-                    sprintf(lcTempMainString, "Status: %s", gucStickyErrorStatus);
-                    gtk_label_set_text(GTK_LABEL(lblStatusTitle),  lcTempMainString);
-                }
-                else
-                {
-                    // Clear sticky error status, prep for the next one
-                    memset(gucStickyErrorStatus, 0x00, sizeof(gucStickyErrorStatus));
-                    lucStickyErrorCount = 3;
-                    gtk_label_set_text(GTK_LABEL(lblStatusTitle),  "Status");
-                }
             }
         }
 
