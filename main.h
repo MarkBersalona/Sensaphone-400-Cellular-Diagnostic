@@ -88,6 +88,10 @@ extern GIOChannel *gIOChannelSerialUSB;
 extern guint16 guiStatusTimestampCountdown_minutes;
 extern guint8  guiStatusTimestampCountdownIndex;
 
+// Sticky error status
+extern char gucStickyErrorStatus[200];
+
+
 
 #ifdef __cplusplus
 }
