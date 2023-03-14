@@ -1,4 +1,5 @@
 # Sensaphone 400 Cellular Diagnostic tool
+<img src="Sensaphone 400 Cellular Diagnostic 20230314.png" alt="Sensaphone 400 Cellular screenshot, 2023.03.14" />
 This is the Diagnostic tool for the Sensaphone 400 Cellular
 - Runs in a Debian-based Linux distribution, like Linux Mint. (It can probably run in an Arch- or Fedora- or other non-Debian Linux distro, I simply haven't tried building it in one yet.)
 - Connects to the serial debug port of the 400 Cellular via serial-to-USB converter; expects 
