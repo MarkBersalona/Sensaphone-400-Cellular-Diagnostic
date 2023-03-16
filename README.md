@@ -48,6 +48,8 @@ The 400 Cellular also controls the following output zone:
 
 <img src="400 Cellular Diagnostic block diagram.png" alt="Sensaphone 400 Cellular Diagnostic block diagram" />
 
+### Summary
+
 The <b>Diagnostic tool reads the debug serial output of the 400 Cellular</b>, which consists of ASCII strings ending with CRLF (carriage return/linefeed) (as if outputting to a serial terminal).
 - Each line is scanned for relevant data to be extracted and displayed individually, such as the device MAC/SN or zone values.
 - A status display shows important status of the device under test and of the Diagnostic tool, such as warning and error messages.
@@ -60,11 +62,14 @@ The <b>Diagnostic tool can accept operator inputs</b> to pass along to the devic
 - the MENU command to write a new MAC/SN to the device under test, which requires the operator to enter a valid MAC address in the entry box provided
 - the MENU command to write a new Board revision to the device under test, which requires the operator to enter a board revision letter (A-Z) in the entry box provided
 
+### Details
+
 The <b>Diagnostic tool expects to connect to the Linux ttyUSB0 device</b>, the device name for a serial-to-USB converter. The connection status to ttyUSB0 will be given in the Status display.
 
 <b>All debug printouts</b> received by the Diagnostic tool <b>are first stored in a software FIFO</b>. The FIFO was added in anticipation of possible system slowdowns when writing the debug printouts to a log file. In practice system buffers and caches seem to mitigate any throughput bottlenecks with the log file, but the FIFO probably helps make the Diagnostic tool robust. At 200 entries deep, the FIFO doesn't seem to get much above 10% usage.
 
-The <b>serial receive callback function</b> is essentially the <b>interrupt service routine (ISR) for received serial data</b>. It collects the received serial data; when CRLF is received it strips off the CRLF, terminates the string with a NULL and saves the string to the FIFO.
+The <b>serial receive callback function</b> is essentially the <em><b>interrupt service routine (ISR) for received serial data</b></em>. It collects the received serial data; when CRLF is received it strips off the CRLF, terminates the string with a NULL and saves the string to the FIFO.
+- As an ISR, this routine must spend as little time as possible executing. Setting variables, moving small amounts of data around are OK; time delays or waiting around for user inputs are bad; any processing that could be done at the task level or otherwise outside the ISR should be moved out of the ISR. "Get in, do what's needed, get out."
 
 The <b>periodic function</b> of the Diagnostic tool <b>checks for fresh data in the FIFO</b>. If there are any, it reads each string from the FIFO, parses it for any relevant data to display, displays the string in the Receive display and optionally saves it to a log file (with CRLF line terminations). The periodic function also <b>checks the serial connection to the device under test</b>: if the connection to ttyUSB0 is good, it is assumed the device under test is connected.
 
