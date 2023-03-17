@@ -31,7 +31,7 @@ laptop I cloned it to /home/mark/GTKProjects/Sensaphone-400-Cellular-Diagnostic
 ## 400 Cellular Description
 
 The 400 Cellular monitors the following inputs, or *zones*:
-- 0: Power - the DC mains input; raw value is 0 if disconnected, 0x7FFF if onnected
+- 0: Power - the DC mains input; raw value is 0 if disconnected, 0x1FFF if onnected
 - 1:Battery - the rechargeable battery, used as power backup if mains power is disconnected; expressed as a percentage, from 0-100
 - 2: Lithium - the CR2032 lithium cell, used to maintain the real-time clock; expressed as a percentage, from 0-100
 - 3: Internal temperature - the temperature reading from the on-board humidity sensor; value is in Celsius
@@ -43,6 +43,8 @@ The 400 Cellular monitors the following inputs, or *zones*:
 
 The 400 Cellular also controls the following output zone:
 - 9: Output relay; 0 for off/open; 1 for on/closed
+
+Numeric values in Zone Update and Alarm POSTs from the device to the server are generally represented as integers, with the least 3 digits representing decimal values. For example, the value of pi (3.1415926...) is represented as 3141 or possibly rounded to 3142; the value of 95.832% is represented as 95832.
 
 ## Diagnostic Description
 
