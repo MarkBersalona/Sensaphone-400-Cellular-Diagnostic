@@ -1398,12 +1398,12 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="lblQNSSTitle">
+                  <object class="GtkLabel" id="lblQZSSTitle">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">end</property>
                     <property name="margin-left">10</property>
-                    <property name="label" translatable="yes">QNSS:</property>
+                    <property name="label" translatable="yes">QZSS:</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -1411,7 +1411,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="lblQNSS">
+                  <object class="GtkLabel" id="lblQZSS">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">end</property>

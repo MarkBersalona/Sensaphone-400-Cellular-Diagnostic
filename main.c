@@ -855,7 +855,7 @@ main_parse_msg(char *paucReceiveMsg)
         char *plcGLONASSDetected = strstr((char*)paucReceiveMsg, "GLONASS=");
         char *plcGalileoDetected = strstr((char*)paucReceiveMsg, "Galileo=");
         char *plcBeiDouDetected = strstr((char*)paucReceiveMsg, "BeiDou=");
-        char *plcQNSSDetected = strstr((char*)paucReceiveMsg, "QNSS=");
+        char *plcQZSSDetected = strstr((char*)paucReceiveMsg, "QZSS=");
 
         // If NONE detected, zeroize all the satellite counts
         if (plcNONEDetected)
@@ -864,7 +864,7 @@ main_parse_msg(char *paucReceiveMsg)
             gtk_label_set_text(GTK_LABEL(lblGLONASS), "0");
             gtk_label_set_text(GTK_LABEL(lblGalileo), "0");
             gtk_label_set_text(GTK_LABEL(lblBeiDou), "0");
-            gtk_label_set_text(GTK_LABEL(lblQNSS), "0");
+            gtk_label_set_text(GTK_LABEL(lblQZSS), "0");
         }
 
         // If GPS detected, write count to its label
@@ -899,12 +899,12 @@ main_parse_msg(char *paucReceiveMsg)
             gtk_label_set_text(GTK_LABEL(lblBeiDou), trim(lcTempMainString));
         }
 
-        // If QNSS detected, write count to its label
-        if (plcQNSSDetected)
+        // If QZSS detected, write count to its label
+        if (plcQZSSDetected)
         {
             memset(lcTempMainString, 0, sizeof(lcTempMainString));
-            memcpy(lcTempMainString, plcQNSSDetected+5, 4);
-            gtk_label_set_text(GTK_LABEL(lblQNSS), trim(lcTempMainString));
+            memcpy(lcTempMainString, plcQZSSDetected+5, 4);
+            gtk_label_set_text(GTK_LABEL(lblQZSS), trim(lcTempMainString));
         }
     }
     
