@@ -31,7 +31,7 @@ laptop I cloned it to /home/mark/GTKProjects/Sensaphone-400-Cellular-Diagnostic
 ## 400 Cellular Description
 
 The 400 Cellular monitors the following inputs, or *zones*:
-- 0: Power - the DC mains input; raw value is 0 if disconnected, 0x1FFF if onnected
+- 0: Power - the DC mains input; raw value is 0 if disconnected, 0x1FFF if connected
 - 1:Battery - the rechargeable battery, used as power backup if mains power is disconnected; expressed as a percentage, from 0-100
 - 2: Lithium - the CR2032 lithium cell, used to maintain the real-time clock; expressed as a percentage, from 0-100
 - 3: Internal temperature - the temperature reading from the on-board humidity sensor; value is in Celsius
@@ -79,3 +79,7 @@ The <b>periodic function</b> of the Diagnostic tool <b>checks for fresh data in 
 - Operator-entered <b>MAC address and board rev are validated</b> before passing these to the device under test. A MAC address must consist of 6 hex values separated by delimiters, of the form XX-XX-XX-XX-XX-XX. A board rev must be a single letter in range [A-Z], though case-insensitive.
 - Operator-entered <b>AT command is passed</b> to the device under test, to the SARA-R5 cellular transceiver, <b>as is</b>.
 
+## Suggested changes
+- Update Status timestamp on the real-time minute instead of elapsed time minutes
+- Capture and display GNSS timestamp along with lat/long; if lat/long unavailable, do NOT clear lat/long/GNSS timestamp
+- Option to dump Status contents to log file
