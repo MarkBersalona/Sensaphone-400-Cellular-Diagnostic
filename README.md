@@ -44,6 +44,8 @@ The 400 Cellular monitors the following inputs, or *zones*:
 The 400 Cellular also controls the following output zone:
 - 9: Output relay; 0 for off/open; 1 for on/closed
 
+NOTE: Zone numbering internal to the device is 0-based, but zone numbering in the Zone Update and Alarm POSTs is 1-based. For example, the internal input zone for Power is zone 0, but in the POSTs Power is zone 1. The dichotomy comes from the Sentinel devices, and since 400 Cellular at both the device and server ends is based on Sentinel, this dichotomy is carried over.
+
 Numeric values in Zone Update and Alarm POSTs from the device to the server are generally represented as integers, with the least 3 digits representing decimal values. For example, the value of pi (3.1415926...) is represented as 3141 or possibly rounded to 3142; the value of 95.832% is represented as 95832.
 
 ## Diagnostic Description
@@ -68,16 +70,27 @@ The <b>Diagnostic tool can accept operator inputs</b> to pass along to the devic
 
 The <b>Diagnostic tool expects to connect to the Linux ttyUSB0 device</b>, the device name for a serial-to-USB converter. The connection status to ttyUSB0 will be given in the Status display.
 
-<b>All debug printouts</b> received by the Diagnostic tool <b>are first stored in a software FIFO</b>. The FIFO was added in anticipation of possible system slowdowns when writing the debug printouts to a log file. In practice system buffers and caches seem to mitigate any throughput bottlenecks with the log file, but the FIFO probably helps make the Diagnostic tool robust. At 200 entries deep, the FIFO doesn't seem to get much above 10% usage.
+<b>All debug printouts</b> received by the Diagnostic tool <b>are first stored in a software FIFO</b> by main_receive_msg_write(). The FIFO was added in anticipation of possible system slowdowns when writing the debug printouts to a log file. In practice system buffers and caches seem to mitigate any throughput bottlenecks with the log file, but the FIFO probably helps make the Diagnostic tool robust. At 200 entries deep, the FIFO doesn't seem to get much above 10% usage.
 
-The <b>serial receive callback function</b> is essentially the <em><b>interrupt service routine (ISR) for received serial data</b></em>. It collects the received serial data; when CRLF is received it strips off the CRLF, terminates the string with a NULL and saves the string to the FIFO.
+The <b>serial receive callback function</b> serial_read() is essentially the <em><b>interrupt service routine (ISR) for received serial data</b></em>. It collects the received serial data; when CRLF is received it strips off the CRLF, terminates the string with a NULL and saves the string to the FIFO.
 - As an ISR, this routine must spend as little time as possible executing. Setting variables, moving small amounts of data around are OK; time delays or waiting around for user inputs are bad; any processing that could be done at the task level or otherwise outside the ISR should be moved out of the ISR. "Get in, do what's needed, get out."
 
-The <b>periodic function</b> of the Diagnostic tool <b>checks for fresh data in the FIFO</b>. If there are any, it reads each string from the FIFO, parses it for any relevant data to display, displays the string in the Receive display and optionally saves it to a log file (with CRLF line terminations). The periodic function also <b>checks the serial connection to the device under test</b>: if the connection to ttyUSB0 is good, it is assumed the device under test is connected.
+The <b>periodic function</b> main_periodic() of the Diagnostic tool <b>checks for fresh data in the FIFO</b>. If there are any, it reads each string from the FIFO, parses it for any relevant data to display, displays the string in the Receive display and optionally saves it to a log file (with CRLF line terminations). The periodic function also <b>checks the serial connection to the device under test</b>: if the connection to ttyUSB0 is good, it is assumed the device under test is connected.
 
 <b>Processing of operator inputs</b> is performed by the callback routines triggered by the button_clicked events of the relevant Diagnostic tool buttons.
 - Operator-entered <b>MAC address and board rev are validated</b> before passing these to the device under test. A MAC address must consist of 6 hex values separated by delimiters, of the form XX-XX-XX-XX-XX-XX. A board rev must be a single letter in range [A-Z], though case-insensitive.
 - Operator-entered <b>AT command is passed</b> to the device under test, to the SARA-R5 cellular transceiver, <b>as is</b>.
+
+Both the Status and Receive text windows adjust to display the most recent text string; that is, both move to the bottom of the respective text buffer. The operator may scroll either to view older text strings, but when a new text string is to be displayed, the display will move back to the bottom of the text buffer. Additionally, the periodic function moves the Status window to the bottom of the Status text buffer, so in practice manually scrolling the Status window tends to be futile.
+- The code in both display_status_write() and display_receive_write() to move the text window to the bottom of the buffer is insufficient to move <b>immediately and reliably</b>. GTK seems to do a *lazy update* when it comes to moving text windows, updating (or not!) only when higher-priority display tasks have finished. To ensure the Status text window always shows the latest status, the periodic function also moves the Status text window to the bottom of the buffer. Thus, the Status display reliably shows the latest status.
+
+To ensure the Receive text buffer doesn't get too large, the Receive text buffer is emptied every 5 minutes.
+
+When enabled, the logfile filename uses the local date and time to prefix "400 Cellular.txt", so an example would be "20230327 0807 400 Cellular.txt" which will be in the same directory as the Diagnostic tool.
+
+On startup or reboot, the 400 Cellular debug port outputs 3 instances of "*Sensaphone 400 Cellular starting...*" which the Diagnostic tool uses to detect device startup/reboot and reset its displays.
+- There are 3 instances to ensure the device startup/reboot is detected even in the case of a garbled transmission or reception: assumes at least 1 complete message will be detected.
+
 
 ## Suggested changes
 - Update Status timestamp on the real-time minute instead of elapsed time minutes
