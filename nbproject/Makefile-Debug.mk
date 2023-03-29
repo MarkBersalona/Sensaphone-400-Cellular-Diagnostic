@@ -41,7 +41,7 @@ OBJECTFILES= \
 
 
 # C Compiler Flags
-CFLAGS=`pkg-config --cflags gtk+-3.0 json-glib-1.0`  
+CFLAGS=`pkg-config --cflags gtk+-3.0`  
 
 # CC Compiler Flags
 CCFLAGS=
@@ -64,7 +64,7 @@ LDLIBSOPTIONS=
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/400_cellular_diagnostic: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/400_cellular_diagnostic ${OBJECTFILES} ${LDLIBSOPTIONS} `pkg-config --libs gtk+-3.0 json-glib-1.0`
+	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/400_cellular_diagnostic ${OBJECTFILES} ${LDLIBSOPTIONS} `pkg-config --libs gtk+-3.0`
 
 ${OBJECTDIR}/display.o: display.c
 	${MKDIR} -p ${OBJECTDIR}
