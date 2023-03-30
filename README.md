@@ -6,6 +6,7 @@ This is the Diagnostic tool for the <b>Sensaphone 400 Cellular</b>
 - Runs in a Debian-based Linux distribution, like Linux Mint. (It can probably run in an Arch- or Fedora- or other non-Debian Linux distro, I simply haven't tried building it in one yet.)
 - Connects to the serial debug port of the 400 Cellular via serial-to-USB converter; expects 
 connection to the ttyUSB0 device
+- Works best on a 1920x1080 or larger display
 
 ## Prerequisites
 Requires the GTK 3 library. To install:
@@ -96,3 +97,4 @@ On startup or reboot, the 400 Cellular debug port outputs 3 instances of "*Sensa
 - Update Status timestamp on the real-time minute instead of elapsed time minutes
 - Capture and display GNSS timestamp along with lat/long; if lat/long unavailable, do NOT clear lat/long/GNSS timestamp
 - Option to dump Status contents to log file
+- Reduce the initial height of the Receive window and the overall window, so Diagnostic can fit on a 1366x768 display. (Still manually resizable; maybe get fancy and automatically extend height to available display height??)
