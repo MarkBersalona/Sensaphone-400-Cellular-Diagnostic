@@ -83,6 +83,7 @@ GIOChannel *gIOChannelSerialUSB;
 
 // Sticky error status
 char gucStickyErrorStatus[200];
+char gucStickyErrorStatusOLD[200];
 
 // Error codes
 char* pucErrorCodes[] =
@@ -1090,6 +1091,20 @@ main_parse_msg(char *paucReceiveMsg)
         }
     }
 
+    // Look for Standby State
+    plcDetected = strstr((char*)paucReceiveMsg, "Standby State:");
+    if (plcDetected)
+    {
+        // Write the entire Standby state to Status
+        memset (lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy (lcTempMainString, plcDetected, sizeof(lcTempMainString));
+        display_status_write(lcTempMainString);
+        display_status_write("\r\n");
+
+        // Save error message as a sticky one
+        strcpy(gucStickyErrorStatus, lcTempMainString);
+    }
+    
 }
 // end main_parse_msg
 
@@ -1196,8 +1211,8 @@ main_periodic(gpointer data)
     static guint32 lulElapsed_sec = 0;
     char* plcReceivedMsgAvailable;
     static int fd;
-    #define STICKY_ERROR_COUNT_PERIOD_SECONDS 180
-    static guint8 lucStickyErrorCount = STICKY_ERROR_COUNT_PERIOD_SECONDS;
+    #define STICKY_ERROR_COUNT_PERIOD_SECONDS 600
+    static guint16 luiStickyErrorCount = STICKY_ERROR_COUNT_PERIOD_SECONDS;
     
     //////////////////////////////////////////////////////////
     //
@@ -1226,12 +1241,22 @@ main_periodic(gpointer data)
         gtk_adjustment_set_value( adjStatus, gtk_adjustment_get_upper(adjStatus) );
 
         // Display sticky error status (if any) to Status for N minutes
+        // (but first check if stick error status has changed)
+        if (strcmp(gucStickyErrorStatus, gucStickyErrorStatusOLD))
+        {
+            // Want to display new sticky status immediately,
+            // so reset sticky error count and make the new
+            // sticky status the current one
+            luiStickyErrorCount = STICKY_ERROR_COUNT_PERIOD_SECONDS;
+            memset(gucStickyErrorStatusOLD, 0x00, sizeof(gucStickyErrorStatusOLD));
+            strcpy(gucStickyErrorStatusOLD, gucStickyErrorStatus);
+        }
         if (strlen(gucStickyErrorStatus) > 0)
         {
-            if (lucStickyErrorCount > 0)
+            if (luiStickyErrorCount > 0)
             {
                 // Display sticky error status
-                --lucStickyErrorCount;
+                --luiStickyErrorCount;
                 if (lulElapsed_sec%60 == 0)
                 {
                     display_status_write(gucStickyErrorStatus);
@@ -1244,13 +1269,13 @@ main_periodic(gpointer data)
             {
                 // Clear sticky error status, prep for the next one
                 memset(gucStickyErrorStatus, 0x00, sizeof(gucStickyErrorStatus));
-                lucStickyErrorCount = STICKY_ERROR_COUNT_PERIOD_SECONDS;
+                luiStickyErrorCount = STICKY_ERROR_COUNT_PERIOD_SECONDS;
                 gtk_label_set_text(GTK_LABEL(lblStatusTitle),  "Status");
             }
         }
         else
         {
-            lucStickyErrorCount = STICKY_ERROR_COUNT_PERIOD_SECONDS;
+            luiStickyErrorCount = STICKY_ERROR_COUNT_PERIOD_SECONDS;
         }
 
         if (lulElapsed_sec%60 == 0)

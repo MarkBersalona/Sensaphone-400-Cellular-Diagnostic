@@ -526,7 +526,8 @@ void display_clear_UUT_values(void)
     gtk_text_buffer_delete(textbufReceive, &textiterReceiveStart, &textiterReceiveEnd);
 
     // Clear sticky error status, prep for the next one
-    memset(gucStickyErrorStatus, 0x00, sizeof(gucStickyErrorStatus));
+    memset(gucStickyErrorStatus,    0x00, sizeof(gucStickyErrorStatus));
+    memset(gucStickyErrorStatusOLD, 0x00, sizeof(gucStickyErrorStatusOLD));
     gtk_label_set_text(GTK_LABEL(lblStatusTitle),  "Status");
 }
 // end display_clear_UUT_values

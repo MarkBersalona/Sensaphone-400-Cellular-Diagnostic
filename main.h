@@ -90,6 +90,7 @@ extern guint8  guiStatusTimestampCountdownIndex;
 
 // Sticky error status
 extern char gucStickyErrorStatus[200];
+extern char gucStickyErrorStatusOLD[200];
 
 
 
