@@ -1048,8 +1048,11 @@ main_parse_msg(char *paucReceiveMsg)
     }
     
     // Look for "Cellular signal quality: " followed by "RSSI=", "RSRQ=", "RSRP=" and "QUALITY="
-    plcDetected = strstr((char*)paucReceiveMsg, "Cellular signal quality: ");
-    if (plcDetected)
+    if ( NULL!=strstr((char*)paucReceiveMsg, "Cellular signal quality: ") &&
+         NULL!=strstr((char*)paucReceiveMsg, "RSSI=")                     &&
+         NULL!=strstr((char*)paucReceiveMsg, "RSRQ=")                     &&
+         NULL!=strstr((char*)paucReceiveMsg, "RSRP=")                     &&
+         NULL!=strstr((char*)paucReceiveMsg, "QUALITY=")                     )
     {
         // Look for "RSSI=" and get RSSI, display it to RSSI label
         plcDetectedParam = strstr((char*)paucReceiveMsg, "RSSI=");
