@@ -354,7 +354,6 @@ display_main_initialize(void)
     gtk_widget_set_name((lblTypePower),    "DiagnosticsFixed");
     gtk_widget_set_name((lblTypeBattery),  "DiagnosticsFixed");
     gtk_widget_set_name((lblTypeLithium),  "DiagnosticsFixed");
-    gtk_widget_set_name((lblTypeIntTemp),  "DiagnosticsFixed");
     gtk_widget_set_name((lblTypeHumidity), "DiagnosticsFixed");
     gtk_widget_set_name((lblTypeRelay),    "DiagnosticsFixed");
 		
@@ -379,6 +378,7 @@ display_main_initialize(void)
     gtk_widget_set_name((lblTypeZone2),        "DiagnosticValue");
     gtk_widget_set_name((lblTypeZone3),        "DiagnosticValue");
     gtk_widget_set_name((lblTypeZone4),        "DiagnosticValue");
+    gtk_widget_set_name((lblTypeIntTemp),      "DiagnosticValue");
 
     gtk_widget_set_name((lblValuePower),        "DiagnosticValue");
     gtk_widget_set_name((lblValueBattery),      "DiagnosticValue");
@@ -473,6 +473,7 @@ void display_clear_UUT_values(void)
     gtk_label_set_text(GTK_LABEL(lblTypeZone2), "------");
     gtk_label_set_text(GTK_LABEL(lblTypeZone3), "------");
     gtk_label_set_text(GTK_LABEL(lblTypeZone4), "------");
+    gtk_label_set_text(GTK_LABEL(lblTypeIntTemp), "Celsius (Fahrenheit)");
     
     gtk_label_set_text(GTK_LABEL(lblValuePower), "------");
     gtk_label_set_text(GTK_LABEL(lblValueBattery), "------");

@@ -735,6 +735,16 @@ main_parse_msg(char *paucReceiveMsg)
         }
     }
     
+    // Look for "Internal Temperature type = "
+    plcDetected = strstr((char*)paucReceiveMsg, "Internal Temperature type = ");
+    if (plcDetected)
+    {
+        // Write the 400 Cellular Internal Temp/Humidity to the Internal Temp Type label
+        memset (lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy (lcTempMainString, plcDetected+28, strlen(trim(plcDetected+28)));
+        gtk_label_set_text(GTK_LABEL(lblTypeIntTemp), lcTempMainString);
+    }
+    
     // Look for the periodic input zone readouts
     plcDetected = strstr((char*)paucReceiveMsg, "InputTask: Zone ");
     if (plcDetected)
