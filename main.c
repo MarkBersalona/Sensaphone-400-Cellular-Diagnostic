@@ -662,6 +662,18 @@ main_parse_msg(char *paucReceiveMsg)
             memset (lcTempMainString, 0, sizeof(lcTempMainString));
             memcpy (lcTempMainString, plcDetectedParam+4, strlen(trim(plcDetectedParam+4)));
             gtk_label_set_text(GTK_LABEL(lblConnection), lcTempMainString);
+            if ( strstr((char*)lcTempMainString, "CONNECTED") )
+            {
+                gtk_widget_set_name((lblConnection),     "ConnectionOK");     // green
+            }
+            else if ( strstr((char*)lcTempMainString, "ERROR") )
+            {
+                gtk_widget_set_name((lblConnection),     "ConnectionError");     // red
+            }
+            else
+            {
+                gtk_widget_set_name((lblConnection),     "DiagnosticValue");  // white
+            }
         }
     }
     
@@ -1101,6 +1113,23 @@ main_parse_msg(char *paucReceiveMsg)
             memset(lcTempMainString, 0, sizeof(lcTempMainString));
             memcpy(lcTempMainString, plcDetectedParam+8, strlen(plcDetectedParam+8));
             gtk_label_set_text(GTK_LABEL(lblSignalQuality),  trim(lcTempMainString));
+            if ( strstr((char*)lcTempMainString, "EXCELLENT") ||
+                 strstr((char*)lcTempMainString, "GOOD")        )
+            {
+                gtk_widget_set_name((lblSignalQuality),  "ConnectionOK");       // green
+            }
+            else if ( strstr((char*)lcTempMainString, "FAIR") )
+            {
+                gtk_widget_set_name((lblSignalQuality),  "ConnectionWarning");  // yellow
+            }
+            else if ( strstr((char*)lcTempMainString, "POOR") )
+            {
+                gtk_widget_set_name((lblSignalQuality),  "ConnectionError");    // red
+            }
+            else
+            {
+                gtk_widget_set_name((lblSignalQuality),  "DiagnosticValue");    // white
+            }
         }
     }
 

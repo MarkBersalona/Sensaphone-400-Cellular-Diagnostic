@@ -112,6 +112,7 @@ char* pucMenuItems[] =
     "Ping server",
     "Close sockets",
 
+    "Zone Update POST",
     "RESET to defaults",
     "REBOOT",
 
@@ -143,7 +144,8 @@ char* pucMenuCMD[] =
     "R", // Toggle relay
     "P", // Ping server
     "S", // Close sockets
-    
+
+    "U", // Zone Update POST
     "X", // RESET to defaults
     "Z", // REBOOT
 
@@ -463,11 +465,13 @@ void display_clear_UUT_values(void)
     gtk_label_set_text(GTK_LABEL(lblICCID), "--------------------");
     gtk_label_set_text(GTK_LABEL(lblIMEI), "---------------");
     gtk_label_set_text(GTK_LABEL(lblConnection), "---------------");
+    gtk_widget_set_name((lblConnection),     "DiagnosticValue");
 
     gtk_label_set_text(GTK_LABEL(lblRSSI), "----");
     gtk_label_set_text(GTK_LABEL(lblRSRP), "----");
     gtk_label_set_text(GTK_LABEL(lblRSRQ), "----");
     gtk_label_set_text(GTK_LABEL(lblSignalQuality), "------------");
+    gtk_widget_set_name((lblSignalQuality),  "DiagnosticValue");
 
     gtk_label_set_text(GTK_LABEL(lblTypeZone1), "------");
     gtk_label_set_text(GTK_LABEL(lblTypeZone2), "------");
