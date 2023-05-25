@@ -1147,6 +1147,17 @@ main_parse_msg(char *paucReceiveMsg)
         strcpy(gucStickyErrorStatus, lcTempMainString);
     }
     
+    // Look for "Zone Update Pending in "
+    plcDetected = strstr((char*)paucReceiveMsg, "Zone Update Pending in ");
+    if (plcDetected)
+    {
+        // Write the entire "Zone Update Pending in ..."" to Status
+        memset (lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy (lcTempMainString, plcDetected, sizeof(lcTempMainString));
+        display_status_write(lcTempMainString);
+        display_status_write("\r\n");
+    }
+    
 }
 // end main_parse_msg
 
