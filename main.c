@@ -1158,6 +1158,17 @@ main_parse_msg(char *paucReceiveMsg)
         display_status_write("\r\n");
     }
     
+    // Look for "Keep-alive WebSocket P-i-n-g pending in "
+    plcDetected = strstr((char*)paucReceiveMsg, "Keep-alive WebSocket P-i-n-g pending in ");
+    if (plcDetected)
+    {
+        // Write the entire "Zone Update Pending in ..."" to Status
+        memset (lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy (lcTempMainString, plcDetected, sizeof(lcTempMainString));
+        display_status_write(lcTempMainString);
+        display_status_write("\r\n");
+    }
+    
 }
 // end main_parse_msg
 
