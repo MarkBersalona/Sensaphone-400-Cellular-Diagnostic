@@ -103,15 +103,16 @@ char* pucMenuItems[] =
     "Read  zone configs",
     "SPI flash test (big)",
     "SPI flash test (small)",
+    "GNSS shutdown",
     "ACK all alarms",
-    "Read MAC/SN",
 
+    "Read MAC/SN",
     "Read Board rev.",
     "Toggle lamps",
     "Toggle relay",
     "Ping server",
-    "Close sockets",
 
+    "Close sockets",
     "Zone Update POST",
     "RESET to defaults",
     "REBOOT",
@@ -136,15 +137,16 @@ char* pucMenuCMD[] =
     "e", // Read  zone configs
     "F", // SPI flash test (big)
     "f", // SPI flash test (small)
+    "G", // GNSS shutdown
     "K", // ACK all alarms
+
     "m", // Read MAC/SN
-    
     "b", // Read Board rev.
     "L", // Toggle lamps
     "R", // Toggle relay
     "P", // Ping server
-    "S", // Close sockets
 
+    "S", // Close sockets
     "U", // Zone Update POST
     "X", // RESET to defaults
     "Z", // REBOOT
