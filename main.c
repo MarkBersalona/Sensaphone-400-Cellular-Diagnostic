@@ -101,11 +101,12 @@ char* pucErrorCodes[] =
     "Server closed the socket",
 
     "Transmit failure",
+    "ERROR response received",
     "uBlox SARA-R5 failed to initialize",
     "uBlox SARA-R5 updating",
     "uBlox SARA-R5 update failed",
-    "uBlox SARA-R5 unresponsive",
 
+    "uBlox SARA-R5 unresponsive",
     "WebSocket PONG frame expected but timed out",
     "Too many Alarm/Update POST ACK timeouts",
     "Unspecified ERROR",
