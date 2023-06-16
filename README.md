@@ -98,4 +98,5 @@ On startup or reboot, the 400 Cellular debug port outputs 3 instances of "*Sensa
 - Capture and display GNSS timestamp along with lat/long; if lat/long unavailable, do NOT clear lat/long/GNSS timestamp
 - Option to dump Status contents to log file
 - Reduce the initial height of the Receive window and the overall window, so Diagnostic can fit on a 1366x768 display. (Still manually resizable; maybe get fancy and automatically extend height to available display height??)
-- Empty the Status text buffer periodically, say every 12 hours?
+- Add an 'About' button to display version and date of Sensaphone 400 Cellular Diagnostic to Status
+

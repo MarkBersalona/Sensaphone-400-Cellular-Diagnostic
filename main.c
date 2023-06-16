@@ -112,6 +112,9 @@ char* pucErrorCodes[] =
     "Unspecified ERROR",
 };
 
+// Sticky Status
+#define STICKY_ERROR_COUNT_PERIOD_SECONDS 600
+static guint16 guiStickyErrorCountdown_sec = STICKY_ERROR_COUNT_PERIOD_SECONDS;
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -666,6 +669,11 @@ main_parse_msg(char *paucReceiveMsg)
             if ( strstr((char*)lcTempMainString, "CONNECTED") )
             {
                 gtk_widget_set_name((lblConnection),     "ConnectionOK");     // green
+
+                // Clear sticky error status, prep for the next one
+                memset(gucStickyErrorStatus, 0x00, sizeof(gucStickyErrorStatus));
+                guiStickyErrorCountdown_sec = STICKY_ERROR_COUNT_PERIOD_SECONDS;
+                gtk_label_set_text(GTK_LABEL(lblStatusTitle),  "Status");
             }
             else if ( strstr((char*)lcTempMainString, "ERROR") )
             {
@@ -1287,8 +1295,6 @@ main_periodic(gpointer data)
     static guint32 lulElapsed_sec = 0;
     char* plcReceivedMsgAvailable;
     static int fd;
-    #define STICKY_ERROR_COUNT_PERIOD_SECONDS 600
-    static guint16 luiStickyErrorCount = STICKY_ERROR_COUNT_PERIOD_SECONDS;
     
     //////////////////////////////////////////////////////////
     //
@@ -1323,16 +1329,16 @@ main_periodic(gpointer data)
             // Want to display new sticky status immediately,
             // so reset sticky error count and make the new
             // sticky status the current one
-            luiStickyErrorCount = STICKY_ERROR_COUNT_PERIOD_SECONDS;
+            guiStickyErrorCountdown_sec = STICKY_ERROR_COUNT_PERIOD_SECONDS;
             memset(gucStickyErrorStatusOLD, 0x00, sizeof(gucStickyErrorStatusOLD));
             strcpy(gucStickyErrorStatusOLD, gucStickyErrorStatus);
         }
         if (strlen(gucStickyErrorStatus) > 0)
         {
-            if (luiStickyErrorCount > 0)
+            if (guiStickyErrorCountdown_sec > 0)
             {
                 // Display sticky error status
-                --luiStickyErrorCount;
+                --guiStickyErrorCountdown_sec;
                 if (lulElapsed_sec%60 == 0)
                 {
                     display_status_write(gucStickyErrorStatus);
@@ -1345,13 +1351,13 @@ main_periodic(gpointer data)
             {
                 // Clear sticky error status, prep for the next one
                 memset(gucStickyErrorStatus, 0x00, sizeof(gucStickyErrorStatus));
-                luiStickyErrorCount = STICKY_ERROR_COUNT_PERIOD_SECONDS;
+                guiStickyErrorCountdown_sec = STICKY_ERROR_COUNT_PERIOD_SECONDS;
                 gtk_label_set_text(GTK_LABEL(lblStatusTitle),  "Status");
             }
         }
         else
         {
-            luiStickyErrorCount = STICKY_ERROR_COUNT_PERIOD_SECONDS;
+            guiStickyErrorCountdown_sec = STICKY_ERROR_COUNT_PERIOD_SECONDS;
         }
 
         if (lulElapsed_sec%60 == 0)
@@ -1407,6 +1413,10 @@ main_periodic(gpointer data)
             //
             // Updates every ELAPSED 24-hour day
             //
+            // Periodically clear the Status text buffer
+            gtk_text_buffer_get_start_iter(textbufStatus, &textiterStatusStart);
+            gtk_text_buffer_get_end_iter  (textbufStatus, &textiterStatusEnd);
+            gtk_text_buffer_delete(textbufStatus, &textiterStatusStart, &textiterStatusEnd);
         }
     }
     
