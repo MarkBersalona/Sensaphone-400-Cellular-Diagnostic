@@ -1189,6 +1189,17 @@ main_parse_msg(char *paucReceiveMsg)
         display_status_write("\r\n");
     }
     
+    // Look for "PING frame received"
+    plcDetected = strstr((char*)paucReceiveMsg, "PING frame received");
+    if (plcDetected)
+    {
+        // Write the entire "PING frame received" to Status
+        memset (lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy (lcTempMainString, plcDetected, sizeof(lcTempMainString));
+        display_status_write(lcTempMainString);
+        display_status_write("\r\n");
+    }
+    
 }
 // end main_parse_msg
 
