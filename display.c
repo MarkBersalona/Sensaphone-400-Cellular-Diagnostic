@@ -457,7 +457,7 @@ display_main_initialize(void)
 ////////////////////////////////////////////////////////////////////////////
 void display_clear_UUT_values(void)
 {
-    gtk_label_set_text(GTK_LABEL(lblMAC), "00-07-F9-xx-xx");
+    gtk_label_set_text(GTK_LABEL(lblMAC), "00-07-F9-xx-xx-xx");
     gtk_label_set_text(GTK_LABEL(lblBoardRev), "-");
     gtk_label_set_text(GTK_LABEL(lblHumiditySensor), "---------------");
     gtk_label_set_text(GTK_LABEL(lbl400FW), "vX.X.X");

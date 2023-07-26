@@ -543,7 +543,7 @@
                 <property name="valign">center</property>
                 <property name="hexpand">True</property>
                 <property name="invisible-char">●</property>
-                <property name="text" translatable="yes">00-07-F9-00-xx-xx</property>
+                <property name="text" translatable="yes">00-07-F9-01-xx-xx</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>
