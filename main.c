@@ -709,8 +709,8 @@ main_parse_msg(char *paucReceiveMsg)
         gtk_label_set_text(GTK_LABEL(lblValuePower), lcTempMainString);
     }
     
-    // Look for "Periodic battery status: Battery voltage " then "Percentage = "
-    plcDetected = strstr((char*)paucReceiveMsg, "Periodic battery status: Battery voltage ");
+    // Look for "Periodic battery status: Time: " then "Percentage = "
+    plcDetected = strstr((char*)paucReceiveMsg, "Periodic battery status: Time: ");
     if (plcDetected)
     {
         plcPercentage = strstr((char*)plcDetected, "Percentage = ");
@@ -821,6 +821,10 @@ main_parse_msg(char *paucReceiveMsg)
             case 4:
                 gtk_label_set_text(GTK_LABEL(lblTypeZone4),  trim(lcZoneTypeName));
                 gtk_label_set_text(GTK_LABEL(lblValueZone4), trim(lcTempMainString));
+                break;
+            case 5:
+                gtk_label_set_text(GTK_LABEL(lblTypeZone5),  trim(lcZoneTypeName));
+                gtk_label_set_text(GTK_LABEL(lblValueZone5), trim(lcTempMainString));
                 break;
             default:
                 sprintf(lcTempMainString, "ERROR - bad zone number %d\r\n", lucZoneNumber);
@@ -1056,6 +1060,10 @@ main_parse_msg(char *paucReceiveMsg)
             case 8: 
                 gtk_label_set_text(GTK_LABEL(lblAlarmZone4), trim(lcTempMainString)); 
                 gtk_widget_set_name((lblAlarmZone4), lcZoneAlarmColor); 
+                break;
+            case 9: 
+                gtk_label_set_text(GTK_LABEL(lblAlarmZone5), trim(lcTempMainString)); 
+                gtk_widget_set_name((lblAlarmZone5), lcZoneAlarmColor); 
                 break;
         }
     }
