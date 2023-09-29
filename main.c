@@ -488,10 +488,14 @@ main_parse_msg(char *paucReceiveMsg)
     if (plcDetected)
     {
         // Write the entire warning, including *** WARNING ***, to Status
+        // (but only if there's a significant string following)
         memset (lcTempMainString, 0, sizeof(lcTempMainString));
         memcpy (lcTempMainString, plcDetected, sizeof(lcTempMainString));
-        display_status_write(lcTempMainString);
-        display_status_write("\r\n");
+        if (strlen(lcTempMainString) > 20)
+        {
+            display_status_write(lcTempMainString);
+            display_status_write("\r\n");
+        }
     }
     
     // Look for *** ERROR ***
@@ -499,13 +503,17 @@ main_parse_msg(char *paucReceiveMsg)
     if (plcDetected)
     {
         // Write the entire error, including *** ERROR ***, to Status
+        // (but only if there's a significant string following)
         memset (lcTempMainString, 0, sizeof(lcTempMainString));
         memcpy (lcTempMainString, plcDetected, sizeof(lcTempMainString));
-        display_status_write(lcTempMainString);
-        display_status_write("\r\n");
+        if (strlen(lcTempMainString) > 20)
+        {
+            display_status_write(lcTempMainString);
+            display_status_write("\r\n");
 
-        // Save error message as a sticky one
-        strcpy(gucStickyErrorStatus, lcTempMainString);
+            // Save error message as a sticky one
+            strcpy(gucStickyErrorStatus, lcTempMainString);
+        }
     }
     
     // Look for "Sensaphone 400 starting..."
@@ -627,15 +635,19 @@ main_parse_msg(char *paucReceiveMsg)
     }
     
     // Look for "ICCID is "
+    // (but only if there's a significant string following)
     plcDetected = strstr((char*)paucReceiveMsg, "ICCID is ");
     if (plcDetected)
     {
         memset (lcTempMainString, 0, sizeof(lcTempMainString));
         memcpy (lcTempMainString, plcDetected+9, strlen(plcDetected+9));
-        display_status_write("Detected ICCID: ");
-        display_status_write(lcTempMainString);
-        display_status_write("\r\n");
-        gtk_label_set_text(GTK_LABEL(lblICCID), lcTempMainString);
+        if (strlen(lcTempMainString) > 20)
+        {
+            display_status_write("Detected ICCID: ");
+            display_status_write(lcTempMainString);
+            display_status_write("\r\n");
+            gtk_label_set_text(GTK_LABEL(lblICCID), lcTempMainString);
+        }
     }
     
     // Look for "400 Cellular firmware version is "
@@ -1202,6 +1214,28 @@ main_parse_msg(char *paucReceiveMsg)
     if (plcDetected)
     {
         // Write the entire "PING frame received" to Status
+        memset (lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy (lcTempMainString, plcDetected, sizeof(lcTempMainString));
+        display_status_write(lcTempMainString);
+        display_status_write("\r\n");
+    }
+    
+    // Look for "Firmware Download progress:"
+    plcDetected = strstr((char*)paucReceiveMsg, "Firmware Download progress:");
+    if (plcDetected)
+    {
+        // Write the entire "Firmware Download progress:..." to Status
+        memset (lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy (lcTempMainString, plcDetected, sizeof(lcTempMainString));
+        display_status_write(lcTempMainString);
+        display_status_write("\r\n");
+    }
+    
+    // Look for "Firmware Download elapsed time:"
+    plcDetected = strstr((char*)paucReceiveMsg, "Firmware Download elapsed time:");
+    if (plcDetected)
+    {
+        // Write the entire "Firmware Download elapsed time:..." to Status
         memset (lcTempMainString, 0, sizeof(lcTempMainString));
         memcpy (lcTempMainString, plcDetected, sizeof(lcTempMainString));
         display_status_write(lcTempMainString);
