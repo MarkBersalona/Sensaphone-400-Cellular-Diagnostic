@@ -1242,6 +1242,28 @@ main_parse_msg(char *paucReceiveMsg)
         display_status_write("\r\n");
     }
     
+    // Look for "CRC of processor flash Pages 16-253 = "
+    plcDetected = strstr((char*)paucReceiveMsg, "CRC of processor flash Pages 16-253 = ");
+    if (plcDetected)
+    {
+        // Write the entire "CRC of processor flash Pages 16-253 = ..." to Status
+        memset (lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy (lcTempMainString, plcDetected, sizeof(lcTempMainString));
+        display_status_write(lcTempMainString);
+        display_status_write("\r\n");
+    }
+    
+    // Look for "CRC after external flash Blocks 8-126 = "
+    plcDetected = strstr((char*)paucReceiveMsg, "CRC after external flash Blocks 8-126 = ");
+    if (plcDetected)
+    {
+        // Write the entire "CRC after external flash Blocks 8-126 = ..." to Status
+        memset (lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy (lcTempMainString, plcDetected, sizeof(lcTempMainString));
+        display_status_write(lcTempMainString);
+        display_status_write("\r\n");
+    }
+    
 }
 // end main_parse_msg
 
