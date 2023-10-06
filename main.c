@@ -558,9 +558,9 @@ main_parse_msg(char *paucReceiveMsg)
     plcDetected = strstr((char*)paucReceiveMsg, "Model number is ");
     if (plcDetected)
     {
-        plcQuoteStart = strchr(plcDetected,   0x22); // search for double quote
-        plcQuoteEnd   = strchr(plcQuoteStart+1, 0x22); // search for double quote
-        if (plcQuoteStart && plcQuoteEnd) // both quotes found
+        plcQuoteStart = strchr(plcDetected+16, 0x22); // search for double quote
+        plcQuoteEnd   = strchr(plcDetected+21, 0x22); // search for double quote
+        if (plcQuoteStart && plcQuoteEnd && (plcQuoteEnd-plcQuoteStart > 5) ) // both quotes found
         {
             // Write the transceiver model to Status and to the transceiver label
             memset (lcTempMainString, 0, sizeof(lcTempMainString));
@@ -576,9 +576,9 @@ main_parse_msg(char *paucReceiveMsg)
     plcDetected = strstr((char*)paucReceiveMsg, "SARA-R5 FW version number is ");
     if (plcDetected)
     {
-        plcQuoteStart = strchr(plcDetected,   0x22); // search for double quote
-        plcQuoteEnd   = strchr(plcQuoteStart+1, 0x22); // search for double quote
-        if (plcQuoteStart && plcQuoteEnd) // both quotes found
+        plcQuoteStart = strchr(plcDetected+29, 0x22); // search for double quote
+        plcQuoteEnd   = strchr(plcDetected+32, 0x22); // search for double quote
+        if (plcQuoteStart && plcQuoteEnd && (plcQuoteEnd-plcQuoteStart > 2) ) // both quotes found
         {
             // Write the transceiver firmware version to Status and to the transceiver FW label
             memset (lcTempMainString, 0, sizeof(lcTempMainString));
@@ -620,9 +620,9 @@ main_parse_msg(char *paucReceiveMsg)
     plcDetected = strstr((char*)paucReceiveMsg, "IMEI is ");
     if (plcDetected)
     {
-        plcQuoteStart = strchr(plcDetected,   0x22); // search for double quote
-        plcQuoteEnd   = strchr(plcQuoteStart+1, 0x22); // search for double quote
-        if (plcQuoteStart && plcQuoteEnd) // both quotes found
+        plcQuoteStart = strchr(plcDetected+8,  0x22); // search for double quote
+        plcQuoteEnd   = strchr(plcDetected+12, 0x22); // search for double quote
+        if (plcQuoteStart && plcQuoteEnd && (plcQuoteEnd-plcQuoteStart > 5) ) // both quotes found
         {
             // Write the IMEI to Status and to the IMEI label
             memset (lcTempMainString, 0, sizeof(lcTempMainString));
