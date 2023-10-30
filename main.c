@@ -415,7 +415,7 @@ void main_REBOOT_clicked(void)
     serial_write(lcTempMainString);
 
     // Reset display
-    display_clear_UUT_values();
+    //display_clear_UUT_values();
 }
 // end main_REBOOT_clicked
 
@@ -433,7 +433,7 @@ void main_RTD_clicked(void)
     serial_write(lcTempMainString);
 
     // Reset display
-    display_clear_UUT_values();
+    //display_clear_UUT_values();
 }
 // end main_RTD_clicked
 
@@ -525,13 +525,13 @@ main_parse_msg(char *paucReceiveMsg)
         display_clear_UUT_values();
     }
     
-    // Look for "**ERROR CODE** geOnlineConnectionError = "
-    plcDetected = strstr((char*)paucReceiveMsg, "**ERROR CODE** geOnlineConnectionError = ");
+    // Look for "*** ERROR CODE *** geOnlineConnectionError = "
+    plcDetected = strstr((char*)paucReceiveMsg, "*** ERROR CODE *** geOnlineConnectionError = ");
     if (plcDetected)
     {
         // Get the error code
         memset (lcTempMainString, 0, sizeof(lcTempMainString));
-        memcpy (lcTempMainString, plcDetected+41, strlen(plcDetected+41));
+        memcpy (lcTempMainString, plcDetected+45, strlen(plcDetected+41));
         int liErrorCode = atoi(lcTempMainString);
         sprintf(lcTempMainString, "*** ERROR CODE *** %s", pucErrorCodes[liErrorCode]);
         display_status_write(lcTempMainString);
@@ -548,10 +548,13 @@ main_parse_msg(char *paucReceiveMsg)
         // Write the MAC address to Status and to the MAC label
         memset (lcTempMainString, 0, sizeof(lcTempMainString));
         memcpy (lcTempMainString, plcDetected+13, strlen(plcDetected+13));
-        display_status_write("Detected device MAC address: ");
-        display_status_write(lcTempMainString);
-        display_status_write("\r\n");
-        gtk_label_set_text(GTK_LABEL(lblMAC), lcTempMainString);
+        if ( strlen(plcDetected+13) > 12)
+        {
+            display_status_write("Detected device MAC address: ");
+            display_status_write(lcTempMainString);
+            display_status_write("\r\n");
+            gtk_label_set_text(GTK_LABEL(lblMAC), lcTempMainString);
+        }
     }
     
     // Look for "Model number is "
@@ -687,7 +690,8 @@ main_parse_msg(char *paucReceiveMsg)
                 guiStickyErrorCountdown_sec = STICKY_ERROR_COUNT_PERIOD_SECONDS;
                 gtk_label_set_text(GTK_LABEL(lblStatusTitle),  "Status");
             }
-            else if ( strstr((char*)lcTempMainString, "ERROR") )
+            else if ( strstr((char*)lcTempMainString, "ERROR") || 
+                      strstr((char*)lcTempMainString, "Error")    )
             {
                 gtk_widget_set_name((lblConnection),     "ConnectionError");     // red
             }

@@ -97,7 +97,7 @@ char* pucMenuItems[] =
     "App from ext. flash",
     "SARA-R5 defaults",
     "Airplane mode on/off",
-    "Calib. zones 1-4",
+    "Calib. zones 1-5",
     "Write zone configs",
 
     "Read  zone configs",
