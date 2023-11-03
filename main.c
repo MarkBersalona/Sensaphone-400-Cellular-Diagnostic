@@ -1053,31 +1053,31 @@ main_parse_msg(char *paucReceiveMsg)
                 gtk_label_set_text(GTK_LABEL(lblAlarmLithium), trim(lcTempMainString)); 
                 gtk_widget_set_name((lblAlarmLithium), lcZoneAlarmColor); 
                 break;
+            // case 3: 
+            //     gtk_label_set_text(GTK_LABEL(lblAlarmIntTemp), trim(lcTempMainString)); 
+            //     gtk_widget_set_name((lblAlarmIntTemp), lcZoneAlarmColor); 
+            //     break;
+            // case 4: 
+            //     gtk_label_set_text(GTK_LABEL(lblAlarmHumidity), trim(lcTempMainString)); 
+            //     gtk_widget_set_name((lblAlarmHumidity), lcZoneAlarmColor); 
+            //     break;
             case 3: 
-                gtk_label_set_text(GTK_LABEL(lblAlarmIntTemp), trim(lcTempMainString)); 
-                gtk_widget_set_name((lblAlarmIntTemp), lcZoneAlarmColor); 
-                break;
-            case 4: 
-                gtk_label_set_text(GTK_LABEL(lblAlarmHumidity), trim(lcTempMainString)); 
-                gtk_widget_set_name((lblAlarmHumidity), lcZoneAlarmColor); 
-                break;
-            case 5: 
                 gtk_label_set_text(GTK_LABEL(lblAlarmZone1), trim(lcTempMainString)); 
                 gtk_widget_set_name((lblAlarmZone1), lcZoneAlarmColor); 
                 break;
-            case 6: 
+            case 4: 
                 gtk_label_set_text(GTK_LABEL(lblAlarmZone2), trim(lcTempMainString)); 
                 gtk_widget_set_name((lblAlarmZone2), lcZoneAlarmColor); 
                 break;
-            case 7: 
+            case 5: 
                 gtk_label_set_text(GTK_LABEL(lblAlarmZone3), trim(lcTempMainString)); 
                 gtk_widget_set_name((lblAlarmZone3), lcZoneAlarmColor); 
                 break;
-            case 8: 
+            case 6: 
                 gtk_label_set_text(GTK_LABEL(lblAlarmZone4), trim(lcTempMainString)); 
                 gtk_widget_set_name((lblAlarmZone4), lcZoneAlarmColor); 
                 break;
-            case 9: 
+            case 7: 
                 gtk_label_set_text(GTK_LABEL(lblAlarmZone5), trim(lcTempMainString)); 
                 gtk_widget_set_name((lblAlarmZone5), lcZoneAlarmColor); 
                 break;
