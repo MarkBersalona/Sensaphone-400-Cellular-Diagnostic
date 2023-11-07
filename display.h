@@ -21,7 +21,7 @@ extern "C" {
 // Main display
 extern GtkCssProvider *cssProvider;
 extern GtkWindow *window;
-extern GtkWidget *lblMAC, *lblBoardRev, *lblHumiditySensor, *lbl400FW;
+extern GtkWidget *lblMAC, *lblBoardRev, *lbl400FW;
 extern GtkWidget *lblTransceiver, *lblTransceiverFW, *lblICCID, *lblIMEI;
 extern GtkWidget *txtentNewMAC, *txtentNewBoardRev, *txtentATCommand;
 extern GtkWidget *cbtMenu;
@@ -29,11 +29,11 @@ extern GtkWidget *swLogfileEnable, *lblLogfile;
 extern GtkWidget *lblRTC, *lblConnection;
 extern GtkWidget *lblRSSI, *lblRSRP, *lblRSRQ, *lblSignalQuality;
 
-extern GtkWidget *lblTypePower, *lblTypeBattery, *lblTypeLithium, *lblTypeIntTemp, *lblTypeHumidity;
+extern GtkWidget *lblTypePower, *lblTypeBattery, *lblTypeLithium;
 extern GtkWidget *lblTypeZone1, *lblTypeZone2, *lblTypeZone3, *lblTypeZone4, *lblTypeZone5, *lblTypeRelay;
-extern GtkWidget *lblValuePower, *lblValueBattery, *lblValueLithium, *lblValueIntTemp, *lblValueHumidity;
+extern GtkWidget *lblValuePower, *lblValueBattery, *lblValueLithium;
 extern GtkWidget *lblValueZone1, *lblValueZone2, *lblValueZone3, *lblValueZone4, *lblValueZone5, *lblValueRelay;
-extern GtkWidget *lblAlarmPower, *lblAlarmBattery, *lblAlarmLithium, *lblAlarmIntTemp, *lblAlarmHumidity;
+extern GtkWidget *lblAlarmPower, *lblAlarmBattery, *lblAlarmLithium;
 extern GtkWidget *lblAlarmZone1, *lblAlarmZone2, *lblAlarmZone3, *lblAlarmZone4, *lblAlarmZone5, *lblAlarmRelay;
 
 extern GtkWidget *lblLatitude, *lblLongitude;

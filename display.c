@@ -32,8 +32,8 @@
 GtkCssProvider *cssProvider;
 GtkWindow *window;
 
-GtkWidget *lblMACTitle, *lblBoardRevTitle, *lblHumiditySensorTitle, *lbl400FWTitle;
-GtkWidget *lblMAC, *lblBoardRev, *lblHumiditySensor, *lbl400FW;
+GtkWidget *lblMACTitle, *lblBoardRevTitle, *lbl400FWTitle;
+GtkWidget *lblMAC, *lblBoardRev, *lbl400FW;
 GtkWidget *lblTransceiverTitle, *lblTransceiverFWTitle, *lblICCIDTitle, *lblIMEITitle;
 GtkWidget *lblTransceiver, *lblTransceiverFW, *lblICCID, *lblIMEI;
 GtkWidget *lblRTCTitle, *lblConnectionTitle;
@@ -50,13 +50,13 @@ GtkWidget *lblRSSI, *lblRSRP, *lblRSRQ, *lblSignalQuality;
 
 GtkWidget *lblZoneTitle, *lblTypeTitle, *lblValueTitle, *lblAlarmTitle;
 
-GtkWidget *lblZonePower, *lblZoneBattery, *lblZoneLithium, *lblZoneIntTemp, *lblZoneHumidity;
+GtkWidget *lblZonePower, *lblZoneBattery, *lblZoneLithium;
 GtkWidget *lblZone1, *lblZone2, *lblZone3, *lblZone4, *lblZone5, *lblZoneRelay;
-GtkWidget *lblTypePower, *lblTypeBattery, *lblTypeLithium, *lblTypeIntTemp, *lblTypeHumidity;
+GtkWidget *lblTypePower, *lblTypeBattery, *lblTypeLithium;
 GtkWidget *lblTypeZone1, *lblTypeZone2, *lblTypeZone3, *lblTypeZone4, *lblTypeZone5, *lblTypeRelay;
-GtkWidget *lblValuePower, *lblValueBattery, *lblValueLithium, *lblValueIntTemp, *lblValueHumidity;
+GtkWidget *lblValuePower, *lblValueBattery, *lblValueLithium;
 GtkWidget *lblValueZone1, *lblValueZone2, *lblValueZone3, *lblValueZone4, *lblValueZone5, *lblValueRelay;
-GtkWidget *lblAlarmPower, *lblAlarmBattery, *lblAlarmLithium, *lblAlarmIntTemp, *lblAlarmHumidity;
+GtkWidget *lblAlarmPower, *lblAlarmBattery, *lblAlarmLithium;
 GtkWidget *lblAlarmZone1, *lblAlarmZone2, *lblAlarmZone3, *lblAlarmZone4, *lblAlarmZone5, *lblAlarmRelay;
 
 GtkWidget *lblLatitudeTitle, *lblLongitudeTitle;
@@ -175,8 +175,6 @@ display_main_initialize(void)
     lblMAC                 = GTK_WIDGET(gtk_builder_get_object(builder, "lblMAC"));
     lblBoardRevTitle       = GTK_WIDGET(gtk_builder_get_object(builder, "lblBoardRevTitle"));
     lblBoardRev            = GTK_WIDGET(gtk_builder_get_object(builder, "lblBoardRev"));
-    lblHumiditySensorTitle = GTK_WIDGET(gtk_builder_get_object(builder, "lblHumiditySensorTitle"));
-    lblHumiditySensor      = GTK_WIDGET(gtk_builder_get_object(builder, "lblHumiditySensor"));
     lbl400FWTitle          = GTK_WIDGET(gtk_builder_get_object(builder, "lbl400FWTitle"));
     lbl400FW               = GTK_WIDGET(gtk_builder_get_object(builder, "lbl400FW"));
     lblRTCTitle            = GTK_WIDGET(gtk_builder_get_object(builder, "lblRTCTitle"));
@@ -226,8 +224,6 @@ display_main_initialize(void)
     lblZonePower    = GTK_WIDGET(gtk_builder_get_object(builder, "lblZonePower"));
     lblZoneBattery  = GTK_WIDGET(gtk_builder_get_object(builder, "lblZoneBattery"));
     lblZoneLithium  = GTK_WIDGET(gtk_builder_get_object(builder, "lblZoneLithium"));
-    lblZoneIntTemp  = GTK_WIDGET(gtk_builder_get_object(builder, "lblZoneIntTemp"));
-    lblZoneHumidity = GTK_WIDGET(gtk_builder_get_object(builder, "lblZoneHumidity"));
     lblZone1        = GTK_WIDGET(gtk_builder_get_object(builder, "lblZone1"));
     lblZone2        = GTK_WIDGET(gtk_builder_get_object(builder, "lblZone2"));
     lblZone3        = GTK_WIDGET(gtk_builder_get_object(builder, "lblZone3"));
@@ -238,8 +234,6 @@ display_main_initialize(void)
     lblTypePower    = GTK_WIDGET(gtk_builder_get_object(builder, "lblTypePower"));
     lblTypeBattery  = GTK_WIDGET(gtk_builder_get_object(builder, "lblTypeBattery"));
     lblTypeLithium  = GTK_WIDGET(gtk_builder_get_object(builder, "lblTypeLithium"));
-    lblTypeIntTemp  = GTK_WIDGET(gtk_builder_get_object(builder, "lblTypeIntTemp"));
-    lblTypeHumidity = GTK_WIDGET(gtk_builder_get_object(builder, "lblTypeHumidity"));
     lblTypeZone1    = GTK_WIDGET(gtk_builder_get_object(builder, "lblTypeZone1"));
     lblTypeZone2    = GTK_WIDGET(gtk_builder_get_object(builder, "lblTypeZone2"));
     lblTypeZone3    = GTK_WIDGET(gtk_builder_get_object(builder, "lblTypeZone3"));
@@ -250,8 +244,6 @@ display_main_initialize(void)
     lblValuePower    = GTK_WIDGET(gtk_builder_get_object(builder, "lblValuePower"));
     lblValueBattery  = GTK_WIDGET(gtk_builder_get_object(builder, "lblValueBattery"));
     lblValueLithium  = GTK_WIDGET(gtk_builder_get_object(builder, "lblValueLithium"));
-    lblValueIntTemp  = GTK_WIDGET(gtk_builder_get_object(builder, "lblValueIntTemp"));
-    lblValueHumidity = GTK_WIDGET(gtk_builder_get_object(builder, "lblValueHumidity"));
     lblValueZone1    = GTK_WIDGET(gtk_builder_get_object(builder, "lblValueZone1"));
     lblValueZone2    = GTK_WIDGET(gtk_builder_get_object(builder, "lblValueZone2"));
     lblValueZone3    = GTK_WIDGET(gtk_builder_get_object(builder, "lblValueZone3"));
@@ -262,8 +254,6 @@ display_main_initialize(void)
     lblAlarmPower    = GTK_WIDGET(gtk_builder_get_object(builder, "lblAlarmPower"));
     lblAlarmBattery  = GTK_WIDGET(gtk_builder_get_object(builder, "lblAlarmBattery"));
     lblAlarmLithium  = GTK_WIDGET(gtk_builder_get_object(builder, "lblAlarmLithium"));
-    lblAlarmIntTemp  = GTK_WIDGET(gtk_builder_get_object(builder, "lblAlarmIntTemp"));
-    lblAlarmHumidity = GTK_WIDGET(gtk_builder_get_object(builder, "lblAlarmHumidity"));
     lblAlarmZone1    = GTK_WIDGET(gtk_builder_get_object(builder, "lblAlarmZone1"));
     lblAlarmZone2    = GTK_WIDGET(gtk_builder_get_object(builder, "lblAlarmZone2"));
     lblAlarmZone3    = GTK_WIDGET(gtk_builder_get_object(builder, "lblAlarmZone3"));
@@ -318,7 +308,6 @@ display_main_initialize(void)
     // Titles
     gtk_widget_set_name((lblMACTitle),            "DiagnosticsTitle");
     gtk_widget_set_name((lblBoardRevTitle),       "DiagnosticsTitle");
-    gtk_widget_set_name((lblHumiditySensorTitle), "DiagnosticsTitle");
     gtk_widget_set_name((lbl400FWTitle),          "DiagnosticsTitle");
     gtk_widget_set_name((lblRTCTitle),            "DiagnosticsTitle");
     gtk_widget_set_name((lblTransceiverTitle),    "DiagnosticsTitle");
@@ -352,8 +341,6 @@ display_main_initialize(void)
     gtk_widget_set_name((lblZonePower),    "DiagnosticsFixed");
     gtk_widget_set_name((lblZoneBattery),  "DiagnosticsFixed");
     gtk_widget_set_name((lblZoneLithium),  "DiagnosticsFixed");
-    gtk_widget_set_name((lblZoneIntTemp),  "DiagnosticsFixed");
-    gtk_widget_set_name((lblZoneHumidity), "DiagnosticsFixed");
     gtk_widget_set_name((lblZone1),        "DiagnosticsFixed");
     gtk_widget_set_name((lblZone2),        "DiagnosticsFixed");
     gtk_widget_set_name((lblZone3),        "DiagnosticsFixed");
@@ -363,13 +350,11 @@ display_main_initialize(void)
     gtk_widget_set_name((lblTypePower),    "DiagnosticsFixed");
     gtk_widget_set_name((lblTypeBattery),  "DiagnosticsFixed");
     gtk_widget_set_name((lblTypeLithium),  "DiagnosticsFixed");
-    gtk_widget_set_name((lblTypeHumidity), "DiagnosticsFixed");
     gtk_widget_set_name((lblTypeRelay),    "DiagnosticsFixed");
 		
 	// Values
     gtk_widget_set_name((lblMAC),            "DiagnosticValue");
     gtk_widget_set_name((lblBoardRev),       "DiagnosticValue");
-    gtk_widget_set_name((lblHumiditySensor), "DiagnosticValue");
     gtk_widget_set_name((lbl400FW),          "DiagnosticValue");
     gtk_widget_set_name((lblRTC),            "DiagnosticValue");
     gtk_widget_set_name((lblTransceiver),    "DiagnosticValue");
@@ -388,13 +373,10 @@ display_main_initialize(void)
     gtk_widget_set_name((lblTypeZone3),        "DiagnosticValue");
     gtk_widget_set_name((lblTypeZone4),        "DiagnosticValue");
     gtk_widget_set_name((lblTypeZone5),        "DiagnosticValue");
-    gtk_widget_set_name((lblTypeIntTemp),      "DiagnosticValue");
 
     gtk_widget_set_name((lblValuePower),        "DiagnosticValue");
     gtk_widget_set_name((lblValueBattery),      "DiagnosticValue");
     gtk_widget_set_name((lblValueLithium),      "DiagnosticValue");
-    gtk_widget_set_name((lblValueIntTemp),      "DiagnosticValue");
-    gtk_widget_set_name((lblValueHumidity),     "DiagnosticValue");
     gtk_widget_set_name((lblValueZone1),        "DiagnosticValue");
     gtk_widget_set_name((lblValueZone2),        "DiagnosticValue");
     gtk_widget_set_name((lblValueZone3),        "DiagnosticValue");
@@ -405,8 +387,6 @@ display_main_initialize(void)
     gtk_widget_set_name((lblAlarmPower),        "DiagnosticValue");
     gtk_widget_set_name((lblAlarmBattery),      "DiagnosticValue");
     gtk_widget_set_name((lblAlarmLithium),      "DiagnosticValue");
-    gtk_widget_set_name((lblAlarmIntTemp),      "DiagnosticValue");
-    gtk_widget_set_name((lblAlarmHumidity),     "DiagnosticValue");
     gtk_widget_set_name((lblAlarmZone1),        "DiagnosticValue");
     gtk_widget_set_name((lblAlarmZone2),        "DiagnosticValue");
     gtk_widget_set_name((lblAlarmZone3),        "DiagnosticValue");
@@ -467,7 +447,6 @@ void display_clear_UUT_values(void)
 {
     gtk_label_set_text(GTK_LABEL(lblMAC), "00-07-F9-xx-xx-xx");
     gtk_label_set_text(GTK_LABEL(lblBoardRev), "-");
-    gtk_label_set_text(GTK_LABEL(lblHumiditySensor), "---------------");
     gtk_label_set_text(GTK_LABEL(lbl400FW), "vX.X.X");
     gtk_label_set_text(GTK_LABEL(lblRTC), "---------------");
     gtk_label_set_text(GTK_LABEL(lblTransceiver), "-------------------");
@@ -488,13 +467,10 @@ void display_clear_UUT_values(void)
     gtk_label_set_text(GTK_LABEL(lblTypeZone3), "------");
     gtk_label_set_text(GTK_LABEL(lblTypeZone4), "------");
     gtk_label_set_text(GTK_LABEL(lblTypeZone5), "------");
-    gtk_label_set_text(GTK_LABEL(lblTypeIntTemp), "Celsius (Fahrenheit)");
     
     gtk_label_set_text(GTK_LABEL(lblValuePower), "------");
     gtk_label_set_text(GTK_LABEL(lblValueBattery), "------");
     gtk_label_set_text(GTK_LABEL(lblValueLithium), "------");
-    gtk_label_set_text(GTK_LABEL(lblValueIntTemp), "------");
-    gtk_label_set_text(GTK_LABEL(lblValueHumidity), "------");
     gtk_label_set_text(GTK_LABEL(lblValueZone1), "------");
     gtk_label_set_text(GTK_LABEL(lblValueZone2), "------");
     gtk_label_set_text(GTK_LABEL(lblValueZone3), "------");
@@ -505,8 +481,6 @@ void display_clear_UUT_values(void)
     gtk_label_set_text(GTK_LABEL(lblAlarmPower), "------");
     gtk_label_set_text(GTK_LABEL(lblAlarmBattery), "------");
     gtk_label_set_text(GTK_LABEL(lblAlarmLithium), "------");
-    gtk_label_set_text(GTK_LABEL(lblAlarmIntTemp), "------");
-    gtk_label_set_text(GTK_LABEL(lblAlarmHumidity), "------");
     gtk_label_set_text(GTK_LABEL(lblAlarmZone1), "------");
     gtk_label_set_text(GTK_LABEL(lblAlarmZone2), "------");
     gtk_label_set_text(GTK_LABEL(lblAlarmZone3), "------");
@@ -516,8 +490,6 @@ void display_clear_UUT_values(void)
     gtk_widget_set_name((lblAlarmPower),        "DiagnosticValue");
     gtk_widget_set_name((lblAlarmBattery),      "DiagnosticValue");
     gtk_widget_set_name((lblAlarmLithium),      "DiagnosticValue");
-    gtk_widget_set_name((lblAlarmIntTemp),      "DiagnosticValue");
-    gtk_widget_set_name((lblAlarmHumidity),     "DiagnosticValue");
     gtk_widget_set_name((lblAlarmZone1),        "DiagnosticValue");
     gtk_widget_set_name((lblAlarmZone2),        "DiagnosticValue");
     gtk_widget_set_name((lblAlarmZone3),        "DiagnosticValue");

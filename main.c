@@ -592,20 +592,7 @@ main_parse_msg(char *paucReceiveMsg)
             gtk_label_set_text(GTK_LABEL(lblTransceiverFW), lcTempMainString);
         }
     }
-    
-    // Look for "Humidity sensor is the "
-    plcDetected = strstr((char*)paucReceiveMsg, "Humidity sensor is the ");
-    if (plcDetected)
-    {
-        // Write the humidity sensor to Status and to the humidity sensor label
-        memset (lcTempMainString, 0, sizeof(lcTempMainString));
-        memcpy (lcTempMainString, plcDetected+23, strlen(plcDetected+23));
-        display_status_write("Detected humidity sensor: ");
-        display_status_write(lcTempMainString);
-        display_status_write("\r\n");
-        gtk_label_set_text(GTK_LABEL(lblHumiditySensor), lcTempMainString);
-    }
-    
+        
     // Look for "Board revision = "
     plcDetected = strstr((char*)paucReceiveMsg, "Board revision = ");
     if (plcDetected)
@@ -751,35 +738,6 @@ main_parse_msg(char *paucReceiveMsg)
             memcpy (lcTempMainString, plcPercentage+13, strlen(trim(plcPercentage+13)));
             gtk_label_set_text(GTK_LABEL(lblValueLithium), lcTempMainString);
         }
-    }
-    
-    // Look for "Internal  Temperature = " then "Humidity = "
-    plcDetected = strstr((char*)paucReceiveMsg, "Internal  Temperature = ");
-    if (plcDetected)
-    {
-        plcHumidity = strstr((char*)paucReceiveMsg, "Humidity = ");
-        if (plcHumidity)
-        {
-            // Write the 400 Cellular Internal Temperature to the Internal Temperature Value label
-            memset (lcTempMainString, 0, sizeof(lcTempMainString));
-            memcpy (lcTempMainString, plcDetected+24, plcHumidity-(plcDetected+24)-1);
-            gtk_label_set_text(GTK_LABEL(lblValueIntTemp), trim(lcTempMainString));
-
-            // Write the 400 Cellular Humidity to the Humidity Value label
-            memset (lcTempMainString, 0, sizeof(lcTempMainString));
-            memcpy (lcTempMainString, plcHumidity+11, strlen(trim(plcHumidity+11)));
-            gtk_label_set_text(GTK_LABEL(lblValueHumidity), trim(lcTempMainString));
-        }
-    }
-    
-    // Look for "Internal Temperature type = "
-    plcDetected = strstr((char*)paucReceiveMsg, "Internal Temperature type = ");
-    if (plcDetected)
-    {
-        // Write the 400 Cellular Internal Temp/Humidity to the Internal Temp Type label
-        memset (lcTempMainString, 0, sizeof(lcTempMainString));
-        memcpy (lcTempMainString, plcDetected+28, strlen(trim(plcDetected+28)));
-        gtk_label_set_text(GTK_LABEL(lblTypeIntTemp), lcTempMainString);
     }
     
     // Look for the periodic input zone readouts

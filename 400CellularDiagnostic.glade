@@ -43,49 +43,6 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="lblBoardRevTitle">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="halign">end</property>
-                <property name="margin-left">20</property>
-                <property name="margin-right">10</property>
-                <property name="label" translatable="yes">Board rev.</property>
-                <property name="justify">right</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="lblHumiditySensorTitle">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="halign">end</property>
-                <property name="margin-left">20</property>
-                <property name="margin-right">10</property>
-                <property name="label" translatable="yes">Humidity sensor</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="lbl400FWTitle">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="halign">end</property>
-                <property name="margin-left">20</property>
-                <property name="margin-right">10</property>
-                <property name="label" translatable="yes">FW</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">3</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkLabel" id="lblMAC">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -98,51 +55,6 @@
               <packing>
                 <property name="left-attach">1</property>
                 <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="lblBoardRev">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="halign">start</property>
-                <property name="margin-right">10</property>
-                <property name="hexpand">True</property>
-                <property name="label" translatable="yes">D</property>
-                <property name="selectable">True</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="lblHumiditySensor">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="halign">start</property>
-                <property name="margin-right">10</property>
-                <property name="hexpand">True</property>
-                <property name="label" translatable="yes">Sensirion SHTC3</property>
-                <property name="selectable">True</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="lbl400FW">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="halign">start</property>
-                <property name="margin-right">10</property>
-                <property name="hexpand">True</property>
-                <property name="label" translatable="yes">v0.7.5</property>
-                <property name="selectable">True</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">3</property>
               </packing>
             </child>
             <child>
@@ -255,35 +167,6 @@
               <packing>
                 <property name="left-attach">3</property>
                 <property name="top-attach">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="lblRTCTitle">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="halign">end</property>
-                <property name="margin-left">20</property>
-                <property name="margin-right">10</property>
-                <property name="label" translatable="yes">Device time (UTC)</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">4</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="lblRTC">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="halign">start</property>
-                <property name="margin-right">10</property>
-                <property name="hexpand">True</property>
-                <property name="label" translatable="yes">2023.02.03 18:42</property>
-                <property name="selectable">True</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">4</property>
               </packing>
             </child>
             <child>
@@ -423,6 +306,101 @@
                 <property name="left-attach">5</property>
                 <property name="top-attach">3</property>
               </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="lblBoardRevTitle">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-right">10</property>
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">Board rev.</property>
+                <property name="justify">right</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="lblBoardRev">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <property name="hexpand">True</property>
+                <property name="margin-right">10</property>
+                <property name="label" translatable="yes">D</property>
+                <property name="selectable">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="lbl400FWTitle">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">end</property>
+                <property name="margin-left">20</property>
+                <property name="margin-right">10</property>
+                <property name="label" translatable="yes">FW</property>
+                <property name="justify">right</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="lbl400FW">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <property name="hexpand">True</property>
+                <property name="margin-right">10</property>
+                <property name="label" translatable="yes">v0.7.5</property>
+                <property name="selectable">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="lblRTCTitle">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">end</property>
+                <property name="margin-left">20</property>
+                <property name="margin-right">10</property>
+                <property name="label" translatable="yes">Device time (UTC)</property>
+                <property name="justify">right</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="lblRTC">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <property name="hexpand">True</property>
+                <property name="margin-right">10</property>
+                <property name="label" translatable="yes">2023.02.03 18:42</property>
+                <property name="selectable">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
             </child>
             <child>
               <placeholder/>
@@ -768,30 +746,6 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="lblZoneIntTemp">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">Temperature</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="lblZoneHumidity">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">Humidity</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">5</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkLabel" id="lblZone1">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
@@ -873,30 +827,6 @@
                   <packing>
                     <property name="left-attach">1</property>
                     <property name="top-attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="lblTypeIntTemp">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">Celsius (Fahrenheit)</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="lblTypeHumidity">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">RH%</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">5</property>
                   </packing>
                 </child>
                 <child>
@@ -986,32 +916,6 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="lblValueIntTemp">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">26 C</property>
-                    <property name="selectable">True</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
-                    <property name="top-attach">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="lblValueHumidity">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">35%</property>
-                    <property name="selectable">True</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
-                    <property name="top-attach">5</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkLabel" id="lblValueZone1">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
@@ -1097,30 +1001,6 @@
                   <packing>
                     <property name="left-attach">3</property>
                     <property name="top-attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="lblAlarmIntTemp">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">OK</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">3</property>
-                    <property name="top-attach">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="lblAlarmHumidity">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">OK</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">3</property>
-                    <property name="top-attach">5</property>
                   </packing>
                 </child>
                 <child>
@@ -1268,6 +1148,30 @@
                     <property name="left-attach">3</property>
                     <property name="top-attach">10</property>
                   </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
