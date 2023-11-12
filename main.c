@@ -65,12 +65,13 @@ guint32 gulElapsedTimeSinceDataUpdate_sec;
 // Glib date/time
 GDateTime *gDateTime;
 // Countdown minutes to Status timestamp
+#define TIMESTAMP_DELAY_TABLE_COUNT (13)
 guint16 guiStatusTimestampCountdown_minutes = 0;
 guint8  guiStatusTimestampCountdownIndex    = 0;
 guint8  uiStatusTimestampCountdownIndex_OLD = 0;
-guint16 uiStatusTimestampCountdownTable[11] = 
+guint16 uiStatusTimestampCountdownTable[TIMESTAMP_DELAY_TABLE_COUNT] = 
 {
-    5, 6, 6, 7, 8, 10, 13, 18, 28, 39, 60
+    5, 6, 6, 7, 8, 10, 13, 18, 28, 39, 60, 120, 240
 };
 
 // Logfile
@@ -1332,6 +1333,12 @@ main_periodic(gpointer data)
     static guint32 lulElapsed_sec = 0;
     char* plcReceivedMsgAvailable;
     static int fd;
+    static gint liRTCSecond;
+    static gint liRTCMinute;
+    static gint liRTCHour;
+    static gint liOLDRTCSecond = 99;
+    static gint liOLDRTCMinute = 99;
+    static gint liOLDRTCHour   = 99;
     
     //////////////////////////////////////////////////////////
     //
@@ -1348,12 +1355,9 @@ main_periodic(gpointer data)
         gDateTime = g_date_time_new_now_local();
         ++lulElapsed_sec;
         ++gulElapsedTimeSinceDataUpdate_sec;
-
-        // Display data age if it's been a while since update (update every n seconds)
-        if (lulElapsed_sec%300 == 0)
-        {
-            display_update_data_age();
-        }
+        liRTCSecond = g_date_time_get_second(gDateTime);
+        liRTCMinute = g_date_time_get_minute(gDateTime);
+        liRTCHour   = g_date_time_get_hour(gDateTime);
 
         // Force Status window to bottom
         adjStatus = gtk_scrolled_window_get_vadjustment(scrolledwindowStatus);
@@ -1402,28 +1406,6 @@ main_periodic(gpointer data)
             //
             // Updates every ELAPSED minute
             //
-            if (--guiStatusTimestampCountdown_minutes)
-            {
-                // Do nothing, not yet time to display Status timestamp
-            }
-            else
-            {
-                // Save old table index
-                uiStatusTimestampCountdownIndex_OLD = guiStatusTimestampCountdownIndex;
-
-                // Print timestamp in Status
-                sprintf(lcTempMainString, "%s: UNIX timestamp %d\t", __FUNCTION__, gulUNIXTimestamp);
-                display_status_write(lcTempMainString);
-                sprintf(lcTempMainString, "Local time %s\r\n", g_date_time_format(gDateTime, "%Y-%m-%d %H:%M"));
-                display_status_write(lcTempMainString);
-
-                // Restore table index; update if needed
-                guiStatusTimestampCountdownIndex = uiStatusTimestampCountdownIndex_OLD;
-                if (guiStatusTimestampCountdownIndex<10) ++guiStatusTimestampCountdownIndex;
-
-                // Reset minute countdown for Status timestamp
-                guiStatusTimestampCountdown_minutes = uiStatusTimestampCountdownTable[guiStatusTimestampCountdownIndex];
-            }
         }
 
         if (lulElapsed_sec%(5*60) == 0)
@@ -1455,6 +1437,41 @@ main_periodic(gpointer data)
             gtk_text_buffer_get_end_iter  (textbufStatus, &textiterStatusEnd);
             gtk_text_buffer_delete(textbufStatus, &textiterStatusStart, &textiterStatusEnd);
         }
+
+        //
+        // Updates every minute
+        //
+        if (liOLDRTCMinute != liRTCMinute)
+        {
+            liOLDRTCMinute = liRTCMinute;
+
+            if (--guiStatusTimestampCountdown_minutes)
+            {
+                // Do nothing, not yet time to display Status timestamp
+            }
+            else
+            {
+                // Save old table index
+                uiStatusTimestampCountdownIndex_OLD = guiStatusTimestampCountdownIndex;
+
+                // Print timestamp in Status
+                sprintf(lcTempMainString, "%s: UNIX timestamp %d\t", __FUNCTION__, gulUNIXTimestamp);
+                display_status_write(lcTempMainString);
+                sprintf(lcTempMainString, "Local time %s\r\n", g_date_time_format(gDateTime, "%Y-%m-%d %H:%M:%S"));
+                display_status_write(lcTempMainString);
+
+                // Display data age
+                display_update_data_age();
+
+                // Restore table index; update if needed
+                guiStatusTimestampCountdownIndex = uiStatusTimestampCountdownIndex_OLD;
+                if (guiStatusTimestampCountdownIndex<(TIMESTAMP_DELAY_TABLE_COUNT-1)) ++guiStatusTimestampCountdownIndex;
+
+                // Reset minute countdown for Status timestamp
+                guiStatusTimestampCountdown_minutes = uiStatusTimestampCountdownTable[guiStatusTimestampCountdownIndex];
+            }
+        }
+
     }
     
     //////////////////////////////////////////////////////////
