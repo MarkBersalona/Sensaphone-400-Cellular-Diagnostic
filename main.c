@@ -683,6 +683,10 @@ main_parse_msg(char *paucReceiveMsg)
             {
                 gtk_widget_set_name((lblConnection),     "ConnectionError");     // red
             }
+            else if ( strstr((char*)lcTempMainString, "UPDATING") )
+            {
+                gtk_widget_set_name((lblConnection),     "ConnectionWarning");   // yellow
+            }
             else
             {
                 gtk_widget_set_name((lblConnection),     "DiagnosticValue");  // white
