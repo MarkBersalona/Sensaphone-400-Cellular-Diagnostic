@@ -109,10 +109,10 @@ char* pucMenuItems[] =
     "Read MAC/SN",
     "Read Board rev.",
     "Toggle lamps",
+    "Toggle quick scan",
     "Toggle relay",
-    "Ping server",
 
-    "Close sockets",
+    "Ping server",
     "Zone Update POST",
     "RESET to defaults",
     "REBOOT",
@@ -143,10 +143,10 @@ char* pucMenuCMD[] =
     "m", // Read MAC/SN
     "b", // Read Board rev.
     "L", // Toggle lamps
+    "Q", // Toggle quick scan
     "R", // Toggle relay
-    "P", // Ping server
 
-    "S", // Close sockets
+    "P", // Ping server
     "U", // Zone Update POST
     "X", // RESET to defaults
     "Z", // REBOOT
