@@ -532,7 +532,7 @@ main_parse_msg(char *paucReceiveMsg)
     {
         // Get the error code
         memset (lcTempMainString, 0, sizeof(lcTempMainString));
-        memcpy (lcTempMainString, plcDetected+45, strlen(plcDetected+41));
+        memcpy (lcTempMainString, plcDetected+45, strlen(plcDetected+45));
         int liErrorCode = atoi(lcTempMainString);
         sprintf(lcTempMainString, "*** ERROR CODE *** %s", pucErrorCodes[liErrorCode]);
         display_status_write(lcTempMainString);
@@ -1227,6 +1227,28 @@ main_parse_msg(char *paucReceiveMsg)
         // Write the entire "CRC after external flash Blocks 8-126 = ..." to Status
         memset (lcTempMainString, 0, sizeof(lcTempMainString));
         memcpy (lcTempMainString, plcDetected, sizeof(lcTempMainString));
+        display_status_write(lcTempMainString);
+        display_status_write("\r\n");
+    }
+    
+    // Look for "Network_Detect_FTP_Command_Response: "
+    plcDetected = strstr((char*)paucReceiveMsg, "Network_Detect_FTP_Command_Response: ");
+    if (plcDetected)
+    {
+        // Get the FTP command response and result
+        memset (lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy (lcTempMainString, plcDetected+37, strlen(plcDetected+37));
+        display_status_write(lcTempMainString);
+        display_status_write("\r\n");
+    }
+    
+    // Look for "Network_Detect_FTP_Error: "
+    plcDetected = strstr((char*)paucReceiveMsg, "Network_Detect_FTP_Error: ");
+    if (plcDetected)
+    {
+        // Get the FTP command response and result
+        memset (lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy (lcTempMainString, plcDetected+26, strlen(plcDetected+26));
         display_status_write(lcTempMainString);
         display_status_write("\r\n");
     }
