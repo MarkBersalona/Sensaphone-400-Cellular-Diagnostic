@@ -1253,6 +1253,17 @@ main_parse_msg(char *paucReceiveMsg)
         display_status_write("\r\n");
     }
     
+    // Look for "Network_Detect_FW_Install: "
+    plcDetected = strstr((char*)paucReceiveMsg, "Network_Detect_FW_Install: ");
+    if (plcDetected)
+    {
+        // Get the FW install status/result
+        memset (lcTempMainString, 0, sizeof(lcTempMainString));
+        memcpy (lcTempMainString, plcDetected+27, strlen(plcDetected+27));
+        display_status_write(lcTempMainString);
+        display_status_write("\r\n");
+    }
+    
 }
 // end main_parse_msg
 

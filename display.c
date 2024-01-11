@@ -95,6 +95,7 @@ char* pucMenuItems[] =
     "App to ext. flash",
 
     "App from ext. flash",
+    "Start FTP FOTA",
     "SARA-R5 defaults",
     "Airplane mode on/off",
     "Calib. zones 1-5",
@@ -129,6 +130,7 @@ char* pucMenuCMD[] =
     "5", // App to ext. flash
 
     "6", // App from ext. flash
+    "7", // Start FTP FOTA
     "8", // SARA-R5 defaults
     "A", // Airplane mode on/off
     "C", // Calib. zones 1-4
