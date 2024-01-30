@@ -1,7 +1,7 @@
 # Sensaphone 400 Cellular Diagnostic tool
 <img src="Sensaphone 400 Cellular Diagnostic 20230314.png" alt="Sensaphone 400 Cellular screenshot, 2023.03.14" />
 
-This is the Diagnostic tool for the <b>Sensaphone 400 Cellular</b>
+This is the Diagnostic tool for the **Sensaphone 400 Cellular**
 
 - Runs in a Debian-based Linux distribution, like Linux Mint. (It can probably run in an Arch- or Fedora- or other non-Debian Linux distro, I simply haven't tried building it in one yet.)
 - Connects to the serial debug port of the 400 Cellular via serial-to-USB converter; expects 
@@ -29,6 +29,25 @@ laptop I cloned it to /home/mark/GTKProjects/Sensaphone-400-Cellular-Diagnostic
    - Plug USB end into the Linux PC, the serial end to the Sensaphone serial card; plug the wire header onto the 400 Cellular serial debug port (take care to orient correctly!)
    - Run the 400_cellular_diagnostic app in the application directory, the one with the .glade and .css files. The app expects to find and read these files in the same directory where it itself is located.
 
+### Problem recognizing ttyUSB0?
+First, **verify the USB-to-serial cable is plugged into a USB port**. (I know, obvious, but I forgot to plug it in while testing these instructions.)
+
+In some instances the tool might not immediately recognize ttyUSB0, the Linux device for a USB-to-serial converter, or allow non-root access to it. See https://askubuntu.com/questions/133235/how-do-i-allow-non-root-access-to-ttyusb0 for a detailed explanation, but what's worked for me is the following:
+1. Confirm ttyUSB0 is in the user group 'dialout'
+```
+stat /dev/ttyUSB0
+```
+2. Add the user to the dialout group using the following command
+```
+sudo usermod -a -G dialout $USER
+```
+3. Logout and log back into the account. The tool should recognize ttyUSB0 and work correctly.
+4. (Optional) Verify the user is included in the dialout group. The following command lists the groups to which the user belongs
+```
+sudo groups $USER
+```
+
+
 ## 400 Cellular Description
 
 The 400 Cellular monitors the following inputs, or *zones*:
@@ -54,13 +73,13 @@ Numeric values in Zone Update and Alarm POSTs from the device to the server are 
 
 ### Summary
 
-The <b>Diagnostic tool reads the debug serial output of the 400 Cellular</b>, which consists of ASCII strings ending with CRLF (carriage return/linefeed) (as if outputting to a serial terminal).
+The **Diagnostic tool reads the debug serial output of the 400 Cellular**, which consists of ASCII strings ending with CRLF (carriage return/linefeed) (as if outputting to a serial terminal).
 - Each line is scanned for relevant data to be extracted and displayed individually, such as the device MAC/SN or zone values.
 - A status display shows important status of the device under test and of the Diagnostic tool, such as warning and error messages.
 - Each debug printout line is shown in the Receive display.
 - If enabled, each debug printout line is also saved to a log file (with CRLF line terminations).
 
-The <b>Diagnostic tool can accept operator inputs</b> to pass along to the device under test.
+The **Diagnostic tool can accept operator inputs** to pass along to the device under test.
 - AT commands to be passed to the SARA-R5 cellular transceiver
 - The simple MENU commands, which require only the MENU command to be selected and then sent to the device under test
 - the MENU command to write a new MAC/SN to the device under test, which requires the operator to enter a valid MAC address in the entry box provided
@@ -68,21 +87,21 @@ The <b>Diagnostic tool can accept operator inputs</b> to pass along to the devic
 
 ### Details
 
-The <b>Diagnostic tool expects to connect to the Linux ttyUSB0 device</b>, the device name for a serial-to-USB converter. The connection status to ttyUSB0 will be given in the Status display.
+The **Diagnostic tool expects to connect to the Linux ttyUSB0 device**, the device name for a serial-to-USB converter. The connection status to ttyUSB0 will be given in the Status display.
 
-<b>All debug printouts</b> received by the Diagnostic tool <b>are first stored in a software FIFO</b> by main_receive_msg_write(). The FIFO was added in anticipation of possible system slowdowns when writing the debug printouts to a log file. In practice system buffers and caches seem to mitigate any throughput bottlenecks with the log file, but the FIFO probably helps make the Diagnostic tool robust. At 200 entries deep, the FIFO doesn't seem to get much above 10% usage.
+**All debug printouts** received by the Diagnostic tool **are first stored in a software FIFO** by main_receive_msg_write(). The FIFO was added in anticipation of possible system slowdowns when writing the debug printouts to a log file. In practice system buffers and caches seem to mitigate any throughput bottlenecks with the log file, but the FIFO probably helps make the Diagnostic tool robust. At 200 entries deep, the FIFO doesn't seem to get much above 10% usage.
 
-The <b>serial receive callback function</b> serial_read() is essentially the <em><b>interrupt service routine (ISR) for received serial data</b></em>. It collects the received serial data; when CRLF is received it strips off the CRLF, terminates the string with a NULL and saves the string to the FIFO.
+The **serial receive callback function** serial_read() is essentially the ***interrupt service routine (ISR) for received serial data***. It collects the received serial data; when CRLF is received it strips off the CRLF, terminates the string with a NULL and saves the string to the FIFO.
 - As an ISR, this routine must spend as little time as possible executing. Setting variables, moving small amounts of data around are OK; time delays or waiting around for user inputs are bad; any processing that could be done at the task level or otherwise outside the ISR should be moved out of the ISR. "Get in, do what's needed, get out."
 
-The <b>periodic function</b> main_periodic() of the Diagnostic tool <b>checks for fresh data in the FIFO</b>. If there are any, it reads each string from the FIFO, parses it for any relevant data to display, displays the string in the Receive display and optionally saves it to a log file (with CRLF line terminations). The periodic function also <b>checks the serial connection to the device under test</b>: if the connection to ttyUSB0 is good, it is assumed the device under test is connected.
+The **periodic function** main_periodic() of the Diagnostic tool **checks for fresh data in the FIFO**. If there are any, it reads each string from the FIFO, parses it for any relevant data to display, displays the string in the Receive display and optionally saves it to a log file (with CRLF line terminations). The periodic function also **checks the serial connection to the device under test**: if the connection to ttyUSB0 is good, it is assumed the device under test is connected.
 
-<b>Processing of operator inputs</b> is performed by the callback routines triggered by the button_clicked events of the relevant Diagnostic tool buttons.
-- Operator-entered <b>MAC address and board rev are validated</b> before passing these to the device under test. A MAC address must consist of 6 hex values separated by delimiters, of the form XX-XX-XX-XX-XX-XX. A board rev must be a single letter in range [A-Z], though case-insensitive.
-- Operator-entered <b>AT command is passed</b> to the device under test, to the SARA-R5 cellular transceiver, <b>as is</b>.
+**Processing of operator inputs** is performed by the callback routines triggered by the button_clicked events of the relevant Diagnostic tool buttons.
+- Operator-entered **MAC address and board rev are validated** before passing these to the device under test. A MAC address must consist of 6 hex values separated by delimiters, of the form XX-XX-XX-XX-XX-XX. A board rev must be a single letter in range [A-Z], though case-insensitive.
+- Operator-entered **AT command is passed** to the device under test, to the SARA-R5 cellular transceiver, **as is**.
 
 Both the Status and Receive text windows adjust to display the most recent text string; that is, both move to the bottom of the respective text buffer. The operator may scroll either to view older text strings, but when a new text string is to be displayed, the display will move back to the bottom of the text buffer. Additionally, the periodic function moves the Status window to the bottom of the Status text buffer, so in practice manually scrolling the Status window tends to be futile.
-- The code in both display_status_write() and display_receive_write() to move the text window to the bottom of the buffer is insufficient to move <b>immediately and reliably</b>. GTK seems to do a *lazy update* when it comes to moving text windows, updating (or not!) only when higher-priority display tasks have finished. To ensure the Status text window always shows the latest status, the periodic function also moves the Status text window to the bottom of the buffer. Thus, the Status display reliably shows the latest status.
+- The code in both display_status_write() and display_receive_write() to move the text window to the bottom of the buffer is insufficient to move **immediately and reliably**. GTK seems to do a *lazy update* when it comes to moving text windows, updating (or not!) only when higher-priority display tasks have finished. To ensure the Status text window always shows the latest status, the periodic function also moves the Status text window to the bottom of the buffer. Thus, the Status display reliably shows the latest status.
 
 To ensure the Receive text buffer doesn't get too large, the Receive text buffer is emptied every 5 minutes.
 
@@ -93,8 +112,8 @@ On startup or reboot, the 400 Cellular debug port outputs 3 instances of "*Sensa
 
 
 ## Suggested changes
-- Capture and display GNSS timestamp along with lat/long; if lat/long unavailable, do NOT clear lat/long/GNSS timestamp
+- Add an 'About' button to display version and date of Sensaphone 400 Cellular Diagnostic to Status
+- Capture and display GNSS timestamp along with lat/long; if lat/long unavailable, do NOT clear lat/long/GNSS timestamp (This makes lat/long 'sticky': an advantage if the device is stationary; a disadvantage if the device is mobile)
 - Option to dump Status contents to log file
 - Reduce the initial height of the Receive window and the overall window, so Diagnostic can fit on a 1366x768 display. (Still manually resizable; maybe get fancy and automatically extend height to available display height??)
-- Add an 'About' button to display version and date of Sensaphone 400 Cellular Diagnostic to Status
 
