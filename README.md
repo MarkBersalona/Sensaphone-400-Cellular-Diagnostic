@@ -119,3 +119,7 @@ On startup or reboot, the 400 Cellular debug port outputs 3 instances of "*Sensa
 
 <img src="Diagnostic at 1366x768.png" alt="Diagnostic tool on 1366x768 screen" />
 
+This is what the Diagnostic tool looks like on a 1366x768 screen, with the textboxes and associated labels and buttons with the "Visible" attribute turned off: at least more of the Receive window shows up; bottom still cut off...
+
+<img src="Diagnostic at 1366x768 invisible textboxes.png" alt="Diagnostic tool with invisible textboxes on 1366x768 screen" />
+
