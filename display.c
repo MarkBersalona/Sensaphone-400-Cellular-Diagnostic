@@ -105,14 +105,15 @@ char* pucMenuItems[] =
     "SPI flash test (big)",
     "SPI flash test (small)",
     "GNSS shutdown",
-    "ACK all alarms",
+    "Increment SARA-R5 FW",
 
+    "ACK all alarms",
     "Read MAC/SN",
     "Read Board rev.",
     "Toggle lamps",
     "Toggle quick scan",
-    "Toggle relay",
 
+    "Toggle relay",
     "Ping server",
     "Zone Update POST",
     "RESET to defaults",
@@ -140,14 +141,15 @@ char* pucMenuCMD[] =
     "F", // SPI flash test (big)
     "f", // SPI flash test (small)
     "G", // GNSS shutdown
-    "K", // ACK all alarms
+    "i", // Increment SARA-R5 FW version index
 
+    "K", // ACK all alarms
     "m", // Read MAC/SN
     "b", // Read Board rev.
     "L", // Toggle lamps
     "Q", // Toggle quick scan
-    "R", // Toggle relay
 
+    "R", // Toggle relay
     "P", // Ping server
     "U", // Zone Update POST
     "X", // RESET to defaults
