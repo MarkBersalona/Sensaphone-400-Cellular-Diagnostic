@@ -115,10 +115,11 @@ char* pucMenuItems[] =
 
     "Toggle relay",
     "Ping server",
+    "Close sockets",
     "Zone Update POST",
     "RESET to defaults",
-    "REBOOT",
 
+    "REBOOT",
     "ENDOFMENU"
 };
 char* pucMenuCMD[] =
@@ -151,10 +152,11 @@ char* pucMenuCMD[] =
 
     "R", // Toggle relay
     "P", // Ping server
+    "S", // Close sockets
     "U", // Zone Update POST
     "X", // RESET to defaults
-    "Z", // REBOOT
 
+    "Z", // REBOOT
     "-", // end of menu
  
     
