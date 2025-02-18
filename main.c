@@ -865,15 +865,15 @@ main_parse_msg(char *paucReceiveMsg)
     plcDetected = strstr((char*)paucReceiveMsg, "UGGSV satellite counts: ");
     if (plcDetected)
     {
-        char *plcNONEDetected  = strstr((char*)paucReceiveMsg, "NONE");
+        //char *plcNONEDetected  = strstr((char*)paucReceiveMsg, "NONE");
         char *plcGPSDetected = strstr((char*)paucReceiveMsg, "GPS=");
         char *plcGLONASSDetected = strstr((char*)paucReceiveMsg, "GLONASS=");
         char *plcGalileoDetected = strstr((char*)paucReceiveMsg, "Galileo=");
         char *plcBeiDouDetected = strstr((char*)paucReceiveMsg, "BeiDou=");
         char *plcQZSSDetected = strstr((char*)paucReceiveMsg, "QZSS=");
 
-        // If NONE detected, zeroize all the satellite counts
-        if (plcNONEDetected)
+        // Zeroize all the satellite counts
+        //if (plcNONEDetected)
         {
             gtk_label_set_text(GTK_LABEL(lblGPS), "0");
             gtk_label_set_text(GTK_LABEL(lblGLONASS), "0");
