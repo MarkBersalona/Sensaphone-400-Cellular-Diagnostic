@@ -3,17 +3,33 @@
 
 This is the Diagnostic tool for the **Sensaphone 400 Cellular**
 
-- Runs in a Debian-based Linux distribution, like Linux Mint. (It can probably run in an Arch- or Fedora- or other non-Debian Linux distro, I simply haven't tried building it in one yet.)
+- Runs in a Debian-based Linux distribution, like Linux Mint. I've also got it running in Fedora. (It can probably run in an Arch- or other non-Debian Linux distro, I simply haven't tried building it in one yet.)
 - Connects to the serial debug port of the 400 Cellular via serial-to-USB converter; expects 
 connection to the ttyUSB0 device
 - Works best on a 1920x1080 or larger display
 
 ## Prerequisites
+
+### Linux Mint / Ubuntu / Raspberry Pi OS
+
 Requires the GTK 3 library. To install:
 
 ```
 sudo apt-get update
 sudo apt-get install libgtk-3-dev
+```
+
+### Fedora
+For a Fedora-based Linux distribution:
+
+```
+sudo dnf install gtk3-devel
+```
+
+In my copy of Fedora, gcc wasn't installed! But to get it installed, I simply typed the following in the terminal and approved installation for Fedora to install gcc:
+
+```
+gcc
 ```
 
 ## Build instructions
